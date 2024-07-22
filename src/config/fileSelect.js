@@ -1,14 +1,14 @@
 import API from "@/api";
-import fileServerApi from "@/api/fileServer/common"
+// import fileServerApi from "@/api/fileSystemApi/fileApi"
 
 //文件选择器配置
 
 export default { 
 	apiObj: API.common.upload,
-	menuApiObj: fileServerApi.file.menu,
-	listApiObj: fileServerApi.file.list,
-	fileInfoApi: fileServerApi.file,
-	fileTransfer: fileServerApi,
+	// menuApiObj: fileServerApi.file.menu,
+	// listApiObj: fileServerApi.file.list,
+	// fileInfoApi: fileServerApi.file,
+	// fileTransfer: fileServerApi,
 	successCode: 200,
 	maxSize: 30,
 	max: 99,

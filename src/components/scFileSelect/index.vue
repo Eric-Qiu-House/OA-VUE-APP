@@ -85,7 +85,7 @@
 import config from "@/config/fileSelect"
 import { fileSystemStore } from '@/store/fileSystem/fileSystemStore';
 import { computed } from 'vue';
-export default {
+export default { 
 	props: {
 		modelValue: null,
 		hideUpload: { type: Boolean, default: false },
@@ -172,7 +172,9 @@ export default {
 		//获取分类数据
 		async getMenu() {
 			this.menuLoading = true
-			var res = await config.menuApiObj.get()
+			
+			// var res = await config.menuApiObj.get()
+			var res = await this.$fileApi.file.menu.get()
 			this.menu = res
 			this.menuLoading = false
 		},
@@ -188,13 +190,15 @@ export default {
 			if (this.onlyImage) {
 				reqData.type = 'image'
 			}
-			var res = await config.listApiObj.get(reqData)
+			var res = await this.$fileApi.file.list.get(reqData)
+			// var res = await config.listApiObj.get(reqData)
 			this.data = res
 			this.listLoading = false
 		},
 		// 文件夹下的图片
 		async getImgFolat(data) {
-			var res = await config.fileInfoApi.folderFile.post(data)
+			// var res = await config.fileInfoApi.folderFile.post(data)
+			var res = await this.$fileApi.file.folderFile.post(data)
 			this.data = res
 		},
 		//树点击事件
@@ -258,8 +262,8 @@ export default {
 			// }
 
 			try {
-				var apiObj = config.fileTransfer.upload;
-				await apiObj.post(formData)
+				// var apiObj = config.fileTransfer.upload;
+				await this.$fileApi.upload.post(formData)
 			} catch (error) {
 				console.error('上传失败:', error);
 				alert('文件上传失败');

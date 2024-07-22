@@ -16,7 +16,7 @@
 				</el-button>
 			</div>
 		</el-header>
-		<el-main class="nopadding">src/views/vab/dialog/dialog1.vue
+		<el-main class="nopadding">
 			<!-- <el-card shadow="never" header="异步" style="margin-top: 15px;">
 				<el-button type="primary" @click="asyn1">异步加载1</el-button>
 				<el-button type="primary" @click="asyn2">异步加载2</el-button>
@@ -35,7 +35,7 @@
 			</el-card>
 		</el-main>
 	</el-container>
-	<dialog1 v-if="asynDialog1" draggable :message="form" @closed="asynDialog1 = false"></dialog1>
+	<dialog-issue v-if="asynDialog" draggable :message="form" @closed="asynDialog = false"></dialog-issue>
 </template>
 
 <script>
@@ -47,7 +47,7 @@ export default {
 	components: {
 		scEditor,
 		scCropper,
-		dialog1: defineAsyncComponent(() => import("./dialog1")),
+		dialogIssue: defineAsyncComponent(() => import("./widgets/dialogIssue")),
 	},
 	data() {
 		return {
@@ -58,7 +58,7 @@ export default {
 			// aspectRatio: 0,
 			// uploadImg: '',
 			// imgData: '',
-			asynDialog1: false,
+			asynDialog: false,
 			templates: [
 				{
 					title: '模板:[自定义HTML]',
@@ -96,7 +96,7 @@ export default {
 				if (valid) {
 					// 表单验证通过，执行程序逻辑
 					console.log(valid, 'valiaddddd')
-					this.asynDialog1 = true
+					this.asynDialog = true
 					// this.gitAPI();
 				} else {
 					// 表单验证不通过，可以给出提示或者其他处理

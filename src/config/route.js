@@ -37,8 +37,8 @@ const routes = [
         ]
     },
     {
-        name: "CMS",
-        path: "/CMS",
+        name: "cmsSystem",
+        path: "/cmsSystem",
         meta: {
             title: "CMS",
             icon: "el-icon-eleme-filled",
@@ -46,42 +46,42 @@ const routes = [
         },
         children: [
             {
-                name: "newsList",
-                path: "/cms/news/newsList",
+                name: "articleList",
+                path: "/cmsSystem/portalWeb/articleList",
                 meta: {
                     title: "门户网站",
                     icon: "el-icon-menu",
                 },
-                component: "cms/news/newsList"
+                component: "cmsSystem/portalWeb/articleList"
             },
             {
-                name: "newsAdd",
-                path: "/cms/news/newsAdd",
+                name: "articleEdit",
+                path: "/cmsSystem/portalWeb/articleEdit",
                 meta: {
-                    title: "添加新闻",
+                    title: "编辑文章",
                     icon: "el-icon-menu",
                     type: "menu",
                     hidden: true
                 },
-                component: "cms/news/newsAdd"
+                component: "cmsSystem/portalWeb/articleEdit"
             },
             {
-                name: "newsParticular",
-                path: "/cms/news/newsParticular",
+                name: "articleRead",
+                path: "/cmsSystem/portalWeb/articleRead",
                 meta: {
-                    title: "新闻详情",
+                    title: "文章详情",
                     icon: "el-icon-menu",
                     type: "menu",
                     hidden: true
 
                 },
-                component: "cms/news/newsParticular"
+                component: "cmsSystem/portalWeb/articleRead"
             },
         ]
     },
     {
-        name: "file",
-        path: "/file",
+        name: "fileSystem",
+        path: "/fileSystem",
         meta: {
             title: "文件库",
             icon: "el-icon-takeaway-box",
@@ -89,14 +89,14 @@ const routes = [
         },
         children: [
             {
-                path: '/file/imgHub',
-                name: 'imgHub',
+                path: '/fileSystem/imageLibrary',
+                name: 'imageLibrary',
                 meta: {
                     title: '图片中心',
                     icon: "el-icon-magic-stick",
                     type: "menu"
                 },
-                component: "file/imgHub"
+                component: "fileSystem/imageLibrary"
             }
         ]
     },

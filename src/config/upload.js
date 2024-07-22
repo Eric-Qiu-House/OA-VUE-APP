@@ -1,4 +1,4 @@
-import API from "@/api/fileServer/common";
+import API from "@/api/fileSystemApi/fileApi";
 
 //上传配置
  

@@ -1,3 +1,4 @@
+// 用于配置 JavaScript 项目中编辑器和工具行为的文件。用于 VS Code 等编辑器，以提供更好的代码补全、导航和其他开发体验。
 {
 	"compilerOptions": {
 		"target": "es5",

@@ -28,14 +28,6 @@ const routes = [
 		meta: {
 			title: "重置密码"
 		}
-	},
-	{
-		name:'newsParticular',
-		path: "/cms/news/newsParticular",
-		component: () => import(/* webpackChunkName: "resetPassword" */ '@/views/cms/news/newsParticular'),
-		meta: {
-			title: "新闻详情"
-		}
 	}
 ]
 

@@ -1,75 +1,46 @@
-
-<div align="center">
-
-![logo](https://python-abc.xyz/scui-doc/logo.png)
-
-<p align="center">
-	<a href="https://v3.vuejs.org/" target="_blank">
-		<img src="https://img.shields.io/badge/VueCLI-5-green" alt="VueCLI">
-	</a>
-	<a href="https://v3.vuejs.org/" target="_blank">
-		<img src="https://img.shields.io/badge/Vue.js-3.x-green" alt="Vue">
-	</a>
-	<a href="https://element-plus.org/#/zh-CN/component/changelog" target="_blank">
-		<img src="https://img.shields.io/badge/element--plus-latest-blue" alt="element plus">
-	</a>
-</p>
-
-<h1>SCUI Admin</h1>
-
-</div>
-
-## 介绍
-SCUI 是一个中后台前端解决方案，基于VUE3和elementPlus实现。
-使用最新的前端技术栈，提供各类实用的组件方便在业务开发时的调用，并且持续性的提供丰富的业务模板帮助你快速搭建企业级中后台前端任务。
-
-SCUI的宗旨是 让一切复杂的东西傻瓜化。
-
-![logo](https://python-abc.xyz/scui-doc/g_1.jpg)
-
-## 演示和文档
-
-| 类型 | 链接 |
-| -------- | -------- |
-| 文档地址 | https://python-abc.xyz/scui-doc/ |
-| 演示地址  | https://python-abc.xyz/scui-doc/demo/#/login |
-
-
-
-## 特点
-
-- **组件** 多个独家组件、业务模板
-- **权限** 完整的鉴权体系和高精度权限控制
-- **布局** 提供多套布局模式，满足各种视觉需求
-- **API** 完善的API管理，使用真实网络MOCK
-- **配置** 统一的全局配置和组件配置，支持build后配置热更新
-- **性能** 在减少带宽请求和前端算力上多次优化，并且持续着
-- **其他** 多功能视图标签、动态权限菜单、控制台组态化、统一异常处理等等
-
-
-## 部分截图
-
-![logo](https://python-abc.xyz/scui-doc/g_2.jpg)
-
-## 安装教程
-``` sh
-# 克隆项目
-git clone https://github.com/shenxgan/scui.git
-
-# 进入项目目录
-cd scui
-
 # 安装依赖
 npm i
 
 # 启动项目(开发模式)
 npm run serve
-```
 启动完成后浏览器访问 http://localhost:2800
 
-## 鸣谢
+# API_URL地址
+src/config/index
 
-<img src="https://www.fastmock.site/resource/images/logo.png" style="height:40px"/>
+# 全局挂载方法
+./scui
 
-## 支持
-如果觉得本项目还不错或在工作中有所启发，请在[Gitee(码云)](https://gitee.com/lolicode/scui)帮开发者点亮星星，这是对开发者最大的支持和鼓励！
+# 目录结构
+src/
+├── api/
+│ ├── cmsApi/ # “CMS” api
+│ ├── fileApi/ # 文件服务器api
+│ ├── model/ # 新增的图标组件
+│ │ ├── auth # token
+│ │ ├── common #
+│ │ ├──
+│ │ ├──
+├── assets/
+│ ├── icons/ # 新增的图标组件
+├── components/
+│ ├── scCommon/ # SC存放通用组件
+├── views/
+│ ├── cmsSystem/ # CMS视图组件
+│ ├── fileSystem/ # 文件服务器视图组件
+│ └── 
+├── router/
+│ └── index.js # 配置 Vue Router 路由规则
+├── store/
+│ └── index.js # 配置 Vuex store，包括 state、mutations、actions 和 getters
+├── services/
+│ └── api.js # 配置和管理 API 请求的函数
+├── utils/
+│ ├── formatDate.js # 日期格式化工具函数
+│ └── validate.js # 数据验证工具函数
+├── plugins/
+│ └── vuetify.js # 配置 Vuetify 插件（如使用 Vuetify 作为 UI 框架）
+├── mixins/
+│ └── commonMixin.js # 包含通用逻辑的混入
+├── App.vue # 主应用组件，作为 Vue 实例的根组件
+└── main.js # 应用的入口文件，创建 Vue 实例并挂载到 DOM 上

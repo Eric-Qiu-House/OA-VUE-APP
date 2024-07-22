@@ -1,8 +1,13 @@
 import config from "./config"
-import api from './api'
 import tool from './utils/tool'
 import http from "./utils/request"
 import { permission, rolePermission } from './utils/permission'
+
+//api 挂载url
+import api from './api' // 基础api
+import fileApi from './api/fileSystemApi/fileApi' // 基础api
+import cmsApi from './api/cmsApi/portalWeb' // 基础api
+
 
 import scTable from './components/scTable'
 import scTableColumn from './components/scTable/column.js'
@@ -26,7 +31,7 @@ import scTrend from './components/scMini/scTrend'
 import auth from './directives/auth'
 import auths from './directives/auths'
 import authsAll from './directives/authsAll'
-import role from './directives/role'
+import role from './directives/role' 
 import time from './directives/time'
 import copy from './directives/copy'
 import errorHandler from './utils/errorHandler'
@@ -40,9 +45,14 @@ export default {
 		app.config.globalProperties.$CONFIG = config;
 		app.config.globalProperties.$TOOL = tool;
 		app.config.globalProperties.$HTTP = http;
-		app.config.globalProperties.$API = api;
 		app.config.globalProperties.$AUTH = permission;
 		app.config.globalProperties.$ROLE = rolePermission;
+
+		// 挂载API
+		app.config.globalProperties.$API = api;
+		app.config.globalProperties.$fileApi = fileApi;
+		app.config.globalProperties.$cmsApi = cmsApi;
+
 
 		//注册全局组件
 		app.component('scTable', scTable);

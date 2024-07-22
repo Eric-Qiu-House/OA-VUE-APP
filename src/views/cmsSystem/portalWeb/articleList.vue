@@ -1,7 +1,7 @@
 <template>
 	<el-container>
 		<el-header>
-			<router-link :to="{ name: 'newsAdd', query: { type: '新增内容' } }">
+			<router-link :to="{ name: 'articleEdit', query: { type: '新增内容' } }">
 				<el-button type="primary" icon="el-icon-plus">添加文章</el-button>
 			</router-link>
 		</el-header>
@@ -10,14 +10,17 @@
 				<p>
 					主菜单：
 					<el-button round @click="article()">全部</el-button>
-					<el-button round v-for="(item, index) in menu" :key="index" @click="cutMenu(item.file_path_)">{{
-						item.folder_name_ }}</el-button>
+					<el-button round v-for="(item, index) in menu" :key="index" @click="cutMenu(item.file_path_)">
+						{{ item.folder_name_ }}
+					</el-button>
 				</p>
 				<p style="padding: 10px 0;height: 52px;display: flex;align-items: center;">
 					子菜单：
 					<el-button round v-for="(item, index) in menuChild" :key="index"
 						v-show="item.form_ == this.paths && this.paths != 0 && this.paths != 5"
-						@click="cutMenuChild(item.id_)">{{ item.menu_name_ch_ }}</el-button>
+						@click="cutMenuChild(item.id_)">
+						{{ item.menu_name_ch_ }}
+					</el-button>
 				</p>
 				<el-select v-model="value" placeholder="Select" size="large" style="width: 240px"
 					@change="language(value)">
@@ -53,14 +56,14 @@
 				<el-table-column label="操作" prop="progress" width="280" sortable>
 					<template v-slot:default="scope">
 						<router-link :to="{
-							name: 'newsParticular',
+							name: 'articleRead',
 							query: { id: scope.row.id_, form: true, type: 'NewsList' },
 						}">
 							<el-button text type="primary">详情</el-button>
 						</router-link>
 
 						<router-link v-if="scope.row.status_ === 0 || scope.row.status_ === 2"
-							:to="{ name: 'newsAdd', query: { id: scope.row.id_ } }">
+							:to="{ name: 'articleEdit', query: { id: scope.row.id_ } }">
 							<el-button text type="primary">编辑</el-button>
 						</router-link>
 
@@ -106,7 +109,7 @@
 
 <script>
 // import { number } from 'echarts';
-import config from "@/config/fileSelect"
+// import config from "@/config/fileSelect"
 import { defineAsyncComponent } from 'vue';
 const scEditor = defineAsyncComponent(() => import('@/components/scEditor'));
 // import api from '@/api/cms/news-api'
@@ -192,7 +195,7 @@ export default {
 		},
 		// 获取 - 主菜单
 		async getMenu() {
-			var res = await config.menuApiObj.get()
+			var res = await this.$fileApi.file.menu.get()
 			this.cacheNewsList = res
 			this.menu = res
 		},

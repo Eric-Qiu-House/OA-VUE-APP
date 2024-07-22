@@ -3,14 +3,28 @@ import http from "@/utils/request";
 
 export default {
     inquire: {
-        url: `${config.CMS_URL}/cms/news/inquireList`,
+        url: `${config.API_URL}/cms/news/inquireList`,
         name: "新闻列表",
         async get(params) {
             return await http.get(this.url, params);
         }
     },
+    inquireMenu: {
+        url: `${config.API_URL}/cms/webMenu/inquireList`,
+        name: "子菜单列表",
+        async get(params) {
+            return await http.get(this.url, params);
+        }
+    },
+    inquireType: {
+        url: `${config.API_URL}/cms/news/inquireType`,
+        name: "类型查询",
+        async post(params) {
+            return await http.post(this.url, params);
+        }
+    },
     add: {
-        url: `${config.CMS_URL}/cms/news/addNews`,
+        url: `${config.API_URL}/cms/news/addNews`,
         name: "添加新闻",
         async post(params) {
             try {
@@ -22,14 +36,14 @@ export default {
         }
     },
 	where: {
-		url: `${config.CMS_URL}/cms/news/whereId`,
+		url: `${config.API_URL}/cms/news/whereId`,
 		name: "新闻详情",
 		post: async function (data, config = {}) {
 			return await http.post(this.url, data, config);
 		}
 	},
 	updata: {
-		url: `${config.CMS_URL}/cms/news/updata`,
+		url: `${config.API_URL}/cms/news/updata`,
 		name: "修改新闻",
 		post: async function (data, config = {}) {
 			return await http.post(this.url, data, config);

@@ -1,6 +1,5 @@
 <template>
 	<sc-dialog v-model="visible" title="发布至 ？" @closed="$emit('closed')">
-		{{formData}}
 		<el-form ref="formData" style="max-width: 600px" :model="formData" :rules="rules" label-width="auto"
 			class="demo-ruleForm">
 			<el-form-item label="主页菜单：" prop="menu_class_">
