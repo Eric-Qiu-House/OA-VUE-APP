@@ -95,7 +95,6 @@ export default {
 			this.$refs.form.validate(valid => {
 				if (valid) {
 					// 表单验证通过，执行程序逻辑
-					console.log(valid, 'valiaddddd')
 					this.asynDialog = true
 					// this.gitAPI();
 				} else {
@@ -111,7 +110,7 @@ export default {
 				const data = {
 					id_: this.$route.query.id
 				}
-				this.form = await this.$API.news.where.post(data);
+				this.form = await this.$cmsApi.where.post(data);
 			} catch (error) {
 				console.error("Error fetching user list:", error);
 			}

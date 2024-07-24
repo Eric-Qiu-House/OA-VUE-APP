@@ -27,7 +27,7 @@ export default {
                 const data = {
                     id_: this.$route.query.id
                 }
-                const info = await this.$API.news.where.post(data);
+                const info = await this.$cmsApi.where.post(data);
                 this.news = info; 
             } catch (error) {
                 console.error("Error fetching user list:", error);

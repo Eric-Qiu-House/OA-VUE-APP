@@ -1,10 +1,10 @@
 <template>
 	<el-card shadow="hover" header="关于项目" class="item-background">
-		<p>高性能 / 精致 / 优雅。基于Vue3 + Element-Plus 的中后台前端解决方案，如果喜欢就点个星星支持一下。</p>
+		<p>企业集成办公自动化平台，采用微服务框架，VUE3 + NODE 技术栈。</p>
 		<p>
-			<a href='https://gitee.com/lolicode/scui' target="_blank">
+			<!-- <a href='https://gitee.com/lolicode/scui' target="_blank">
 				<img src='https://gitee.com/lolicode/scui/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
-			</a>
+			</a> -->
 		</p>
 	</el-card>
 </template>

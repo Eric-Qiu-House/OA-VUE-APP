@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import config from "@/config/fileSelect"
 import { ElMessage } from 'element-plus'
 export default {
 	props: {
@@ -84,12 +83,12 @@ export default {
 	methods: {
 		// 获取 - 主菜单
 		async getMenu() {
-			var res = await config.menuApiObj.get()
+			var res = await this.$fileApi.file.menu.get()
 			this.mainMenu = res
 		},
 		// 获取 - 子菜单
 		async getMenuChild() {
-			var res = await this.$API.news.inquireMenu.get();
+			var res = await this.$cmsApi.inquireMenu.get();
 			this.subMenuCache = res
 			this.subMenu = res
 			// this.subMenu = res
@@ -121,13 +120,13 @@ export default {
 			try {
 				// 更新且重新赋值
 				if (!data.id_) {
-					await this.$API.news.add.post(data);
+					await this.$cmsApi.add.post(data);
 					ElMessage({
 						message: '添加成功.',
 						type: 'success',
 					})
 				} else {
-					await this.$API.news.updata.post(data);
+					await this.$cmsApi.updata.post(data);
 					// this.data = {}
 					ElMessage({
 						message: '修改成功.',

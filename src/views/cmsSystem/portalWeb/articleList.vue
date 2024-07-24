@@ -66,16 +66,6 @@
 							:to="{ name: 'articleEdit', query: { id: scope.row.id_ } }">
 							<el-button text type="primary">编辑</el-button>
 						</router-link>
-
-						<!-- <el-button v-if="scope.row.status_ === 0 || scope.row.status_ === 2" text type="primary" @click="
-							sendAction(
-								cmsApi.news.removeNewsUrl + scope.row.id,
-								`确定删除${scope.row.title}吗?`
-							)
-							">
-							删除
-						</el-button> -->
-
 						<el-popconfirm :title="`确定发布${scope.row.title_}吗?`" @confirm="table_up(scope.row, scope.$index)"
 							v-if="scope.row.status_ === 0 || scope.row.status_ === 2">
 							<template #reference>
@@ -99,12 +89,6 @@
 			</scTable>
 		</el-main>
 	</el-container>
-	<!-- <div v-html="this.list.apiObj[0].content_"></div> -->
-
-	<!-- <el-card shadow="never">
-		<sc-editor v-model="this.list.apiObj[0].content_" placeholder="请输入" :templates="templates"
-			:height="400"></sc-editor>
-	</el-card> -->
 </template>
 
 <script>
@@ -165,7 +149,7 @@ export default {
 		async article() {
 			this.value = 'all'
 			try {
-				const info = await this.$API.news.inquire.get();
+				const info = await this.$cmsApi.inquire.get();
 			this.cacheNewsList = info
 			this.newsList = info; // 更新组件的数据
 			} catch (error) {
@@ -179,7 +163,7 @@ export default {
 			const data = {
 				menu_class_: i
 			}
-			var res = await this.$API.news.inquireType.post(data);
+			var res = await this.$cmsApi.inquireType.post(data);
 			this.cacheNewsList = res
 			this.newsList = res
 		},
@@ -189,7 +173,7 @@ export default {
 			const data = {
 				belong_to_: i
 			}
-			var res = await this.$API.news.inquireType.post(data);
+			var res = await this.$cmsApi.inquireType.post(data);
 			this.cacheNewsList = res
 			this.newsList = res
 		},
@@ -201,7 +185,7 @@ export default {
 		},
 		// 获取 - 子菜单
 		async getMenuChild() {
-			var res = await this.$API.news.inquireMenu.get();
+			var res = await this.$cmsApi.inquireMenu.get();
 			this.menuChild = res
 		},
 		// 语音选项
@@ -234,7 +218,7 @@ export default {
 
 			try {
 				// 更新且重新赋值
-				this.newsList[i] = await this.$API.news.updata.post(data);
+				this.newsList[i] = await this.$cmsApi.updata.post(data);
 			} catch (error) {
 				console.error('Error updating data:', error);
 			}

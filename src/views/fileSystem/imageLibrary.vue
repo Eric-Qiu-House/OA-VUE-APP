@@ -23,7 +23,7 @@
 				</el-card>
 				<el-card shadow="never" header="参数和方法">
 					<el-form label-width="100px">
-						<el-form-item label="图片比例">
+						<el-form-item label="图片比例"> 
 						    <el-select v-model="aspectRatio" placeholder="请选择">
 								<el-option label="自由" :value="0"></el-option>
 								<el-option label="1:1" :value="1/1"></el-option>

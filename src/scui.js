@@ -5,7 +5,7 @@ import { permission, rolePermission } from './utils/permission'
 
 //api 挂载url
 import api from './api' // 基础api
-import fileApi from './api/fileSystemApi/fileApi' // 基础api
+import fileApi from './api/fileApi/fileApi' // 基础api
 import cmsApi from './api/cmsApi/portalWeb' // 基础api
 
 
