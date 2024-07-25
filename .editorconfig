@@ -1,0 +1,17 @@
+# 编辑器配置
+
+# 顶层配置文件的编码设置
+root = true
+
+# 适用于所有文件
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 适用于特定的文件类型
+[*.md]
+trim_trailing_whitespace = false
