@@ -8,7 +8,6 @@
 				  </template>
 			</el-progress>
 		</div>
-
 	</el-card>
 </template>
 

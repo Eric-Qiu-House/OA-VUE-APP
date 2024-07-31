@@ -1,7 +1,6 @@
 # 文件包
 .DS_Store
 node_modules
-dist
 docs
 
 # 本地配置文件

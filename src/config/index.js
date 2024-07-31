@@ -12,10 +12,18 @@ const DEFAULT_CONFIG = {
 	CORE_VER: "1.6.9",
 
 	//接口地址
-	API_URL: 'http://127.0.0.1:3000',
-	CMS_URL: 'http://127.0.0.1:3000',
-	FILE_URL: 'http://127.0.0.1:3001', 
-	// API_URL: process.env.NODE_ENV === 'development' && process.env.VUE_APP_PROXY === 'true' ? "/api" : process.env.VUE_APP_API_BASEURL,
+	// API_URL: 'http://127.0.0.1:3000',
+	// CMS_URL: 'http://127.0.0.1:3000',
+	// FILE_URL: 'http://127.0.0.1:3001', 
+
+	
+	// API_URL: 'http://165.154.4.92:3000',
+	// CMS_URL: 'http://165.154.4.92:3000',
+	// FILE_URL: 'http://165.154.4.92:3001', 
+
+	API_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
+	CMS_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
+	FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3001`, 
 
 	//请求超时
 	TIMEOUT: 10000,

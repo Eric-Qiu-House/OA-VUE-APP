@@ -27,6 +27,7 @@
 		},
 		created() {
 			//设置主题颜色
+			console.log('API_URL:', `${process.env.VUE_APP_API_BASEURL}:3000`);
 			const app_color = this.$CONFIG.COLOR || this.$TOOL.data.get('APP_COLOR')
 			if(app_color){
 				document.documentElement.style.setProperty('--el-color-primary', app_color);
