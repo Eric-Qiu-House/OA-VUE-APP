@@ -1100,7 +1100,7 @@ const routes = [
         path: "/fileSystem",
         meta: {
             title: "文件库",
-            icon: "el-icon-takeaway-box",
+            icon: "sc-icon-file-ppt",
             type: "menu"
         },
         children: [
@@ -1116,7 +1116,85 @@ const routes = [
             }
         ]
     },
-   
+    {
+        name: "emailSystem",
+        path: "/emailSystem",
+        meta: {
+            title: "Email",
+            icon: "el-icon-takeaway-box",
+            type: "menu"
+        },
+        children: [
+            {
+                path: '/fixedAssets/GDZC',
+                name: 'imageLibrary',
+                meta: {
+                    title: '自动发送 邮件模板',
+                    icon: "sc-icon-bug-line",
+                    type: "menu"
+                },
+            },
+            {
+                path: '/fixedAssets/GDZC',
+                name: 'imageLibrary',
+                meta: {
+                    title: '官网邮件接收配置',
+                    icon: "sc-icon-bug-line",
+                    type: "menu"
+                },
+            }
+        ]
+    },
+    {
+        name: "fixedAssets",
+        path: "/fixedAssets",
+        meta: {
+            title: "AMS",
+            icon: "el-icon-takeaway-box",
+            type: "menu"
+        },
+        children: [
+            {
+                path: '/fixedAssets/GDZC',
+                name: 'imageLibrary',
+                meta: {
+                    title: '固定资产管理',
+                    icon: "sc-icon-bug-line",
+                    type: "menu"
+                },
+            }
+        ]
+    },
+    {
+        name: "approvalProcess",
+        path: "/approvalProcess",
+        meta: {
+            title: "WFM",
+            icon: "sc-icon-file-excel",
+            type: "menu"
+        },
+        children: [
+            {
+                path: '/fixedAssets/GDZC',
+                name: 'imageLibrary',
+                meta: {
+                    title: '流程管理',
+                    icon: "el-icon-magic-stick",
+                    type: "menu"
+                },
+            },
+            {
+                path: '/fixedAssets/GDZC',
+                name: 'imageLibrary',
+                meta: {
+                    title: '新建流程',
+                    icon: "el-icon-magic-stick",
+                    type: "menu"
+                },
+            },
+        ]
+    },
+    
     // {
     //     name: "vab",
     //     path: "/vab",
@@ -1766,12 +1844,52 @@ const routes = [
     //         }
     //     ]
     // },
-
+    {
+        name: "organize",
+        path: "/organize",
+        meta: {
+            title: "组织管理",
+            icon: "sc-icon-organization",
+            type: "menu"
+        },
+        children: [
+            {
+                path: "/organize/user",
+                name: "user",
+                meta: {
+                    title: "用户管理",
+                    icon: "el-icon-user-filled",
+                    type: "menu"
+                },
+                component: "organize/user"
+            },
+            {
+                path: "/organize/role",
+                name: "role",
+                meta: {
+                    title: "角色管理",
+                    icon: "el-icon-notebook",
+                    type: "menu"
+                },
+                component: "organize/role"
+            },
+            {
+                path: "/organize/dept",
+                name: "dept",
+                meta: {
+                    title: "部门管理",
+                    icon: "sc-icon-organization",
+                    type: "menu"
+                },
+                component: "organize/dept"
+            },
+        ]
+    },
     {
         name: "setting",
         path: "/setting",
         meta: {
-            title: "配置",
+            title: "系统配置",
             icon: "el-icon-setting",
             type: "menu"
         },
@@ -1787,34 +1905,14 @@ const routes = [
                 component: "setting/system"
             },
             {
-                path: "/setting/user",
-                name: "user",
+                path: "/setting/menu",
+                name: "settingMenu",
                 meta: {
-                    title: "用户管理",
-                    icon: "el-icon-user-filled",
+                    title: "菜单管理",
+                    icon: "el-icon-fold",
                     type: "menu"
                 },
-                component: "setting/user"
-            },
-            {
-                path: "/setting/role",
-                name: "role",
-                meta: {
-                    title: "角色管理",
-                    icon: "el-icon-notebook",
-                    type: "menu"
-                },
-                component: "setting/role"
-            },
-            {
-                path: "/setting/dept",
-                name: "dept",
-                meta: {
-                    title: "部门管理",
-                    icon: "sc-icon-organization",
-                    type: "menu"
-                },
-                component: "setting/dept"
+                component: "setting/menu"
             },
             {
                 path: "/setting/dic",
@@ -1835,16 +1933,6 @@ const routes = [
                     type: "menu"
                 },
                 component: "setting/table"
-            },
-            {
-                path: "/setting/menu",
-                name: "settingMenu",
-                meta: {
-                    title: "菜单管理",
-                    icon: "el-icon-fold",
-                    type: "menu"
-                },
-                component: "setting/menu"
             },
             {
                 path: "/setting/task",
