@@ -3,7 +3,7 @@ import http from "@/utils/request"
 
 export default {
 	token: {
-		url: `${config.IAM_URL}/login/log`,
+		url: `${config.API_URL}/login/log`,
 		name: "登录获取TOKEN",
 		post: async function(data={
 				account_:'admin1',

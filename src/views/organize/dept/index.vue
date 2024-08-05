@@ -73,7 +73,6 @@ export default {
 	},
 	async created() {
 		this.data = await this.$apiIAM.group.fromList.get()
-		this.search.keyword = ['友奇环境']
 	},
 	methods: {
 		//添加

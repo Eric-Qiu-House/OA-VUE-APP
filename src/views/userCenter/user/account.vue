@@ -35,7 +35,7 @@
 					user: "administrator@scuiadmin.com",
 					name: "Sakuya",
 					sex: "0",
-					about: "正所谓富贵险中求"
+					about: "春花秋月何时了？往事成追忆。小楼昨夜又东风，旧游地荒凉。笑问客从何处来？柳下又春寒。一帘幽梦隔清秋，笔端瘦千年。"
 				}
 			}
 		}

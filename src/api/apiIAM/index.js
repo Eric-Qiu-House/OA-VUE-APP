@@ -30,7 +30,15 @@ export default {
 			get: async function(){
 				return await http.get(this.url);
 			}
-		}
+		},
+		usersByGroup: {
+			url: `${config.IAM_URL}/org/user/getUsersByGroup`,
+			name: "部门查用户",
+			post: async function(params){
+				console.log(params,'ssssss')
+				return await http.post(this.url, params);
+			}
+		},
 	},
 
 }

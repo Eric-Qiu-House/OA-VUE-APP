@@ -36,7 +36,7 @@
 				</div>
 			</el-header>
 			<el-main class="nopadding">
-				<scTable ref="table" :data="data" @selection-change="selectionChange" stripe remoteSort remoteFilter>
+				<scTable ref="table" :data="userData" @selection-change="selectionChange" stripe remoteSort remoteFilter>
 					<el-table-column type="selection" width="50"></el-table-column>
 					<el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
 					<el-table-column label="头像" width="80" column-key="filterAvatar"
@@ -103,13 +103,13 @@ export default {
 			search: {
 				name: null
 			},
-			data: []
+			userData: []
 		}
 	},
 	async created() {
 		try {
 			const list = await this.$apiIAM.user.fromList.get()
-			this.data = list; // 更新组件的数据
+			this.userData = list; // 更新组件的数据
 		} catch (error) {
 			console.error("Error fetching user list:", error);
 		}
@@ -195,10 +195,18 @@ export default {
 		},
 		//树点击事件
 		groupClick(data) {
-			var params = {
-				groupId: data.id
-			}
-			this.$refs.table.reload(params)
+			
+			console.log(data,'sssssssssss')
+			// var params = {
+			// 	groupId: data.id
+			// }
+			// this.$refs.table.reload(params)
+			this.asd(data.id_)
+		},
+		// 部门查询用户
+		async asd(i) {
+			const data = {group_id_:i}
+			this.userData = await this.$apiIAM.user.usersByGroup.post(data);
 		},
 		//搜索
 		upsearch() {
