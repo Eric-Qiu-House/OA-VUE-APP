@@ -392,8 +392,129 @@ const routes = [
             },
         ]
     },
-    
-    // {
+    {
+        name: "organize",
+        path: "/organize",
+        meta: {
+            title: "组织管理",
+            icon: "sc-icon-organization",
+            type: "menu"
+        },
+        children: [
+            {
+                path: "/organize/user",
+                name: "user",
+                meta: {
+                    title: "用户管理",
+                    icon: "el-icon-user-filled",
+                    type: "menu"
+                },
+                component: "organize/user"
+            },
+            {
+                path: "/organize/role",
+                name: "role",
+                meta: {
+                    title: "角色管理",
+                    icon: "el-icon-notebook",
+                    type: "menu"
+                },
+                component: "organize/role"
+            },
+            {
+                path: "/organize/dept",
+                name: "dept",
+                meta: {
+                    title: "部门管理",
+                    icon: "sc-icon-organization",
+                    type: "menu"
+                },
+                component: "organize/dept"
+            },
+        ]
+    },
+    {
+        name: "setting",
+        path: "/setting",
+        meta: {
+            title: "系统配置",
+            icon: "el-icon-setting",
+            type: "menu"
+        },
+        children: [
+            {
+                path: "/setting/system",
+                name: "system",
+                meta: {
+                    title: "系统设置",
+                    icon: "el-icon-tools",
+                    type: "menu"
+                },
+                component: "setting/system"
+            },
+            {
+                path: "/setting/menu",
+                name: "settingMenu",
+                meta: {
+                    title: "菜单管理",
+                    icon: "el-icon-fold",
+                    type: "menu"
+                },
+                component: "setting/menu"
+            },
+            {
+                path: "/setting/dic",
+                name: "dic",
+                meta: {
+                    title: "字典管理",
+                    icon: "el-icon-document",
+                    type: "menu"
+                },
+                component: "setting/dic"
+            },
+            {
+                path: "/setting/table",
+                name: "tableSetting",
+                meta: {
+                    title: "表格列管理",
+                    icon: "el-icon-scale-to-original",
+                    type: "menu"
+                },
+                component: "setting/table"
+            },
+            {
+                path: "/setting/task",
+                name: "task",
+                meta: {
+                    title: "计划任务",
+                    icon: "el-icon-alarm-clock",
+                    type: "menu"
+                },
+                component: "setting/task"
+            },
+            {
+                path: "/setting/client",
+                name: "client",
+                meta: {
+                    title: "应用管理",
+                    icon: "el-icon-help-filled",
+                    type: "menu"
+                },
+                component: "setting/client"
+            },
+            {
+                path: "/setting/log",
+                name: "log",
+                meta: {
+                    title: "系统日志",
+                    icon: "el-icon-warning",
+                    type: "menu"
+                },
+                component: "setting/log"
+            }
+        ]
+    },
+        // {
     //     name: "vab",
     //     path: "/vab",
     //     meta: {
@@ -1042,128 +1163,6 @@ const routes = [
     //         }
     //     ]
     // },
-    {
-        name: "organize",
-        path: "/organize",
-        meta: {
-            title: "组织管理",
-            icon: "sc-icon-organization",
-            type: "menu"
-        },
-        children: [
-            {
-                path: "/organize/user",
-                name: "user",
-                meta: {
-                    title: "用户管理",
-                    icon: "el-icon-user-filled",
-                    type: "menu"
-                },
-                component: "organize/user"
-            },
-            {
-                path: "/organize/role",
-                name: "role",
-                meta: {
-                    title: "角色管理",
-                    icon: "el-icon-notebook",
-                    type: "menu"
-                },
-                component: "organize/role"
-            },
-            {
-                path: "/organize/dept",
-                name: "dept",
-                meta: {
-                    title: "部门管理",
-                    icon: "sc-icon-organization",
-                    type: "menu"
-                },
-                component: "organize/dept"
-            },
-        ]
-    },
-    {
-        name: "setting",
-        path: "/setting",
-        meta: {
-            title: "系统配置",
-            icon: "el-icon-setting",
-            type: "menu"
-        },
-        children: [
-            {
-                path: "/setting/system",
-                name: "system",
-                meta: {
-                    title: "系统设置",
-                    icon: "el-icon-tools",
-                    type: "menu"
-                },
-                component: "setting/system"
-            },
-            {
-                path: "/setting/menu",
-                name: "settingMenu",
-                meta: {
-                    title: "菜单管理",
-                    icon: "el-icon-fold",
-                    type: "menu"
-                },
-                component: "setting/menu"
-            },
-            {
-                path: "/setting/dic",
-                name: "dic",
-                meta: {
-                    title: "字典管理",
-                    icon: "el-icon-document",
-                    type: "menu"
-                },
-                component: "setting/dic"
-            },
-            {
-                path: "/setting/table",
-                name: "tableSetting",
-                meta: {
-                    title: "表格列管理",
-                    icon: "el-icon-scale-to-original",
-                    type: "menu"
-                },
-                component: "setting/table"
-            },
-            {
-                path: "/setting/task",
-                name: "task",
-                meta: {
-                    title: "计划任务",
-                    icon: "el-icon-alarm-clock",
-                    type: "menu"
-                },
-                component: "setting/task"
-            },
-            {
-                path: "/setting/client",
-                name: "client",
-                meta: {
-                    title: "应用管理",
-                    icon: "el-icon-help-filled",
-                    type: "menu"
-                },
-                component: "setting/client"
-            },
-            {
-                path: "/setting/log",
-                name: "log",
-                meta: {
-                    title: "系统日志",
-                    icon: "el-icon-warning",
-                    type: "menu"
-                },
-                component: "setting/log"
-            }
-        ]
-    },
     // {
     //     path: "/other/about",
     //     name: "about",

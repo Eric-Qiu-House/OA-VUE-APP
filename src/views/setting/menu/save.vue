@@ -167,7 +167,18 @@
 			//保存
 			async save(){
 				this.loading = true
-				var res = await this.$API.demo.post.post(this.form)
+				const formData = {
+					id: this.form.id,
+					// parentId: this.form.parentId,
+					name: this.form.name,
+					path: this.form.path,
+					component: this.form.component,
+					title: this.form.meta.title,
+					icon: this.form.meta.icon,
+					type: this.form.meta.type,
+				}
+				console.log(formData)
+				var res = await this.$apiIAM.system.updetaRoute.post(formData)
 				this.loading = false
 				if(res.code == 200){
 					this.$message.success("保存成功")

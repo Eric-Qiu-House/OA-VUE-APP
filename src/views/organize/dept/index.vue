@@ -13,8 +13,9 @@
 				</div>
 			</div>
 		</el-header>
+
 		<el-main class="nopadding">
-			<scTable ref="table" :data="data" row-key="id" @selection-change="selectionChange" hidePagination>
+			<scTable ref="table" :data="data" row-key="id_" @selection-change="selectionChange" hidePagination>
 				<el-table-column type="selection" width="50"></el-table-column>
 				<el-table-column label="部门名称" prop="name_" width="250"></el-table-column>
 				<el-table-column label="排序" prop="sn_" width="150"></el-table-column>
@@ -98,8 +99,8 @@ export default {
 		},
 		//删除
 		async table_del(row) {
-			var reqData = { id: row.id }
-			var res = await this.$API.demo.post.post(reqData);
+			var reqData = { id_: row.id_ }
+			var res = await this.$apiIAM.group.delete.post(reqData);
 			if (res.code == 200) {
 				this.$refs.table.refresh()
 				this.$message.success("删除成功")

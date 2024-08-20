@@ -44,14 +44,18 @@ export default {
 
 <style lang="scss" scoped>
 .detailsbox {
-  width: 1000px;
   margin: 0 auto;
-
+  img {
+    max-width: 100%;
+  }
   h5 {
-    margin: 12px 0;
-    font-size: 20px;
-    color: #3892f2;
+    font-size: 28px;
     text-align: center;
+    font-weight: bold;
+    background-color: #01417e;
+    color: #fff;
+    padding: 15px 0;
+    margin-bottom: 15px;
   }
 
   .pspan {

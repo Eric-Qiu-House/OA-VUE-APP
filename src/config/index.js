@@ -14,7 +14,7 @@ const DEFAULT_CONFIG = {
 	//接口地址
 	// API_URL: 'http://127.0.0.1:3000',
 	// CMS_URL: 'http://127.0.0.1:3000',
-	// FILE_URL: 'http://127.0.0.1:3001', 
+	FILE_URL: 'http://127.0.0.1:3001', 
 	IAM_URL: 'http://127.0.0.1:3002', 
 
 	
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG = {
 
 	API_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
 	CMS_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
-	FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3001`, 
+	// FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3001`, 
 	// IAM_URL: `${process.env.VUE_APP_API_BASEURL}:3002`, 
 
 	//请求超时

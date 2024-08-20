@@ -20,12 +20,18 @@
 				<el-table-column label="#" type="index" width="50"></el-table-column>
 				<el-table-column label="角色名称" prop="name_" width="150"></el-table-column>
 				<el-table-column label="排序" prop="sn_" width="80"></el-table-column>
-				<el-table-column label="状态" prop="enabled_" width="80">
+				<el-table-column label="状态1" prop="enabled_" width="80">
+					<!-- <template #default="scope">
+						{{ scope.row.enabled_ }}
+						<el-switch v-model="scope.row.enabled_" active-value="1" inactive-value="0"/>
+					</template> -->
+				</el-table-column>
+				<!-- <el-table-column label="状态" prop="enabled_" width="80">
 					<template #default="scope">
 						<el-switch v-model="scope.row.enabled_" @change="changeSwitch($event, scope.row)"
 							:loading="scope.row.$enabled_" active-value="1" inactive-value="0"></el-switch>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				<el-table-column label="创建时间" prop="create_time_" width="180"></el-table-column>
 				<el-table-column label="备注" prop="desc_" min-width="150"></el-table-column>
 				<el-table-column label="操作" fixed="right" align="right" width="170">
@@ -113,8 +119,8 @@ export default {
 		},
 		//删除
 		async table_del(row) {
-			var reqData = { id: row.id }
-			var res = await this.$API.demo.post.post(reqData);
+			var reqData = { id_: row.id_ }
+			var res = await this.$apiIAM.role.delete.post(reqData);
 			if (res.code == 200) {
 				this.$refs.table.refresh()
 				this.$message.success("删除成功")
@@ -140,15 +146,15 @@ export default {
 			this.selection = selection;
 		},
 		//表格内开关
-		changeSwitch(val, row) {
-			row.status = row.status == '1' ? '0' : '1'
-			row.$switch_status = true;
-			setTimeout(() => {
-				delete row.$switch_status;
-				row.status = val;
-				this.$message.success("操作成功")
-			}, 500)
-		},
+		// changeSwitch(val, row) {
+		// 	row.enabled_ = row.enabled_ == '1' ? '0' : '1'
+		// 	row.$switch_status = true;
+		// 	setTimeout(() => {
+		// 		delete row.$switch_status;
+		// 		row.enabled_ = val;
+		// 		this.$message.success("操作成功")
+		// 	}, 500)
+		// },
 		//搜索
 		upsearch() {
 

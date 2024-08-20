@@ -211,7 +211,7 @@ export default {
 		//搜索
 		upsearch() {
 			this.$refs.table.upData(this.search)
-		},
+		},	
 		//本地更新数据
 		handleSuccess(data, mode) {
 			if (mode == 'add') {

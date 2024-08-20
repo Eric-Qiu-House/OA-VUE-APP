@@ -3,7 +3,7 @@
 		<el-tabs tab-position="top">
 			<el-tab-pane label="菜单权限">
 				<div class="treeMain">
-					<el-tree ref="menu" node-key="name" :data="menu.list" :props="menu.props" show-checkbox></el-tree>
+					<el-tree ref="menu" node-key="name" :data="menu" :props="menu.props" show-checkbox></el-tree>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane label="数据权限">
@@ -107,6 +107,7 @@
 		},
 		mounted() {
 			this.getMenu()
+			//角色已拥有的权限
 			this.getDept()
 			this.getGrid()
 		},
@@ -132,8 +133,8 @@
 				},1000)
 			},
 			async getMenu(){
-				var res = await this.$API.system.menu.list.get()
-				this.menu.list = res.data
+				var data = await  this.$apiIAM.system.routerTree.get();
+				this.menu = data
 
 				//获取接口返回的之前选中的和半选的合并，处理过滤掉有叶子节点的key
 				this.menu.checked = ["system", "user", "user.add", "user.edit", "user.del", "directive.edit", "other", "directive"]
