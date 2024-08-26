@@ -97,24 +97,24 @@ export default {
 		async add(node, data) {
 			var newMenuName = "未命名" + newMenuIndex++;
 			var newMenuData = {
-				parentId: data ? data.id : "",
+				parent_id: data ? data.id : null,
 				name: newMenuName,
 				path: "",
 				component: "",
-				meta: {
-					title: newMenuName,
-					type: "menu"
-				}
+				title: newMenuName,
+				type: "menu"
 			}
 			this.menuloading = true
-			var res = await this.$API.demo.post.post(newMenuData)
-			this.menuloading = false
-			newMenuData.id = res.data
+			await this.$apiIAM.system.addRouter.post(newMenuData)
+		this.getMenu();
 
-			this.$refs.menu.append(newMenuData, node)
-			this.$refs.menu.setCurrentKey(newMenuData.id)
-			var pid = node ? node.data.id : ""
-			this.$refs.save.setData(newMenuData, pid)
+			this.menuloading = false
+			// newMenuData.id = res.data
+
+			// this.$refs.menu.append(newMenuData, node)
+			// this.$refs.menu.setCurrentKey(newMenuData.id)
+			// var pid = node ? node.data.id : ""
+			// this.$refs.save.setData(newMenuData, pid)
 		},
 		//删除菜单
 		async delMenu() {

@@ -19,6 +19,8 @@
 				<el-input v-model="form.desc_" clearable type="textarea"></el-input>
 			</el-form-item>
 		</el-form>
+		{{ mode }}
+
 		<template #footer>
 			<el-button @click="visible = false">取 消</el-button>
 			<el-button v-if="mode != 'show'" type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
@@ -85,20 +87,46 @@ export default {
 		},
 		//表单提交方法
 		submit() {
-			this.$refs.dialogForm.validate(async (valid) => {
-				if (valid) {
-					this.isSaveing = true;
-					var res = await this.$API.demo.post.post(this.form);
-					this.isSaveing = false;
-					if (res.code == 200) {
-						this.$emit('success', this.form, this.mode)
-						this.visible = false;
-						this.$message.success("操作成功")
-					} else {
-						this.$alert(res.message, "提示", { type: 'error' })
+			if (this.mode == 'add') {
+				console.log(this.mode, 'add')
+				this.$refs.dialogForm.validate(async (valid) => {
+					if (valid) {
+						this.isSaveing = true;
+						let formToSubmit = {
+						parent_id_: this.form.parent_id_,
+						name_: this.form.name_,
+						sn_: this.form.sn_,
+						state_: this.form.state_,
+						desc_: this.form.desc_
 					}
-				}
-			})
+						var res = await this.$apiIAM.group.add.post(formToSubmit);
+						this.isSaveing = false;
+						if (res.code == 200) {
+							this.$emit('success', this.form, this.mode)
+							this.visible = false;
+							this.$message.success("操作成功")
+						} else {
+							this.$alert(res.message, "提示", { type: 'error' })
+						}
+					}
+				})
+			} else {
+				this.$refs.dialogForm.validate(async (valid) => {
+					if (valid) {
+						this.isSaveing = true;
+						var res = await this.$apiIAM.group.undate.post(this.form);
+						this.isSaveing = false;
+						if (res.code == 200) {
+							this.$emit('success', this.form, this.mode)
+							this.visible = false;
+							this.$message.success("操作成功")
+						} else {
+							this.$alert(res.message, "提示", { type: 'error' })
+						}
+					}
+				})
+			}
+
 		},
 		//表单注入数据
 		setData(data) {

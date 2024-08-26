@@ -37,12 +37,14 @@
 				</el-dropdown>
 			</div>
 			<div class="login-form">
+				<!-- LOG及系统名称 -->
 				<div class="login-header">
 					<div class="logo">
 						<img :alt="$CONFIG.APP_NAME" src="img/logo.png">
 						<label>{{$CONFIG.APP_NAME}}</label>
 					</div>
 				</div>
+				<!-- 账号密码输入框 -->
 				<el-tabs>
 					<el-tab-pane :label="$t('login.accountLogin')" lazy>
 						<password-form></password-form>
@@ -51,6 +53,7 @@
 						<phone-form></phone-form>
 					</el-tab-pane>
 				</el-tabs>
+				<!-- 微信登入 -->
 				<template v-if="$CONFIG.MY_SHOW_LOGIN_OAUTH">
 					<el-divider>{{ $t('login.signInOther') }}</el-divider>
 					<div class="login-oauth">

@@ -33,7 +33,21 @@ export default {
 		}
 	},
 	relation: {
-
+		readUserRelation: {
+			url: `${config.IAM_URL}/org/relation/readOneId`,
+			name: "更新",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		update: {
+			url: `${config.IAM_URL}/org/relation/updateRelation`,
+			name: "更新",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		
 	},
 	role: {
 		fromList: {
@@ -57,7 +71,7 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
-		undate: {
+		update: {
 			url: `${config.IAM_URL}/org/role/updateRole`,
 			name: "更新",
 			post: async function(params){
@@ -80,6 +94,34 @@ export default {
 				return await http.post(this.url, params);
 			}
 		},
+		add: {
+			url: `${config.IAM_URL}/org/user/addUser`,
+			name: "添加",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		delete: {
+			url: `${config.IAM_URL}/org/user/deleteUser`,
+			name: "删除",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		undate: {
+			url: `${config.IAM_URL}/org/user/updateUser`,
+			name: "更新",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		changePassword: {
+			url: `${config.IAM_URL}/login/changePassword`,
+			name: "修改密码",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
 	},
 	system: {
 		routerTree: {
@@ -96,6 +138,13 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
-	}
+		addRouter: {
+			url: `${config.IAM_URL}/system/router/addRouter`,
+			name: "添加路由",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		}
+	},
 
 }

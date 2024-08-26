@@ -10,7 +10,7 @@
 			<el-form-item label="姓名">
 				<el-input v-model="form.name"></el-input>
 			</el-form-item>
-			<el-form-item label="性别">
+			<!-- <el-form-item label="性别">
 				<el-select v-model="form.sex" placeholder="请选择">
 					<el-option label="保密" value="0"></el-option>
 					<el-option label="男" value="1"></el-option>
@@ -19,7 +19,7 @@
 			</el-form-item>
 			<el-form-item label="个性签名">
 				<el-input v-model="form.about" type="textarea"></el-input>
-			</el-form-item>
+			</el-form-item> -->
 			<el-form-item>
 				<el-button type="primary">保存</el-button>
 			</el-form-item>
@@ -33,12 +33,20 @@
 			return {
 				form: {
 					user: "administrator@scuiadmin.com",
-					name: "Sakuya",
+					name: "Sakuya", 
 					sex: "0",
 					about: "春花秋月何时了？往事成追忆。小楼昨夜又东风，旧游地荒凉。笑问客从何处来？柳下又春寒。一帘幽梦隔清秋，笔端瘦千年。"
 				}
 			}
-		}
+		},
+		created() {
+			var userInfo = this.$TOOL.data.get("USER_INFO");
+			console.log(userInfo,'userinfoffffffffffffffffff')
+			this.form = {
+				user: userInfo.account_,
+				name: userInfo.fullname_,
+			}
+		},
 	}
 </script>
 

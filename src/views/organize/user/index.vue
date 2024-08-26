@@ -36,25 +36,38 @@
 				</div>
 			</el-header>
 			<el-main class="nopadding">
-				<scTable ref="table" :data="userData" @selection-change="selectionChange" stripe remoteSort remoteFilter>
+				<scTable ref="table" :data="userData" @selection-change="selectionChange" stripe remoteSort
+					remoteFilter>
 					<el-table-column type="selection" width="50"></el-table-column>
 					<el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
-					<el-table-column label="头像" width="80" column-key="filterAvatar"
+					<!-- <el-table-column label="头像" width="80" column-key="filterAvatar"
 						:filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
 						<template #default="scope">
-							<el-avatar :src="scope.row.avatar" size="small"></el-avatar>
-							{{ photo_ }}
+							<el-avatar :src="scope.row.avatar_" size="small"></el-avatar>
+						</template>
+					</el-table-column>  -->
+					<el-table-column label="头像" width="100" column-key="filterAvatar"
+						:filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
+						<template #default="scope">
+							<el-avatar :src="scope.row.avatar_ ? scope.row.avatar_ : ''" 
+								:style="{ backgroundColor: scope.row.avatar_ ? '' : '#409EFF', color: '#fff' }">
+								<template #default>
+									<!-- 如果 avatar_ 为空，显示 fullname_ 的后两位字符 -->
+									<span v-if="!scope.row.avatar_" style="writing-mode: horizontal-tb;">
+										{{ scope.row.fullname_.slice(-2) }}
+									</span>
+								</template>
+							</el-avatar>
 						</template>
 					</el-table-column>
+
+
 					<el-table-column label="登录账号" prop="account_" width="150" sortable='custom'
 						column-key="filterUserName"
 						:filters="[{ text: '系统账号', value: '1' }, { text: '普通账号', value: '0' }]"></el-table-column>
 					<el-table-column label="姓名" prop="fullname_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="邮箱" prop="email_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="手机号码" prop="mobile_" width="150" sortable='custom'></el-table-column>
-					<el-table-column label="性别" prop="sex_" width="150" sortable='custom'></el-table-column>
-					<el-table-column label="所属组织" prop="create_org_id_" width="150" sortable='custom'></el-table-column>
-					<el-table-column label="到期时间" prop="expire_date_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="状态" prop="status_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="操作" fixed="right" align="right" width="160">
 						<template #default="scope">
@@ -106,7 +119,7 @@ export default {
 			userData: []
 		}
 	},
-	async created() {
+	async created() { 
 		try {
 			const list = await this.$apiIAM.user.fromList.get()
 			this.userData = list; // 更新组件的数据
@@ -146,8 +159,8 @@ export default {
 		},
 		//删除
 		async table_del(row, index) {
-			var reqData = { id: row.id }
-			var res = await this.$API.demo.post.post(reqData);
+			var reqData = { id_: row.id_ }
+			var res = await this.$apiIAM.user.delete.post(reqData);
 			if (res.code == 200) {
 				//这里选择刷新整个表格 OR 插入/编辑现有表格数据
 				this.$refs.table.tableData.splice(index, 1);
@@ -195,8 +208,8 @@ export default {
 		},
 		//树点击事件
 		groupClick(data) {
-			
-			console.log(data,'sssssssssss')
+
+			console.log(data, 'sssssssssss')
 			// var params = {
 			// 	groupId: data.id
 			// }
@@ -205,13 +218,13 @@ export default {
 		},
 		// 部门查询用户
 		async asd(i) {
-			const data = {group_id_:i}
+			const data = { group_id_: i }
 			this.userData = await this.$apiIAM.user.usersByGroup.post(data);
 		},
 		//搜索
 		upsearch() {
 			this.$refs.table.upData(this.search)
-		},	
+		},
 		//本地更新数据
 		handleSuccess(data, mode) {
 			if (mode == 'add') {

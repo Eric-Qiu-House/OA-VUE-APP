@@ -5,7 +5,7 @@
 				<el-button type="primary" icon="el-icon-plus" @click="add"></el-button>
 				<el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length == 0"
 					@click="batch_del"></el-button>
-				<el-button type="primary" plain :disabled="selection.length != 1" @click="permission">权限设置</el-button>
+				<el-button type="primary" plain :disabled="selection.length != 1" @click="permission()">权限设置</el-button>
 			</div>
 			<div class="right-panel">
 				<div class="right-panel-search">
@@ -20,18 +20,12 @@
 				<el-table-column label="#" type="index" width="50"></el-table-column>
 				<el-table-column label="角色名称" prop="name_" width="150"></el-table-column>
 				<el-table-column label="排序" prop="sn_" width="80"></el-table-column>
-				<el-table-column label="状态1" prop="enabled_" width="80">
-					<!-- <template #default="scope">
-						{{ scope.row.enabled_ }}
-						<el-switch v-model="scope.row.enabled_" active-value="1" inactive-value="0"/>
-					</template> -->
-				</el-table-column>
-				<!-- <el-table-column label="状态" prop="enabled_" width="80">
+				<el-table-column label="状态" prop="enabled_" width="80">
 					<template #default="scope">
-						<el-switch v-model="scope.row.enabled_" @change="changeSwitch($event, scope.row)"
-							:loading="scope.row.$enabled_" active-value="1" inactive-value="0"></el-switch>
+						<el-tag v-if="scope.row.enabled_ == 1" type="success">启用</el-tag>
+						<el-tag v-if="scope.row.enabled_ == 0" type="danger">停用</el-tag>
 					</template>
-				</el-table-column> -->
+				</el-table-column>
 				<el-table-column label="创建时间" prop="create_time_" width="180"></el-table-column>
 				<el-table-column label="备注" prop="desc_" min-width="150"></el-table-column>
 				<el-table-column label="操作" fixed="right" align="right" width="170">
@@ -54,7 +48,7 @@
 		</el-main>
 	</el-container>
 
-	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSaveSuccess"
+	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSaveSuccess" 
 		@closed="dialog.save = false"></save-dialog>
 
 	<permission-dialog v-if="dialog.permission" ref="permissionDialog"
@@ -114,6 +108,7 @@ export default {
 		permission() {
 			this.dialog.permission = true
 			this.$nextTick(() => {
+				this.$refs.permissionDialog.setData(this.selection);
 				this.$refs.permissionDialog.open()
 			})
 		},
@@ -143,6 +138,7 @@ export default {
 		},
 		//表格选择后回调事件
 		selectionChange(selection) {
+			console.log(selection)
 			this.selection = selection;
 		},
 		//表格内开关

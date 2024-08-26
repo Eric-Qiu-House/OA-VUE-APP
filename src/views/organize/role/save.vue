@@ -12,7 +12,7 @@
 				<el-input-number v-model="form.sort" controls-position="right" :min="1" style="width: 100%;"></el-input-number>
 			</el-form-item> -->
 			<el-form-item label="是否有效" prop="enabled_">
-				<el-switch v-model="form.enabled_" active-value="1" inactive-value="0"></el-switch>
+				<el-switch v-model="form.enabled_" :active-value="1" :inactive-value="0"></el-switch>
 			</el-form-item>
 			<el-form-item label="备注" prop="desc_">
 				<el-input v-model="form.desc_" clearable type="textarea"></el-input>
@@ -77,7 +77,9 @@ export default {
 				this.$refs.dialogForm.validate(async (valid) => {
 					if (valid) {
 						this.isSaveing = true;
-						var res = await this.$apiIAM.role.add.post(this.form);
+						let formToSubmit = { ...this.form };
+						delete formToSubmit.id_; // 手动删除 id_
+						var res = await this.$apiIAM.role.add.post( formToSubmit );
 						this.isSaveing = false;
 						if (res.code == 200) {
 							this.$emit('success', this.form, this.mode)
@@ -92,7 +94,7 @@ export default {
 				this.$refs.dialogForm.validate(async (valid) => {
 					if (valid) {
 						this.isSaveing = true;
-						var res = await this.$apiIAM.role.undate.post(this.form);
+						var res = await this.$apiIAM.role.update.post(this.form);
 						this.isSaveing = false;
 						if (res.code == 200) {
 							this.$emit('success', this.form, this.mode)

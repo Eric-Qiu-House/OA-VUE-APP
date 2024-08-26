@@ -212,7 +212,6 @@ import userbar from './components/userbar.vue';
 import setting from './components/setting.vue';
 import iframeView from './components/iframeView.vue';
 import autoExit from './other/autoExit.js';
-import routes from '@/config/route'
 
 export default {
 	name: 'index',
@@ -229,7 +228,7 @@ export default {
 	data() {
 		return {
 			settingDialog: false,
-			menu: routes,
+			menu: [],
 			nextMenu: [],
 			pmenu: {},
 			active: ''
@@ -252,8 +251,9 @@ export default {
 	created() {
 		this.onLayoutResize();
 		window.addEventListener('resize', this.onLayoutResize);
-		// var menu = this.$router.sc_getMenu();
-		// this.menu = this.filterUrl(menu);
+		// 提取路由 到 菜单中
+		var menu = this.$router.sc_getMenu();
+		this.menu = this.filterUrl(menu); 
 		this.showThis()
 	},
 	watch: {

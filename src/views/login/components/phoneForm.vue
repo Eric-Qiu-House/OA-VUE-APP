@@ -1,4 +1,5 @@
 <template>
+	<!-- 手机号登入 -->
 	<el-form ref="loginForm" :model="form" :rules="rules" label-width="0" size="large" @keyup.enter="login">
 		<el-form-item prop="phone">
 			<el-input v-model="form.phone" prefix-icon="el-icon-iphone" clearable :placeholder="$t('login.mobilePlaceholder')">
