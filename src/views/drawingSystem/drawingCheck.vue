@@ -2,7 +2,7 @@
     <el-main>
         <el-row :gutter="15">
             <el-col :lg="12">
-                <el-card header="审核清单">
+                <el-card header="审核清单 - PE01PID_001">
                     <div class="file-list">
                         <!-- 静态文件列表 -->
                         <!-- <el-link style="text-align: center; line-height: 50px;margin: 0 auto;display: block;" type="success">{{
@@ -97,7 +97,7 @@
                                 </el-descriptions>
                                 <el-divider></el-divider>
                                 <el-form-item label="请输入“确认”" prop="payPassword">
-                                    <el-input v-model="form.payPassword" show-password placeholder="请输入"></el-input>
+                                    <el-input v-model="form.payPassword" placeholder="请输入"></el-input>
                                 </el-form-item>
                             </el-form>
                             <div v-if="active == 2">
@@ -130,8 +130,8 @@ export default {
             active: 0,
             submitLoading: false,
             form: {
-                paymentAccount: 'Document.pdf',
-                collectionAccount: '计划京津冀',
+                paymentAccount: 'PE01PID_001 V-001',
+                collectionAccount: '文件已校验，本次设计通过，文件进行升版',
                 collectionName: 'Lolowan',
                 amount: '100',
                 payPassword: ''

@@ -16,16 +16,13 @@ const DEFAULT_CONFIG = {
 	// CMS_URL: 'http://127.0.0.1:3000',
 	// FILE_URL: 'http://127.0.0.1:3001', 
 	IAM_URL: 'http://127.0.0.1:3002', 
-
-	
-	// API_URL: 'http://165.154.4.92:3000',
-	// CMS_URL: 'http://165.154.4.92:3000',
-	// FILE_URL: 'http://165.154.4.92:3001', 
+	DMS_URL: 'http://127.0.0.1:3003', 
 
 	API_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
 	CMS_URL: `${process.env.VUE_APP_API_BASEURL}:3000`,
 	FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3001`, 
 	// IAM_URL: `${process.env.VUE_APP_API_BASEURL}:3002`, 
+	// DMS_URL: `${process.env.VUE_APP_API_BASEURL}:3003`, 
 
 	//请求超时
 	TIMEOUT: 10000,
@@ -73,7 +70,7 @@ const DEFAULT_CONFIG = {
 		layout: [12, 6, 6],
 		//小组件分布，com取值:views/home/components 文件名
 		copmsList: [
-			['welcome'],
+			['welcome','manhour'],
 			['about', 'ver'],
 			['time', 'progress']
 		]

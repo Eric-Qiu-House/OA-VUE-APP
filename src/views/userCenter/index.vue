@@ -127,7 +127,7 @@ export default {
 	created() {
 		var userInfo = this.$TOOL.data.get("USER_INFO");
 		this.user.userName = userInfo.fullname_;
-		this.user.userNameF = this.userName.avatar_;
+		// this.user.userNameF = this.userName.avatar_;
 	},
 	//路由跳转进来 判断from是否有特殊标识做特殊处理
 	beforeRouteEnter(to, from, next) {

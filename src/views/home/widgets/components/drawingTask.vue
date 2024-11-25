@@ -294,8 +294,6 @@ export default {
 </script>
 
 <style scoped>
-.welcome {}
-
 .welcome .logo {
 	text-align: center;
 }

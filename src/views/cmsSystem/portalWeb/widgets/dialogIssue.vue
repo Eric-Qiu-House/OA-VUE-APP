@@ -19,7 +19,7 @@
 					<el-option v-for="item in language" :key="item.value" :label="item.label" :value="item.value" />
 				</el-select>
 			</el-form-item>
-<!-- 
+			<!-- 
 			<el-form-item>
 				<el-button type="primary" @click="submitForm()">Submit</el-button>
 				<el-button @click="resetForm(formData)">Reset</el-button>
@@ -40,12 +40,15 @@ export default {
 		message: Object
 	},
 	data() {
+		var userInfo = this.$TOOL.data.get("USER_INFO");
 		return {
 			visible: true,
 			formData: {
 				menu_class_: null,
 				belong_to_: null,
-				language_: ''
+				language_: '',
+				update_by_: userInfo.id_,
+				updater_: userInfo.fullname_
 			},
 			mainMenu: [],
 			subMenu: [],
@@ -96,7 +99,6 @@ export default {
 		// 改变主菜单 - 选择框
 		changeMainMenu(i) {
 			// 清空二级菜单
-			console.log(i)
 			this.formData.belong_to_ = ''
 			this.subMenu = this.subMenuCache.filter(row => row.form_ == i)
 		},

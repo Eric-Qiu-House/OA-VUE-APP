@@ -5,7 +5,7 @@
 				<template #default="{ percentage }">
 				    <div class="percentage-value">{{ percentage }}%</div>
 				    <div class="percentage-label">当前进度</div>
-				  </template>
+				</template>
 			</el-progress>
 		</div>
 	</el-card>

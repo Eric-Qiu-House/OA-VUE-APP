@@ -8,6 +8,7 @@ import api from './api' // 基础api
 import fileApi from './api/fileApi/fileApi' // 基础api
 import cmsApi from './api/cmsApi/portalWeb' // 基础api
 import apiIAM from "./api/apiIAM"
+import dmsApi from "./api/dmsApi"
 
 
 import scTable from './components/scTable'
@@ -54,6 +55,7 @@ export default {
 		app.config.globalProperties.$fileApi = fileApi;
 		app.config.globalProperties.$cmsApi = cmsApi;
 		app.config.globalProperties.$apiIAM = apiIAM;
+		app.config.globalProperties.$dmsApi = dmsApi;
 
 
 		//注册全局组件

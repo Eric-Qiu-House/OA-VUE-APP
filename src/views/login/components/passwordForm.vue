@@ -46,7 +46,7 @@ export default {
 		return {
 			userType: 'user',
 			form: {
-				user: "shenyuan123",
+				user: "",
 				password: "qwe12345",
 				autologin: false
 			},

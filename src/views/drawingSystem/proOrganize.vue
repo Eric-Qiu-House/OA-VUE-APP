@@ -2,82 +2,117 @@
     <el-main>
         <el-row :gutter="15">
             <el-col :lg="3">
-                <el-card>
-                    <el-tree style="max-width: 600px" :data="data" node-key="id" :default-expanded-keys="[1, 2, 3]"
-                        :default-checked-keys="[42]" :props="defaultProps" />
+                <el-card header="项目编号">
+                    <el-tree style="max-width: 600px" :data="projectData" node-key="id_" :props="defaultProps"
+                        @node-click="handleNodeClick" />
                 </el-card>
             </el-col>
             <el-col :lg="21">
-                <el-card shadow="never" header="项目成员 - 23010">
-                    <el-header>
-                        <div class="left-panel">
-                            <!-- <el-button type="primary" icon="el-icon-plus" @click="add"></el-button> -->
-                            <el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length == 0"
-                                @click="batch_del"></el-button>
-                            <el-button type="primary" plain :disabled="selection.length == 0">添加成员</el-button>
-                            <el-button type="primary" plain :disabled="selection.length == 0">密码重置</el-button>
-                        </div>
-                        <div class="right-panel">
-                            <div class="right-panel-search">
-                                <el-input v-model="search.name" placeholder="登录账号 / 姓名" clearable></el-input>
-                                <el-button type="primary" icon="el-icon-search" @click="upsearch"></el-button>
-                            </div>
-                        </div>
+                <el-card shadow="never" header="">
+
+                    <el-header class="header-tabs">
+                        <el-tabs type="card" v-model="groupId" @tab-change="tabChange">
+                            <el-tab-pane label="项目成员 - 23010" name="0"></el-tab-pane>
+                            <el-tab-pane label="外部通讯录" name="1" disabled ></el-tab-pane>
+                        </el-tabs>
                     </el-header>
-                    <!-- {{ this.apiObj }} -->
-                    <el-main class="nopadding">
-                        <scTable ref="table" :data="apiObj" @selection-change="selectionChange" stripe remoteSort
-                            remoteFilter>
-                            <el-table-column type="selection" width="0"></el-table-column>
-                            <el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
-                            <el-table-column label="登录账号" prop="account_" width="120" sortable='custom'
-                                column-key="filterUserName"
-                                :filters="[{ text: '系统账号', value: '1' }, { text: '普通账号', value: '0' }]"></el-table-column>
-                            <el-table-column label="姓名" prop="fullname_" width="100"
-                                sortable='custom'></el-table-column>
-                            <el-table-column label="角色" prop="juese_" width="100" sortable='custom'></el-table-column>
-                            <el-table-column label="邮箱" prop="email_" width="150" sortable='custom'></el-table-column>
-                            <el-table-column label="手机号码" prop="mobile_" width="150"
-                                sortable='custom'></el-table-column>
-                            <el-table-column label="所属组织" prop="create_org_id_" width="150"
-                                sortable='custom'>
-                                <template #default="scope">
-                                    <el-button-group >
-                                        <el-link :type="scope.row.create_org_id_ === '外部' ? 'danger' : '' ">
-                                            {{ scope.row.create_org_id_ }}
-                                        </el-link>
-                                    </el-button-group>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="到期时间" prop="expire_date_" width="150"
-                                sortable='custom'></el-table-column>
-                            <el-table-column label="状态" prop="status_" width="150" sortable='custom'>
-                                <template #default="scope">
-                                    <el-button-group >
-                                        <el-link :type="scope.row.status_ === '启用' ? 'success' : 'danger'">
-                                            {{ scope.row.status_ }}
-                                        </el-link>
-                                    </el-button-group>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" fixed="right" align="right" width="160">
-                                <template #default="scope">
-                                    <el-button-group>
-                                        <el-button text type="primary" size="small"
-                                            >查看</el-button>
-                                        <el-button text type="primary" size="small"
-                                            >编辑</el-button>
-                                        <el-popconfirm title="确定删除吗？" @confirm="table_del(scope.row, scope.$index)">
-                                            <template #reference>
-                                                <el-button text type="primary" size="small">删除</el-button>
+
+                    <el-card shadow="never" header="">
+                        <el-header>
+                            <div class="left-panel">
+                                <el-button type="primary" icon="el-icon-plus" @click="add"></el-button>
+                            </div>
+                            <div class="right-panel">
+                                <div class="right-panel-search">
+                                    <el-input v-model="search.name" placeholder="查询" clearable></el-input>
+                                    <el-button type="primary" icon="el-icon-search" @click="upsearch"></el-button>
+                                </div>
+                            </div>
+                        </el-header>
+                        <!-- {{ this.apiObj }} -->
+                        <el-main class="nopadding" v-if="groupId == 0">
+                            <scTable ref="table" :data="usersData" @selection-change="selectionChange" stripe remoteSort
+                                remoteFilter>
+                                <el-table-column type="selection" width="50"></el-table-column>
+                                <el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
+                                <!-- <el-table-column label="头像" width="80" column-key="filterAvatar"
+						:filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
+						<template #default="scope">
+							<el-avatar :src="scope.row.avatar_" size="small"></el-avatar>
+						</template>
+</el-table-column> -->
+                                <el-table-column label="头像" width="100" column-key="filterAvatar"
+                                    :filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
+                                    <template #default="scope">
+                                        <el-avatar :src="scope.row.avatar_ ? scope.row.avatar_ : ''"
+                                            :style="{ backgroundColor: scope.row.avatar_ ? '' : '#409EFF', color: '#fff' }">
+                                            <template #default>
+                                                <!-- 如果 avatar_ 为空，显示 fullname_ 的后两位字符 -->
+                                                <span v-if="!scope.row.avatar_" style="writing-mode: horizontal-tb;">
+                                                    {{ scope.row.fullname_.slice(-2) }}
+                                                </span>
                                             </template>
-                                        </el-popconfirm>
-                                    </el-button-group>
-                                </template>
-                            </el-table-column>
-                        </scTable>
-                    </el-main>
+                                        </el-avatar>
+                                    </template>
+                                </el-table-column>
+
+
+                                <el-table-column label="登录账号" prop="account_" width="150" sortable='custom'
+                                    column-key="filterUserName"
+                                    :filters="[{ text: '系统账号', value: '1' }, { text: '普通账号', value: '0' }]"></el-table-column>
+                                <el-table-column label="姓名" prop="fullname_" width="150"
+                                    sortable='custom'></el-table-column>
+                                <el-table-column label="邮箱" prop="email_" width="150"
+                                    sortable='custom'></el-table-column>
+                                <el-table-column label="手机号码" prop="mobile_" width="150"
+                                    sortable='custom'></el-table-column>
+                                <el-table-column label="状态" prop="status_" width="150"
+                                    sortable='custom'></el-table-column>
+                                <el-table-column label="操作" fixed="right" align="right" width="160">
+                                    <template #default="scope">
+                                        <el-button-group>
+                                            <el-popconfirm title="确定删除吗？" @confirm="table_del(scope.row, scope.$index)">
+                                                <template #reference>
+                                                    <el-button text type="primary" size="small">删除</el-button>
+                                                </template>
+                                            </el-popconfirm>
+                                        </el-button-group>
+                                    </template>
+                                </el-table-column>
+
+                            </scTable>
+                        </el-main>
+                        <el-main class="nopadding" v-if="groupId == 1" >
+
+                            <scTable ref="table" :data="contactList" @selection-change="selectionChange1" stripe
+                                remoteSort remoteFilter>
+                                <el-table-column type="selection" width="0"></el-table-column>
+
+                                <!-- 公司名称 -->
+                                <el-table-column prop="companyName" label="公司名称" width="180"></el-table-column>
+
+                                <!-- 联系人姓名 -->
+                                <el-table-column prop="contactName" label="联系人" width="150"></el-table-column>
+
+                                <!-- 类型（供应商、设计院等） -->
+                                <el-table-column prop="type" label="类型" width="150">
+                                    <template #default="{ row }">
+                                        <el-tag :type="getTagType(row.type)">{{ row.type }}</el-tag>
+                                    </template>
+                                </el-table-column>
+
+                                <!-- 联系电话 -->
+                                <el-table-column prop="phone" label="联系电话" width="150"></el-table-column>
+
+                                <!-- 电子邮件 -->
+                                <el-table-column prop="email" label="电子邮件" width="200"></el-table-column>
+
+                            </scTable>
+                        </el-main>
+                    </el-card>
+
                 </el-card>
+
             </el-col>
         </el-row>
     </el-main>
@@ -96,29 +131,33 @@ export default {
     },
     data() {
         return {
-            data: [
+            defaultProps: {
+                label: 'project_number_',  // 将 `label` 字段映射为 `project_number_`
+            },
+            groupId: "0",
+            contactList: [
                 {
-                    id: 1,
-                    label: '项目表',
-                    children: [
-                        {
-                            id: 43,
-                            label: '23010',
-                        },
-                        {
-                            id: 45,
-                            label: '22041',
-                        },
-                        {
-                            id: 46,
-                            label: '23029',
-                        },
-                        {
-                            id: 42,
-                            label: '21014S',
-                        },
-                    ],
+                    companyName: 'ABC 供应商有限公司',
+                    contactName: '张三',
+                    type: '供应商',
+                    phone: '13800000001',
+                    email: 'zhangsan@abc.com',
                 },
+                {
+                    companyName: 'XYZ 设计院',
+                    contactName: '李四',
+                    type: '设计院',
+                    phone: '13900000002',
+                    email: 'lisi@xyz.com',
+                },
+                {
+                    companyName: 'DEF 建筑公司',
+                    contactName: '王五',
+                    type: '承包商',
+                    phone: '13700000003',
+                    email: 'wangwu@def.com',
+                },
+                // 更多联系人信息
             ],
             dialog: {
                 save: false
@@ -130,13 +169,13 @@ export default {
                 {
                     id_: 1,
                     account_: "user1",
-                    fullname_: "邹荡平",
+                    fullname_: "DC管理员",
                     email_: "john.doe@example.com",
                     mobile_: "1234567890",
                     create_org_id_: "友奇",
                     expire_date_: "长期",
                     status_: "启用",
-                    juese_: '项目经理'
+                    juese_: 'DC'
                 },
                 {
                     id_: 2,
@@ -241,31 +280,81 @@ export default {
             selection: [],
             search: {
                 name: null
-            }
+            },
+            projectData: [],
+            usersData: []
         }
     },
-    async created() {
-        // try {
-        //     const list = await this.$API.news.list.get();
-        //     this.apiObj = list; // 更新组件的数据
-        // } catch (error) {
-        //     console.error("Error fetching user list:", error);
-        // }
-    },
+    // async created() {
+    //     // try {
+    //     //     const list = await this.$API.news.list.get();
+    //     //     this.apiObj = list; // 更新组件的数据
+    //     // } catch (error) {
+    //     //     console.error("Error fetching user list:", error);
+    //     // }
+    // },
     watch: {
         // groupFilterText(val) {
         //     this.$refs.group.filter(val);
         // }
     },
-    mounted() {
-        // this.getGroup()
+    created() {
+        this.getProjectInfo()
     },
     methods: {
+        // 点击：项目编号
+        async handleNodeClick(nodeData) {
+            const postData = {
+                project_id_: nodeData.uuid_
+            }
+            try {
+                const userIds = await this.$dmsApi.projectUsershiproute.readId.post(postData)
+                if (userIds) {
+                    this.usersData = await this.$apiIAM.user.usersByUserIds.post(userIds)
+                } else {
+                    console.log('User not found');
+                    return null;
+                }
+            } catch (error) {
+                console.error("Error fetching user list:", error);
+            }
+        },
+        async getProjectInfo() {
+            try {
+                this.projectData = await this.$dmsApi.project.readAll.get()
+            } catch (error) {
+                console.error("Error fetching user list:", error);
+            }
+        },
+        selectionChange1(val) {
+            console.log('选中的行：', val);
+        },
+        getTagType(type) {
+            switch (type) {
+                case '供应商':
+                    return 'success';
+                case '设计院':
+                    return 'warning';
+                case '承包商':
+                    return 'info';
+                default:
+                    return 'primary';
+            }
+        },
+        tabChange(name) {
+            var params = {
+                groupId: name
+            }
+            this.$refs.table.reload(params)
+        },
+        filterChange(data) {
+            this.$refs.table.upData(data)
+        },
         //添加
         add() {
             this.dialog.save = true
             this.$nextTick(() => {
-                // this.$refs.saveDialog.open()
+                this.$refs.saveDialog.open()
             })
         },
         //编辑

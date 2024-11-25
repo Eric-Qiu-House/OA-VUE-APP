@@ -94,6 +94,20 @@ export default {
 				return await http.post(this.url, params);
 			}
 		},
+		usersByUserIds: {
+			url: `${config.IAM_URL}/org/user/usersByUserIds`,
+			name: "userIds read userInfo",
+			post: async function(params){
+				return await http.post(this.url, params);
+			}
+		},
+		userIdReadUserInfo: {
+			url: `${config.IAM_URL}/org/user/whereUserId`,
+			name: "userIds read userInfo",
+			post: async function(params){
+				return await http.post(this.url, params);
+			}
+		},
 		add: {
 			url: `${config.IAM_URL}/org/user/addUser`,
 			name: "添加",

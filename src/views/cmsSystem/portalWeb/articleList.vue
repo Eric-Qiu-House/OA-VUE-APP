@@ -30,15 +30,22 @@
 			</el-card>
 			<scTable ref="table" :data="newsList" row-key="id_" stripe :row-class-name="getRowClassName">
 				<el-table-column type="selection" width="50"></el-table-column>
-				<el-table-column label="标题" prop="title_" width="150"></el-table-column>
+				<el-table-column label="标题" prop="title_" width="200">
+					<template #default="{ row }">
+						<div class="ellipsis-text">{{ row.title_ }}</div>
+					</template>
+				</el-table-column>
 				<el-table-column label="访问数量" prop="visit_num_" width="150" sortable></el-table-column>
-				<el-table-column label="发布时间" prop="release_time_" width="150" sortable>
+				<el-table-column label="发布/下架 时间" prop="release_time_" width="150" sortable>
 					<template #default="scope">
-						<!-- {{ scope.row.release_time_ }} -->
 						{{ formatDate(scope.row.release_time_) }}
 					</template>
 				</el-table-column>
-				<el-table-column label="语言" prop="language_" width="150" sortable></el-table-column>
+				<el-table-column label="语言" prop="language_" width="150" sortable>
+					<template #default="scope">
+						{{ scope.row.language_ === 0 ? '中文' : (scope.row.language_ === 1 ? '英文' : '未选择') }}
+					</template>
+				</el-table-column>
 				<el-table-column label="发布人" prop="release_name_" width="150" sortable></el-table-column>
 				<el-table-column label="文档状态" prop="status_" width="150" sortable>
 					<template #default="scope">
@@ -78,7 +85,7 @@
 								<el-button text type="primary">下架</el-button>
 							</template>
 						</el-popconfirm>
-						<el-popconfirm :title="`确定删除${scope.row.title_}吗?`" @confirm="table_up(scope.row, scope.$index)"
+						<el-popconfirm :title="`确定删除${scope.row.title_}吗?`" @confirm="table_delete(scope.row, scope.$index)"
 							v-if="scope.row.status_ === 0 || scope.row.status_ === 2">
 							<template #reference>
 								<el-button text type="primary">删除</el-button>
@@ -150,8 +157,8 @@ export default {
 			this.value = 'all'
 			try {
 				const info = await this.$cmsApi.inquire.get();
-			this.cacheNewsList = info
-			this.newsList = info; // 更新组件的数据
+				this.cacheNewsList = info
+				this.newsList = info; // 更新组件的数据
 			} catch (error) {
 				console.error("Error fetching user list:", error);
 			}
@@ -206,6 +213,8 @@ export default {
 		// 发布、下架、删除
 		async table_up(info, i) {
 			let newStatus
+			var userInfo = this.$TOOL.data.get("USER_INFO");
+			console.log(userInfo,'userrr')
 			if (info.status_ == 1) {
 				newStatus = 2
 			} else {
@@ -213,9 +222,24 @@ export default {
 			}
 			const data = {
 				id_: info.id_,
-				status_: newStatus
+				status_: newStatus,
+				release_time_: new Date().toISOString(),
+				release_by_: userInfo.id_,
+				release_name_: userInfo.fullname_
 			}
 
+			try {
+				// 更新且重新赋值
+				this.newsList[i] = await this.$cmsApi.updata.post(data);
+			} catch (error) {
+				console.error('Error updating data:', error);
+			}
+		},
+		async table_delete(info,i) {
+			const data = {
+				id_: info.id_,
+				delete_time_: new Date().toISOString()
+			}
 			try {
 				// 更新且重新赋值
 				this.newsList[i] = await this.$cmsApi.updata.post(data);
@@ -230,5 +254,15 @@ export default {
 <style scoped>
 .hidden-row {
 	display: none;
+}
+
+.ellipsis-text {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	/* 显示两行 */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
 }
 </style>

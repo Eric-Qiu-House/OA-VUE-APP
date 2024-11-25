@@ -1,423 +1,232 @@
-<!--
- * @Descripttion: 右键简单组件演示文件
- * @version: 1.0
- * @Author: sakuya
- * @Date: 2021年7月22日16:31:14
- * @LastEditors:
- * @LastEditTime:
--->
-
 <template>
-    <el-header class="header-tabs">
-        <el-tabs type="card" v-model="groupId" @tab-change="tabChange">
-            <el-tab-pane label="友奇（内部）" name="0"></el-tab-pane>
-            <el-tab-pane label="船厂（外部）" name="1"></el-tab-pane>
-            <el-tab-pane label="外派（外部）" name="4"></el-tab-pane>
-        </el-tabs>
-    </el-header>
-    <el-main>
-        <el-row :gutter="15">
-            <el-col :lg="4">
-                <el-card>
-                    <el-tree style="max-width: 600px" :data="data" node-key="id" :default-expanded-keys="[1, 2, 3]"
-                        :default-checked-keys="[42]" :props="defaultProps" />
-                </el-card>
-            </el-col>
-            <el-col :lg="20">
-                <el-card shadow="never">
-                    <el-table ref="tableData" :data="tableData" highlight-current-row @row-contextmenu="rowContextmenu">
-                        <el-table-column type="expand">
-                            <template #default="props">
-                                <div class="file-list">
-                                    <!-- 静态文件列表 -->
-                                    <el-link
-                                        style="text-align: center; line-height: 50px;margin: 0 auto;display: block;"
-                                        type="success">{{ props.row.id + ' - ' + props.row.state5 }}</el-link>
+	<el-header class="header-tabs">
 
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=PDF" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Document.pdf</div>
-                                            <div class="file-type">pdf</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                            <el-link type="danger">删除</el-link>
-                                        </div>
-                                    </div>
+		<el-tabs type="card" v-model="groupId" @tab-change="tabChange">
+			<el-tab-pane label="友奇（内部）" name="0"></el-tab-pane>
+			<el-tab-pane label="船厂（外部）" name="1" disabled></el-tab-pane>
+			<el-tab-pane label="外派（外部）" name="4" disabled></el-tab-pane>
+		</el-tabs>
+	</el-header>
 
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=CAD" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Drawing.dwg</div>
-                                            <div class="file-type">cad</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                            <el-link type="danger">删除</el-link>
-                                        </div>
-                                    </div>
+	<dwg-menu></dwg-menu>
 
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=Word" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Report.docx</div>
-                                            <div class="file-type">word</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                            <el-link type="danger">删除</el-link>
-                                        </div>
-                                    </div>
+	<!-- <el-container>
+		<el-aside width="300px" v-loading="menuloading">
+			<el-container>
+				<el-header>
+					<el-button type="primary" icon="el-icon-plus" @click="displayType = '目录'">目录</el-button>
+					<el-button type="primary" icon="el-icon-plus" @click="displayType = '图纸'">图纸</el-button>
+					<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
+				</el-header>
+				<el-main class="nopadding">
+					<el-tree ref="menu" class="menu" node-key="id" :data="menuList" :props="menuProps" draggable
+						highlight-current check-strictly show-checkbox
+						:filter-node-method="menuFilterNode" @node-click="menuClick" @node-drop="nodeDrop">
 
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=Excel" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Spreadsheet.xlsx</div>
-                                            <div class="file-type">excel</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                            <el-link type="danger">删除</el-link>
-                                        </div>
-                                    </div>
-                                </div>
+						<template #default="{ node, data }">
+							<span class="custom-tree-node">
+								<span class="label">
+									{{ node.label }}
+								</span>
+								<span class="do">
+									<el-button icon="el-icon-plus" size="small"
+										@click.stop="add(node, data)"></el-button>
+								</span>
+							</span>
+						</template>
 
-
-                                <div class="file-list">
-                                    <!-- 静态文件列表 -->
-                                    <el-link
-                                        style="text-align: center; line-height: 50px;margin: 0 auto;display: block;"
-                                        type="warning">
-                                        历史版本 - V0
-                                    </el-link>
-
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=PDF" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Document.pdf</div>
-                                            <div class="file-type">pdf</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                        </div>
-                                    </div>
-
-                                    <div class="file-card">
-                                        <img src="https://via.placeholder.com/24x24?text=CAD" alt="file-icon"
-                                            class="file-icon" />
-                                        <div class="file-info">
-                                            <div class="file-name">Drawing.dwg</div>
-                                            <div class="file-type">cad</div>
-                                        </div>
-                                        <div class="file-actions">
-                                            <el-link type="primary">查看</el-link>
-                                            <el-link type="primary">下载</el-link>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="图号" width="100"></el-table-column>
-                        <el-table-column prop="name" label="图名" width="180"></el-table-column>
-                        <el-table-column prop="date" label="执行" width="110">
-                            <template #default>
-                                <el-select v-model="tableData.date" placeholder="Select" style="width: 90px">
-                                    <el-option v-for="item in language" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state" label="校验" width="130">
-                            <template #default>
-                                <el-select v-model="tableData.state" placeholder="Select" style="width: 90px">
-                                    <el-option v-for="item in language" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state1" label="开始时间" width="100"></el-table-column>
-                        <el-table-column prop="state2" label="交付时间" width="100"></el-table-column>
-                        <el-table-column prop="state3" label="状态" width="70">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
-                                    : scope.row.state3 == 1 ? 'success'
-                                        : scope.row.state3 == 2 ? 'primary'
-                                            : scope.row.state3 == 3 ? 'danger'
-                                                : 'default'">
-                                    {{ scope.row.state3 == 0 ? '未开始'
-                                        : scope.row.state3 == 1 ? '执行中'
-                                            : scope.row.state3 == 2 ? '已结束'
-                                                : scope.row.state3 == 3 ? '已超期'
-                                                    : '未知' }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state4" label="最新提交" width="100"></el-table-column>
-                        <el-table-column prop="state5" label="当前版本" width="80"></el-table-column>
-                        <el-table-column prop="state7" label="进度" width="150">
-                            <template #default="props">
-                                <el-progress :percentage="props.row.state7" :stroke-width="10" />
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state6" label="操作" width="120">
-                            <template #default="props">
-                                <el-button-group>
-                                    <el-upload class="sc-file-select__upload" multiple :show-file-list="false"
-                                        :file-list="fileList" :on-change="uploadChange" :before-upload="uploadBefore"
-                                        :on-error="uploadError" :http-request="uploadRequest" style="display: inline;">
-                                        <el-button text type="primary" size="small">上传</el-button>
-                                    </el-upload>
-                                    <el-button text type="primary" size="small"
-                                        @click="open(props.row.name)">提交</el-button>
-                                    <router-link :to="{
-                                        name: 'drawingCheck'
-                                    }">
-                                        <el-button text type="primary" size="small">审核</el-button>
-                                    </router-link>
-                                    <el-button text type="primary" size="small">下载</el-button>
-                                </el-button-group>
-                            </template>
-                        </el-table-column>
-
-                    </el-table>
-                </el-card>
-            </el-col>
-        </el-row>
-    </el-main>
+</el-tree>
+</el-main>
+<el-footer style="height:51px;">
+	<el-button type="primary" size="small" icon="el-icon-plus" @click="add()"></el-button>
+	<el-button type="danger" size="small" plain icon="el-icon-delete" @click="delMenu"></el-button>
+</el-footer>
+</el-container>
+</el-aside>
+<el-container>
+	<el-main class="nopadding" style="padding:20px;" ref="main">
+		<save ref="save" :menu="menuList" :type="displayType"></save>
+	</el-main>
+</el-container>
+</el-container> -->
+	<el-container>
+		<el-main class="nopadding" style="padding:20px;" ref="main">
+			<save ref="save" :menu="menuList" :type="displayType"></save>
+		</el-main>
+	</el-container>
 </template>
 
 <script>
-import { ElMessage, ElMessageBox } from 'element-plus'
+let newMenuIndex = 1;
+import save from '@/components/views/drawingSystem/dwgStateModule.vue'
+import dwgMenu from '@/components/views/drawingSystem/menuDirectory.vue'
+
 export default {
-    name: 'contextmenu',
-    data() {
-        return {
-            row: null,
-            data: [
-                {
-                    id: 1,
-                    label: '友奇*内部',
-                    children: [
-                        {
-                            id: 42,
-                            label: 'Electric 电气图',
-                        },
-                        {
-                            id: 43,
-                            label: 'Hook-up 连接图',
-                        },
-                        {
-                            id: 44,
-                            label: 'LIST 清单文件',
-                        },
-                        {
-                            id: 45,
-                            label: 'ISO 管系轴测图',
-                        },
-                        {
-                            id: 46,
-                            label: 'MTO 材料清单',
-                        },
-                        {
-                            id: 47,
-                            label: 'Certificates 证书',
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    label: '船厂*外部',
-                    children: [
-                        {
-                            id: 5,
-                            label: 'LIST 清单文件',
-                        },
-                        {
-                            id: 6,
-                            label: 'Calculation 计算文件',
-                        },
-                        {
-                            id: 7,
-                            label: 'LIST 清单文件',
-                        },
-                        {
-                            id: 8,
-                            label: 'ISO 管系轴测图',
-                        },
-                        {
-                            id: 9,
-                            label: 'MTO 材料清单',
-                        },
-                        {
-                            id: 10,
-                            label: 'Certificates 证书',
-                        },
-                    ],
-                },
-            ],
-            language: [
-                {
-                    value: '0',
-                    label: '朱文广',
-                },
-                {
-                    value: '1',
-                    label: '王晓伟',
-                },
-            ],
-            tableData: [
-                {
-                    id: 'PE01PID_001',
-                    name: 'P&I Diagram Identification System系统图仪表图例符号',
-                    date: '赵琦',
-                    state: '朱文广',
-                    state1: '2021-10-10',
-                    state2: '2021-10-18',
-                    state3: 0,
-                    state4: '2024-04-15',
-                    state5: 'V1',
-                    state7: '60'
-                },
-                {
-                    id: 'PE01PID_001',
-                    name: 'P&I Diagram Identification System系统图仪表图例符号',
-                    date: '赵琦',
-                    state: '朱文广',
-                    state1: '2022-09-11',
-                    state2: '2023-04-23',
-                    state3: 1,
-                    state4: '2024-07-25',
-                    state5: 'V2',
-                    state7: '70'
+	name: "settingMenu",
+	components: {
+		save,
+		dwgMenu
+	},
+	props: ['projectUuid'], // 通过 props 接收路由传递的参数
+	data() {
+		return {
+			groupId: 0,
+			menuloading: false,
 
-                },
-                {
-                    id: 'PE01PID_001',
-                    name: 'P&I Diagram Identification System系统图仪表图例符号',
-                    date: '赵琦',
-                    state: '朱文广',
-                    state1: '2023-05-12',
-                    state2: '2021-07-18',
-                    state3: 2,
-                    state4: '2024-08-24',
-                    state5: 'V3',
-                    state7: '30'
+			menuList: [],
+			menuProps: {
+				label: (data) => {
+					return data.title
+				}
+			},
+			menuFilterText: "",
+			displayType: '图纸'
+		}
+	},
+	watch: {
+		menuFilterText(val) {
+			this.$refs.menu.filter(val);
+		}
+	},
+	mounted() {
+		console.log(this.$route.query.projectUuid,'sssssssssssssssssssssssssss');  // 输出传递过来的 id 参数
+		// this.getMenu();
+	},
+	methods: {
+		//加载树数据
+		async getMenu() {
+			this.menuloading = true
+			// var data = await this.$apiIAM.system.routerTree.get();
+			const data = {
+				project_id_: 1
+			}
+			var dataA = await this.$dmsApi.drawingMenuProject.readId.post(data);
+			this.menuloading = false
+			this.menuList = dataA;
+		},
+		//树点击
+		menuClick(data, node) {
+			var pid = node.level == 1 ? undefined : node.parent.data.id;
+			this.$refs.save.setData(data, pid)
+			this.$refs.main.$el.scrollTop = 0
+			console.log(data, node)
+		},
+		//树过滤
+		menuFilterNode(value, data) {
+			if (!value) return true;
+			var targetText = data.title;
+			return targetText.indexOf(value) !== -1;
+		},
+		//树拖拽
+		nodeDrop(draggingNode, dropNode, dropType) {
+			this.$refs.save.setData({})
+			this.$message(`拖拽对象：${draggingNode.data.title}, 释放对象：${dropNode.data.title}, 释放对象的位置：${dropType}`)
+		},
+		//增加
+		async add(node, data) {
+			var newMenuName = "未命名" + newMenuIndex++;
+			var newMenuData = {
+				parent_id: data ? data.id : null,
+				name: newMenuName,
+				path: "",
+				component: "",
+				title: newMenuName,
+				type: "menu"
+			}
+			this.menuloading = true
+			await this.$apiIAM.system.addRouter.post(newMenuData)
+			this.getMenu();
 
-                },
-                {
-                    id: 'PE01PID_001',
-                    name: 'P&I Diagram Identification System系统图仪表图例符号',
-                    date: '赵琦',
-                    state: '朱文广',
-                    state1: '2023-05-12',
-                    state2: '2021-07-18',
-                    state3: 3,
-                    state4: '2024-08-24',
-                    state5: 'V4',
-                    state7: '40'
+			this.menuloading = false
+			// newMenuData.id = res.data
 
-                },
-            ],
-        }
-    },
-    mounted() {
+			// this.$refs.menu.append(newMenuData, node)
+			// this.$refs.menu.setCurrentKey(newMenuData.id)
+			// var pid = node ? node.data.id : ""
+			// this.$refs.save.setData(newMenuData, pid)
+		},
+		//删除菜单
+		async delMenu() {
+			var CheckedNodes = this.$refs.menu.getCheckedNodes()
+			if (CheckedNodes.length == 0) {
+				this.$message.warning("请选择需要删除的项")
+				return false;
+			}
 
-    },
-    methods: {
-        open(name) {
-            ElMessageBox.alert(`是否提交 ${name} 审批`, '提交', {
-                // 如果你想禁用其自动聚焦
-                // autofocus: false,
-                confirmButtonText: 'OK',
-                callback: (action) => {
-                    ElMessage({
-                        type: 'info',
-                        message: `action: ${action}`,
-                    })
-                },
-            })
-        },
-        triggerFileUpload() {
-            this.fileInput.value.click();
-        },
-        rowContextmenu(row, column, event) {
-            this.row = row
-            this.$refs.table.setCurrentRow(row);
-            this.$refs.contextmenu.openMenu(event)
-        },
-        openMenu(e) {
-            this.row = null
-            this.$refs.contextmenu.openMenu(e)
-        },
-        handleCommand(command) {
-            this.$message('click on item ' + command)
-            if (command == 'e') {
-                this.row.state = 1
-            }
-        },
-        visibleChange(visible) {
-            if (!visible) {
-                this.$refs.table.setCurrentRow();
-            }
-        }
-    }
+			var confirm = await this.$confirm('确认删除已选择的菜单吗？', '提示', {
+				type: 'warning',
+				confirmButtonText: '删除',
+				confirmButtonClass: 'el-button--danger'
+			}).catch(() => { })
+			if (confirm != 'confirm') {
+				return false
+			}
+
+			this.menuloading = true
+			var reqData = {
+				ids: CheckedNodes.map(item => item.id)
+			}
+			var res = await this.$API.demo.post.post(reqData)
+			this.menuloading = false
+
+			if (res.code == 200) {
+				CheckedNodes.forEach(item => {
+					var node = this.$refs.menu.getNode(item)
+					if (node.isCurrent) {
+						this.$refs.save.setData({})
+					}
+					this.$refs.menu.remove(item)
+				})
+			} else {
+				this.$message.warning(res.message)
+			}
+		}
+	}
 }
 </script>
 
 <style scoped>
-.file-list {
-    padding: 10px;
-    width: 100%;
+.menu:deep(.el-tree-node__label) {
+	display: flex;
+	flex: 1;
+	height: 100%;
 }
 
-.file-card {
-    width: 95%;
-    display: flex;
-    align-items: center;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
+.custom-tree-node {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 14px;
+	height: 100%;
+	padding-right: 24px;
 }
 
-.file-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
+.custom-tree-node .label {
+	display: flex;
+	align-items: center;
+	;
+	height: 100%;
 }
 
-.file-info {
-    display: flex;
-    flex-direction: column;
+.custom-tree-node .label .el-tag {
+	margin-left: 5px;
 }
 
-.file-name {
-    font-weight: bold;
+.custom-tree-node .do {
+	display: none;
 }
 
-.file-type {
-    color: #909399;
+.custom-tree-node .do i {
+	margin-left: 5px;
+	color: #999;
 }
 
-.file-actions {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
+.custom-tree-node .do i:hover {
+	color: #333;
 }
 
-.file-actions a {
-    padding: 0 10px;
+.custom-tree-node:hover .do {
+	display: inline-block;
 }
 </style>
