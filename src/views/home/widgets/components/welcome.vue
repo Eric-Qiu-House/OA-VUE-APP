@@ -1,9 +1,9 @@
 <template>
-	<el-card shadow="hover" header="欢迎">
+	<el-card shadow="hover" header="">
 		<div class="welcome">
 			<div class="logo">
 				<img src="img/logo.png">
-				<h2>欢迎进入UPRO OA系统</h2>
+				<h2>欢迎进入UPRO</h2>
 			</div>
 		</div>
 	</el-card>
@@ -11,7 +11,7 @@
 
 <script>
 import scEcharts from '@/components/scEcharts';
-export default {
+export default {	
 	components: {
 		scEcharts
 	},
@@ -122,8 +122,8 @@ export default {
 
 .welcome .logo img {
 	vertical-align: bottom;
-	width: 100px;
-	height: 100px;
+	/* width: 100px;
+	height: 100px; */
 	margin-bottom: 20px;
 }
 

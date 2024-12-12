@@ -6,8 +6,9 @@
         <template v-else>
             <el-col class="apilist">
                 <h2>{{ menuForm.title_ }}</h2>
-                <el-button type="primary" size="small" icon="el-icon-plus" @click="creatDwg()"></el-button>
-                <el-table ref="table" :data="drawingInfo" highlight-current-row @expand-change="handleExpandChange">
+                <el-button v-loading="dwgloading" type="primary" size="small" icon="el-icon-plus" @click="creatDwg()"></el-button>
+                <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row
+                    @expand-change="handleExpandChange">
                     <el-table-column type="expand" label="全部">
                         <template #default="props">
                             <el-tree :data="props.row.fileList" :props="defaultProps" node-key="id_" show-checkbox
@@ -65,8 +66,10 @@
                     </el-table-column>
                     <el-table-column prop="status_" label="操作" width="220">
                         <template #default="scope">
-                            <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)">信息编辑</el-button>
-                            <el-button text type="primary" size="small" @click="openHoursDialog(scope.row)">填报工时</el-button>
+                            <el-button text type="primary" size="small"
+                                @click="openDwgDialog(scope.row)">信息编辑</el-button>
+                            <el-button text type="primary" size="small"
+                                @click="openHoursDialog(scope.row)">填报工时</el-button>
                             <el-button text type="primary" size="small" @click="deleteDwg(scope.row)">删除</el-button>
 
                             <!-- <el-button-group>
@@ -96,7 +99,7 @@
 <script>
 import dialog1 from '@/components/views/drawingSystem/dialog/dialog1.vue'
 import dialog2 from '@/components/views/drawingSystem/dialog/dialog2.vue'
-
+import { ElMessageBox } from 'element-plus';
 export default {
     components: {
         dialog1,
@@ -105,6 +108,7 @@ export default {
     data() {
         return {
             dialogData: [],
+            dwgloading: false,
             menuForm: [], //接受当前菜单信息
             // 图纸菜单
             defaultProps: {
@@ -131,6 +135,7 @@ export default {
     methods: {
         // 获取图纸
         async getDwgData() {
+            this.dwgloading = true
             try {
                 const referData = {
                     drawing_menu_id_: this.menuForm.menu_id_
@@ -144,13 +149,16 @@ export default {
                 }
             } catch (error) {
                 console.error("Error fetching user list:", error);
+            } finally {
+                this.dwgloading = false
             }
         },
         // 新增图纸
         async creatDwg() {
+            this.dwgloading = true
             try {
                 const referData = {
-                    projec_id_: this.menuForm.project_uuid_,
+                    project_id_: this.menuForm.project_uuid_,
                     drawing_menu_id_: this.menuForm.uuid_,
                     drawing_number_: this.menuForm.coding_rule_ + String(this.drawingInfo.length + 1).padStart(3, '0'),
                 }
@@ -163,34 +171,44 @@ export default {
                 }
             } catch (error) {
                 console.error("Error fetching user list:", error);
+            } finally {
+                this.dwgloading = false
             }
         },
         // 删除图纸
         async deleteDwg(row) {
             try {
-                const referData = {
-                    uuid_: row.uuid_
-                }
-                const receiveData = await this.$dmsApi.drawingInfo.delete.post(referData)
-                if (receiveData) {
-                    this.getDwgData()
-                } else {
-                    console.log('Not found');
-                    return null;
+                // 弹出确认对话框
+                const confirm = await ElMessageBox.confirm(
+                    '此操作将永久删除该项数据，是否继续？',
+                    '提示',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }
+                );
+                if (confirm) {
+                    // 执行删除逻辑
+                    this.dwgloading = true
+                    const referData = {
+                        uuid_: row.uuid_,
+                    };
+                    await this.$dmsApi.drawingInfo.delete.post(referData);
+
+                        this.getDwgData(); // 刷新数据
                 }
             } catch (error) {
-                console.error("Error fetching user list:", error);
+                // 捕获取消操作或其他错误
             }
         },
         openDwgDialog(row) {
             this.dialogData = row
-            console.log(row,'wwwwww')
             this.$refs.dwgDialog.setData(row)
             this.$refs.dwgDialog.open()
         },
         openHoursDialog(row) {
             this.dialogData = row
-            console.log(row,'wwwwww')
             this.$refs.manhoursDialog.setData(row)
             this.$refs.manhoursDialog.open()
         },

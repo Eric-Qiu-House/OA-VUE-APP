@@ -88,6 +88,12 @@
 				</scTable>
 			</el-main>
 		</el-container>
+		<el-aside>
+			<el-container>
+				<el-header>Right Header</el-header>
+				<el-main>Right Main</el-main>
+			</el-container>
+		</el-aside>
 	</el-container>
 
 	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess"
@@ -119,14 +125,14 @@ export default {
 			userData: []
 		}
 	},
-	async created() { 
-		try {
-			const list = await this.$apiIAM.user.fromList.get()
-			this.userData = list; // 更新组件的数据
-		} catch (error) {
-			console.error("Error fetching user list:", error);
-		}
-	},
+	// async created() { 
+	// 	try {
+	// 		const list = await this.$apiIAM.user.fromList.get()
+	// 		this.userData = list; // 更新组件的数据
+	// 	} catch (error) {
+	// 		console.error("Error fetching user list:", error);
+	// 	}
+	// },
 	watch: {
 		groupFilterText(val) {
 			this.$refs.group.filter(val);
@@ -208,8 +214,6 @@ export default {
 		},
 		//树点击事件
 		groupClick(data) {
-
-			console.log(data, 'sssssssssss')
 			// var params = {
 			// 	groupId: data.id
 			// }

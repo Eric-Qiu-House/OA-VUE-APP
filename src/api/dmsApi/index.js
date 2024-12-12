@@ -122,6 +122,20 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
+		readByProjectManhours: {
+			url: `${config.DMS_URL}/dmsServer/manHours/readByProjectManhoursRouter`,
+			name: "readByProjectManhours",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		readByProjectManhoursCsv: {
+			url: `${config.DMS_URL}/dmsServer/manHours/readByProjectManhoursCsvRouter`,
+			name: "readByProjectManhoursCsv",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
 		delete: {
 			url: `${config.DMS_URL}/dmsServer/manHours/deleteRouter`,
 			name: "delete",
@@ -131,11 +145,11 @@ export default {
 		},
 	},
 	drawingMenu: {
-		readAll: {
-			url: `${config.DMS_URL}/dmsServer/drawingMenu/readRouter`,
-			name: "read",
-			get: async function(){
-				return await http.get(this.url);
+		create: {
+			url: `${config.DMS_URL}/dmsServer/drawingMenu/createRouter`,
+			name: "create",
+			post: async function(params){
+				return await http.post(this.url,params);
 			}
 		},
 		update: {
@@ -145,16 +159,16 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
-		create: {
-			url: `${config.DMS_URL}/dmsServer/drawingMenu/createRouter`,
-			name: "update",
-			post: async function(params){
-				return await http.post(this.url,params);
+		readAll: {
+			url: `${config.DMS_URL}/dmsServer/drawingMenu/readRouter`,
+			name: "read",
+			get: async function(){
+				return await http.get(this.url);
 			}
 		},
 		delete: {
 			url: `${config.DMS_URL}/dmsServer/drawingMenu/deleteRouter`,
-			name: "update",
+			name: "delete",
 			post: async function(params){
 				return await http.post(this.url,params);
 			}

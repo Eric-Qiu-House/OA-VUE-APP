@@ -1,25 +1,25 @@
 <template>
     <el-row :gutter="40">
         <el-dialog v-model="dialogDwg" title="工时填报" width="500" :before-close="handleClose">
-            <el-form :model="manhoursFrom" label-width="auto" style="max-width: 600px">
+            <el-form v-loading="loading" :model="manhoursFrom" label-width="auto" style="max-width: 600px">
                 <el-form-item label="图号">
-                    <el-input v-model="manhoursFrom.drawing_number_" disabled/>
+                    <el-input v-model="manhoursFrom.drawing_number_" disabled />
                 </el-form-item>
                 <el-form-item label="图名">
-                    <el-input v-model="manhoursFrom.drawing_name_" disabled/>
+                    <el-input v-model="manhoursFrom.drawing_name_" disabled />
                 </el-form-item>
                 <el-form-item label="填报人id">
-                    <el-input v-model="manhoursFrom.user_id_" disabled/>
+                    <el-input v-model="manhoursFrom.user_id_" disabled />
                 </el-form-item>
                 <el-form-item label="填报人姓名">
-                    <el-input v-model="manhoursFrom.user_name_" disabled/>
+                    <el-input v-model="manhoursFrom.user_name_" disabled />
                 </el-form-item>
                 <el-form-item label="填报日期">
                     <el-date-picker v-model="manhoursFrom.record_date_" type="datetime" placeholder="Pick a date"
                         :default-value="defaultDate" />
                 </el-form-item>
                 <el-form-item label="填报工时">
-                    <el-input v-model="manhoursFrom.hours_"  type="number" placeholder="请填写工时（不能超过12）" :min="0" :max="12"
+                    <el-input v-model="manhoursFrom.hours_" type="number" placeholder="请填写工时（不能超过12）" :min="0" :max="12"
                         @input="handleInput" />
                 </el-form-item>
                 <el-form-item label="审批人">
@@ -36,8 +36,8 @@
                     <el-input v-model="manhoursFrom.submit_message_" type="textarea" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button>取消</el-button>
-                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                    <el-button v-model="dialogDwg">取消</el-button>
+                    <el-button v-model="dialogDwg" type="primary" @click="onSubmit">提交</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -55,10 +55,11 @@ export default {
                 user_id_: '',
                 user_name_: '',
                 record_date_: null,
-                ratify_user_id_:'',
+                ratify_user_id_: '',
                 ratify_user_name_: '',
             },
-            projectUserInfos:[]
+            projectUserInfos: [],
+            loading: false
         }
     },
     mounted() {
@@ -77,11 +78,15 @@ export default {
             this.dialogDwg = true
         },
         async onSubmit() {
-            try{
-                console.log(this.manhoursFrom,'manhoursFrommanhoursFrom')
+            this.loading = true
+            try {
                 await this.$dmsApi.manHours.create.post(this.manhoursFrom)
-            }catch(error) {
+            } catch (error) {
                 console.log(error)
+            } finally {
+                this.loading = false
+                this.dialogDwg = false
+
             }
         },
         handleInput(value) {

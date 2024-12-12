@@ -3,7 +3,7 @@
         <el-row :gutter="15">
             <el-col :lg="3">
                 <el-card header="项目编号">
-                    <el-tree style="max-width: 600px" :data="projectData" node-key="id_" :props="defaultProps"
+                    <el-tree v-loading="proNumLoading" style="max-width: 600px" :data="projectData" node-key="id_" :props="defaultProps"
                         @node-click="handleNodeClick" />
                 </el-card>
             </el-col>
@@ -31,7 +31,7 @@
                         </el-header>
                         <!-- {{ this.apiObj }} -->
                         <el-main class="nopadding" v-if="groupId == 0">
-                            <scTable ref="table" :data="usersData" @selection-change="selectionChange" stripe remoteSort
+                            <scTable ref="table" v-loading="userLoading" :data="usersData" @selection-change="selectionChange" stripe remoteSort
                                 remoteFilter>
                                 <el-table-column type="selection" width="50"></el-table-column>
                                 <el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
@@ -134,30 +134,10 @@ export default {
             defaultProps: {
                 label: 'project_number_',  // 将 `label` 字段映射为 `project_number_`
             },
+            proNumLoading: false,
+            userLoading: false,
             groupId: "0",
             contactList: [
-                {
-                    companyName: 'ABC 供应商有限公司',
-                    contactName: '张三',
-                    type: '供应商',
-                    phone: '13800000001',
-                    email: 'zhangsan@abc.com',
-                },
-                {
-                    companyName: 'XYZ 设计院',
-                    contactName: '李四',
-                    type: '设计院',
-                    phone: '13900000002',
-                    email: 'lisi@xyz.com',
-                },
-                {
-                    companyName: 'DEF 建筑公司',
-                    contactName: '王五',
-                    type: '承包商',
-                    phone: '13700000003',
-                    email: 'wangwu@def.com',
-                },
-                // 更多联系人信息
             ],
             dialog: {
                 save: false
@@ -166,116 +146,6 @@ export default {
             groupFilterText: '',
             group: [],
             apiObj: [
-                {
-                    id_: 1,
-                    account_: "user1",
-                    fullname_: "DC管理员",
-                    email_: "john.doe@example.com",
-                    mobile_: "1234567890",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "启用",
-                    juese_: 'DC'
-                },
-                {
-                    id_: 2,
-                    account_: "user2",
-                    fullname_: "赵琦",
-                    email_: "jane.smith@example.com",
-                    mobile_: "2345678901",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "停用",
-                    juese_: '二维设计'
-                },
-                {
-                    id_: 3,
-                    account_: "user3",
-                    fullname_: "黄义",
-                    email_: "alice.johnson@example.com",
-                    mobile_: "3456789012",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "启用",
-                    juese_: '三维设计'
-                },
-                {
-                    id_: 4,
-                    account_: "user4",
-                    fullname_: "陈维原",
-                    email_: "bob.brown@example.com",
-                    mobile_: "4567890123",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "启用",
-                    juese_: '电气'
-                },
-                {
-                    id_: 5,
-                    account_: "user5",
-                    fullname_: "朱文广",
-                    email_: "charlie.davis@example.com",
-                    mobile_: "5678901234",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "停用",
-                    juese_: '工艺'
-                },
-                {
-                    id_: 6,
-                    account_: "user6",
-                    fullname_: "袁永航",
-                    email_: "diana.evans@example.com",
-                    mobile_: "6789012345",
-                    create_org_id_: "外部",
-                    expire_date_: "2024-07-31",
-                    status_: "启用",
-                    juese_: '电气'
-                },
-                {
-                    id_: 7,
-                    account_: "user7",
-                    fullname_: "陈相羽",
-                    email_: "edward.franklin@example.com",
-                    mobile_: "7890123456",
-                    create_org_id_: "外部",
-                    expire_date_: "2024-06-30",
-                    status_: "启用",
-                    juese_: '工艺'
-                },
-                {
-                    id_: 8,
-                    account_: "user8",
-                    fullname_: "陈硕",
-                    email_: "fiona.green@example.com",
-                    mobile_: "8901234567",
-                    create_org_id_: "外部",
-                    expire_date_: "2024-05-31",
-                    status_: "停用",
-                    juese_: '自动化'
-                },
-                {
-                    id_: 9,
-                    account_: "user9",
-                    fullname_: "陆智杰",
-                    email_: "george.harris@example.com",
-                    mobile_: "9012345678",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "启用",
-                    juese_: '计算'
-                },
-                {
-                    id_: 10,
-                    account_: "user10",
-                    fullname_: "郑昊",
-                    email_: "hannah.irving@example.com",
-                    mobile_: "0123456789",
-                    create_org_id_: "友奇",
-                    expire_date_: "长期",
-                    status_: "停用",
-                    juese_: '计算'
-                }
             ],
             selection: [],
             search: {
@@ -284,19 +154,6 @@ export default {
             projectData: [],
             usersData: []
         }
-    },
-    // async created() {
-    //     // try {
-    //     //     const list = await this.$API.news.list.get();
-    //     //     this.apiObj = list; // 更新组件的数据
-    //     // } catch (error) {
-    //     //     console.error("Error fetching user list:", error);
-    //     // }
-    // },
-    watch: {
-        // groupFilterText(val) {
-        //     this.$refs.group.filter(val);
-        // }
     },
     created() {
         this.getProjectInfo()
@@ -307,23 +164,28 @@ export default {
             const postData = {
                 project_id_: nodeData.uuid_
             }
+            this.userLoading = true
             try {
                 const userIds = await this.$dmsApi.projectUsershiproute.readId.post(postData)
                 if (userIds) {
                     this.usersData = await this.$apiIAM.user.usersByUserIds.post(userIds)
                 } else {
-                    console.log('User not found');
                     return null;
                 }
             } catch (error) {
-                console.error("Error fetching user list:", error);
+                this.usersData = []
+            } finally {
+                this.userLoading = false
             }
         },
         async getProjectInfo() {
+            this.proNumLoading = true
             try {
                 this.projectData = await this.$dmsApi.project.readAll.get()
             } catch (error) {
                 console.error("Error fetching user list:", error);
+            }finally {
+                this.proNumLoading = false
             }
         },
         selectionChange1(val) {
@@ -354,7 +216,7 @@ export default {
         add() {
             this.dialog.save = true
             this.$nextTick(() => {
-                this.$refs.saveDialog.open()
+                this.$refs.saveDialog.open().setData(this.usersData)
             })
         },
         //编辑
@@ -380,7 +242,6 @@ export default {
             if (res.code == 200) {
                 //这里选择刷新整个表格 OR 插入/编辑现有表格数据
                 this.$refs.table.tableData.splice(index, 1);
-                this.$message.success("删除成功")
             } else {
                 this.$alert(res.message, "提示", { type: 'error' })
             }
@@ -399,7 +260,6 @@ export default {
                     })
                 })
                 loading.close();
-                this.$message.success("操作成功")
             }).catch(() => {
 
             })

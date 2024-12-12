@@ -6,10 +6,10 @@ const DEFAULT_CONFIG = {
 	DASHBOARD_URL: "/dashboard",
 
 	//版本号
-	APP_VER: "1.6.9", 
+	APP_VER: "1.0.1", 
 
 	//内核版本号
-	CORE_VER: "1.6.9",
+	CORE_VER: "1.0.1",
 
 	//接口地址
 	// API_URL: 'http://127.0.0.1:3000',
@@ -70,9 +70,10 @@ const DEFAULT_CONFIG = {
 		layout: [12, 6, 6],
 		//小组件分布，com取值:views/home/components 文件名
 		copmsList: [
-			['welcome','manhour'],
-			['about', 'ver'],
-			['time', 'progress']
+			['manhour'],
+			[ 'approvalCenter'],
+			// ['about','progress'],
+			[ 'time', 'welcome', 'ver' ]
 		]
 	}
 }

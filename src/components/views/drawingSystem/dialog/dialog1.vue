@@ -1,7 +1,7 @@
 <template>
     <el-row :gutter="40">
-        <el-dialog v-model="dialogDwg" title="项目详情" width="600px">
-            <el-form :model="dwgForm" label-width="100px">
+        <el-dialog v-model="dialogDwg" title="图纸详情" width="600px">
+            <el-form v-loading="loading" :model="dwgForm" label-width="100px">
                 <el-form-item label="图号">
                     <el-input v-model="dwgForm.drawing_number_"></el-input>
                 </el-form-item>
@@ -10,14 +10,14 @@
                 </el-form-item>
                 <el-form-item label="执行">
                     <el-select v-model="dwgForm.executor_name_" placeholder="选择执行工程师"
-                        @click="handleNodeClick(dwgForm.projec_id_)" @change="executorChange">
+                        @click="handleNodeClick(dwgForm.project_id_)" @change="executorChange">
                         <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
                             :value="item.fullname_" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="校验">
                     <el-select v-model="dwgForm.verifier_name_" placeholder="选择校验工程师"
-                        @click="handleNodeClick(dwgForm.projec_id_)" @change="verifierChange">
+                        @click="handleNodeClick(dwgForm.project_id_)" @change="verifierChange">
                         <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
                             :value="item.fullname_" />
                     </el-select>
@@ -37,8 +37,8 @@
                 </el-form-item>
             </el-form>
             <div class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="submitForm">提交</el-button>
+                <el-button v-loading="loading" @click="dialogVisible = false">取消</el-button>
+                <el-button v-loading="loading" type="primary" @click="submitForm">提交</el-button>
             </div>
         </el-dialog>
     </el-row>
@@ -51,6 +51,7 @@ export default {
             dialogDwg: false,
             dwgForm: {},
             projectUserInfos: [],
+            loading: false,
             options: [
                 {
                     label: "未开始",
@@ -113,19 +114,19 @@ export default {
             try {
                 await this.$dmsApi.drawingInfo.update.post(this.dwgForm);
                 // 提交成功后的逻辑，比如提示成功信息
-                this.$message.success('提交成功!');
             } catch (error) {
                 console.error('提交失败:', error);  // 记录错误详情
                 // 可以选择展示友好的错误信息
-                this.$message.error('提交失败，请稍后再试。');
             } finally {
                 this.loading = false;  // 无论成功还是失败，结束加载状态
+            this.dialogDwg = false
+
             }
         },
         //表单注入数据
         setData(data) {
             console.log(data, 'ssss')
-            this.dwgForm = data
+            this.dwgForm = {...data}
         }
     }
 }

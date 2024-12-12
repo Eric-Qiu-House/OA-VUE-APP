@@ -1,6 +1,5 @@
 <template>
 	<el-header class="header-tabs">
-
 		<el-tabs type="card" v-model="groupId" @tab-change="tabChange">
 			<el-tab-pane label="友奇（内部）" name="0"></el-tab-pane>
 			<el-tab-pane label="船厂（外部）" name="1" disabled></el-tab-pane>
@@ -49,11 +48,11 @@
 	</el-main>
 </el-container>
 </el-container> -->
-	<el-container>
+	<!-- <el-container>
 		<el-main class="nopadding" style="padding:20px;" ref="main">
 			<save ref="save" :menu="menuList" :type="displayType"></save>
 		</el-main>
-	</el-container>
+	</el-container> -->
 </template>
 
 <script>

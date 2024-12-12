@@ -32,6 +32,7 @@
 					<el-button type="primary" size="small" icon="el-icon-plus" @click="createMenuButton()"></el-button>
 					<el-button type="danger" size="small" plain icon="el-icon-delete" @click="delMenu"
 						disabled></el-button>
+					<el-button v-if="displayComponent == 'save'" @click="switchComponent('save3')">导入模板</el-button>
 				</el-footer>
 			</el-container>
 		</el-aside>
@@ -39,6 +40,8 @@
 			<el-main class="nopadding" style="padding:20px;" ref="main">
 				<save v-if="displayComponent === 'save'" ref="save" :menu="menuTreeData" :type="displayType"></save>
 				<save1 v-if="displayComponent === 'save1'" ref="save" :menu="menuTreeData" :type="displayType"></save1>
+				<save3 v-if="displayComponent === 'save3'" ref="save" :menu="menuTreeData" :type="displayType"></save3>
+				<save2 v-if="displayComponent === 'save2'" ref="save" :menu="menuTreeData" :type="displayType"></save2>
 			</el-main>
 		</el-container>
 	</el-container>
@@ -48,12 +51,27 @@
 let newMenuIndex = 1;
 import save from '@/components/views/drawingSystem/menuParams.vue'
 import save1 from '@/components/views/drawingSystem/dwgStateModule.vue'
+import save3 from '@/components/views/drawingSystem/dialog/scav.vue'
+import save2 from '@/views/drawingSystem/drawingCategory.vue'
+import { provide, getCurrentInstance } from 'vue';
 
 export default {
 	name: "settingMenu",
+	setup() {
+        const { proxy } = getCurrentInstance(); // 获取组件实例
+
+        const refreshData = () => {
+            proxy.getMenu(); // 调用 methods 中的 getMenu 方法
+            console.log("父组件数据已刷新");
+        };
+
+        provide("refreshData", refreshData);
+    },
 	components: {
 		save,
-		save1
+		save1,
+		save2,
+		save3
 	},
 	data() {
 		return {
@@ -94,11 +112,11 @@ export default {
 			this.menuloading = true
 			// var data = await this.$apiIAM.system.routerTree.get();
 			let data = []
-			if(this.drawingCategory) {
+			if (this.drawingCategory) {
 				data = await this.$dmsApi.drawingMenu.readAll.get();
-			}else if(this.drawingInfo) {
+			} else if (this.drawingInfo) {
 				let createData = {
-				project_uuid_: this.$route.query.projectUuid
+					project_uuid_: this.$route.query.projectUuid
 				}
 				data = await this.$dmsApi.drawingMenuProject.readById.post(createData);
 			}
@@ -131,13 +149,13 @@ export default {
 				title_: newMenuName,
 			}
 			this.menuloading = true
-			if(this.drawingCategory) {
+			if (this.drawingCategory) {
 				await this.$dmsApi.drawingMenu.create.post(newMenuData)
-			}else if(this.drawingInfo) {
+			} else if (this.drawingInfo) {
 				newMenuData.project_uuid_ = this.$route.query.projectUuid
 				await this.$dmsApi.drawingMenuProject.create.post(newMenuData)
 			}
-			
+
 			this.getMenu();
 			this.menuloading = false
 			// newMenuData.id = res.data

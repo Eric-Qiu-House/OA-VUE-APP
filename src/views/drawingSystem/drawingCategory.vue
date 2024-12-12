@@ -1,5 +1,7 @@
 <template>
-	<directoryMenuTemplate></directoryMenuTemplate>
+	<el-container>
+		<directoryMenuTemplate></directoryMenuTemplate>
+	</el-container>
 	<!-- <el-container>
 		<el-aside width="300px" v-loading="menuloading">
 			<el-container>

@@ -1,7 +1,7 @@
 <template>
 	<el-card shadow="hover" header="我的工时">
 		<div class="app-container">
-			<el-calendar v-model="value">
+			<el-calendar v-model="value" v-loading="loading">
 				<!-- 使用 dateCell 插槽来自定义每个日期单元格的内容 -->
 				<template #dateCell="{ data }">
 					<div :style="{ backgroundColor: getTextColor(data.day).color }" @click="handleDateClick(data.day)"
@@ -22,7 +22,8 @@ export default {
 	data() {
 		return {
 			value: '2024-12-02',  // 初始日期，显示的日期
-			specialDates: []
+			specialDates: [],
+			loading: false
 		};
 	},
 	watch: {
@@ -32,9 +33,18 @@ export default {
 	},
 	mounted() {
 		this.getaData();
+		this.userManhourDay();
 	},
 	methods: {
+		async userManhourDay() {
+			const submitData = {
+					user_id_: 8,
+					record_date_: this.value // 提取年-月格式
+				};
+			return this.$dmsApi.manHours.readById.post(submitData);
+		},
 		async getaData() {
+			this.loading = true
 			try {
 				// 提交的数据格式
 				const date = new Date(this.value);
@@ -47,6 +57,8 @@ export default {
 				this.specialDates = await this.$dmsApi.manHours.readByUserId.post(submitData);
 			} catch (error) {
 				console.log(error);
+			} finally {
+				this.loading = false
 			}
 		},
 		handleDateClick(day) {

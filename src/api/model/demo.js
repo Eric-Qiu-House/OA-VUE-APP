@@ -12,7 +12,7 @@ export default {
 			return await
 			{
 				"code": 200,
-				"data": "1.6.9",
+				"data": "1.0.1",
 				"message": ""
 			}
 		}
