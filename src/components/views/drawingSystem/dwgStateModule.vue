@@ -255,7 +255,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 h2 {
     font-size: 17px;
     color: #3c4a54;

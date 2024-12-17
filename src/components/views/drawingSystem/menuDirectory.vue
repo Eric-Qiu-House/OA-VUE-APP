@@ -209,7 +209,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .menu:deep(.el-tree-node__label) {
 	display: flex;
 	flex: 1;
