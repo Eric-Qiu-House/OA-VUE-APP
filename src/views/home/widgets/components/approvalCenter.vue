@@ -10,7 +10,7 @@
 			<scTable v-loading="loading" ref="tableData" :data="tableData" row-key="uuid_" stripe>
 				<el-table-column label="审批单号" prop="uuid_" width="100" show-overflow-tooltip>
 					<template #default="scope">
-						<div class="clickable" @click="handleClick(scope.row.uuid_)">
+						<div class="clickable" @click="handleClick(scope.row)">
 							{{ scope.row.uuid_ }}
 						</div>
 					</template>
@@ -20,7 +20,7 @@
 						<el-button text type="primary" size="small" :style="{
 							color: scope.row.ratify_type_ === 0 ? '#ff8c00' :
 								scope.row.ratify_type_ === 1 ? '#409eff' : '#909399'  // 默认颜色：已关闭
-						}">
+						}"> 
 							{{ scope.row.ratify_type_ === 0 ? '未审批' :
 								scope.row.ratify_type_ === 1 ? '已审批' : '未通过' }}
 						</el-button>
@@ -31,12 +31,17 @@
 			</scTable>
 		</el-card>
 	</el-card>
+    <dialog2 ref="manhoursDialog" :menu="dialogData"></dialog2>
 </template>
-
 <script>
+import dialog2 from '@/views/dmsSystem/manhourHome/dialog/manhourForm.vue'
 export default {
+	components: {
+        dialog2
+    },
 	data() {
 		return {
+            dialogData: [],
 			tableData: [],
 			projectTypeValue: 0, // 默认选中的tab
 			projectTypes: [
@@ -60,6 +65,11 @@ export default {
 		}, 0);
 	},
 	methods: {
+		openHoursDialog(row) {
+            this.dialogData = row
+            this.$refs.manhoursDialog.setData(row)
+            this.$refs.manhoursDialog.open()
+        },
 		// godoc() {
 		// 	window.open("https://python-abc.xyz/scui-doc/")
 		// },
@@ -80,8 +90,10 @@ export default {
 			}
 			this.getManhours()
 		},
-		handleClick(uuid) {
-			console.log("审批单号被点击：", uuid);
+		handleClick(row) {
+			this.dialogData = row
+            this.$refs.manhoursDialog.setData(row)
+            this.$refs.manhoursDialog.open()
 			// 可以根据业务需求执行更多操作
 		},
 		async getManhours() {

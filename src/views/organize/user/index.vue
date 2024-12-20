@@ -39,7 +39,7 @@
 				<scTable ref="table" :data="userData" @selection-change="selectionChange" stripe remoteSort
 					remoteFilter>
 					<el-table-column type="selection" width="50"></el-table-column>
-					<el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column>
+					<!-- <el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column> -->
 					<!-- <el-table-column label="头像" width="80" column-key="filterAvatar"
 						:filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
 						<template #default="scope">
@@ -88,12 +88,6 @@
 				</scTable>
 			</el-main>
 		</el-container>
-		<el-aside>
-			<el-container>
-				<el-header>Right Header</el-header>
-				<el-main>Right Main</el-main>
-			</el-container>
-		</el-aside>
 	</el-container>
 
 	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess"

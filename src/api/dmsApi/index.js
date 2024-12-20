@@ -32,6 +32,13 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
+		readByUser: {
+			url: `${config.DMS_URL}/dmsServer/project/readByUserRouter`,
+			name: "条件查询",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		}
 		// delete: {
 		// 	url: `${config.DMS_URL}/org/group/deleteGroup`,
 		// 	name: "删除",
@@ -48,6 +55,13 @@ export default {
 				return await http.post(this.url, params);
 			}
 		},
+		update: {
+			url: `${config.DMS_URL}/dmsServer/projectUsershiproute/updateRouter`,
+			name: "update",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},	
 	},
 	drawingInfo: {
 		create: {
@@ -73,6 +87,13 @@ export default {
 		},
 		readById: {
 			url: `${config.DMS_URL}/dmsServer/drawingInfo/readByIdRouter`,
+			name: "read",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		readByUserId: {
+			url: `${config.DMS_URL}/dmsServer/drawingInfo/readByUserIdRouter`,
 			name: "read",
 			post: async function(params){
 				return await http.post(this.url,params);
@@ -192,6 +213,13 @@ export default {
 		create: {
 			url: `${config.DMS_URL}/dmsServer/drawingMenuProject/createRouter`,
 			name: "update",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		createBatch: {
+			url: `${config.DMS_URL}/dmsServer/drawingMenuProject/createBatchRouter`,
+			name: "createBatch",
 			post: async function(params){
 				return await http.post(this.url,params);
 			}

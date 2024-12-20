@@ -1,7 +1,7 @@
 <template>
 	<el-dialog title="角色权限设置" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
 		<el-tabs tab-position="top">
-			{{ roleData }}
+			{{ menu }}
 			<el-tab-pane label="菜单权限">
 				<div class="treeMain">
 					<el-tree ref="menu" node-key="id" :data="menu" :props="menu.props" show-checkbox></el-tree>
