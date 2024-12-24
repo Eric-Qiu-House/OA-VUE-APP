@@ -1,6 +1,7 @@
 <template>
     <project></project>
 </template>
+
 <script>
 import project from "@/views/dmsSystem/components/project/index.vue";
 import { provide } from 'vue';
@@ -15,15 +16,5 @@ export default {
         provide('userType', 'user');
         return {}; // 如果没有其他内容需要返回，可以保留空对象
     },
-    mounted() {
-        this.getMenu();
-    },
-    methods: {
-        async getMenu() {
-
-            await this.$dmsApi.project.readByUser.post()
-
-        }
-    }
 };
 </script>

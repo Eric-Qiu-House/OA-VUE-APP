@@ -13,7 +13,7 @@ export default {
   },
   setup() {
     // 使用 provide 提供 userType 数据
-    provide('userType', 'admin'); 
+    provide('userType', 'admin');
     return {}; // 如果没有其他内容需要返回，可以保留空对象
   }
 };

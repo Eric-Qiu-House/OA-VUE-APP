@@ -20,8 +20,8 @@
                         <el-input v-model="form.coding_rule_" clearable placeholder="编码规则"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="save" :loading="loading">保 存</el-button>
-                        <el-button type="primary" @click="deleteButton" :loading="loading">删 除</el-button>
+                        <el-button type="primary" :disabled="!$isButtonVisible" @click="save" :loading="loading">保 存</el-button>
+                        <el-button type="primary" :disabled="!$isButtonVisible" @click="deleteButton" :loading="loading">删 除</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>

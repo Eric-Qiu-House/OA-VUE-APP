@@ -90,36 +90,38 @@ export default {
 						}
 					]
 				},
-				{
-					groupName: "数据管理",
-					list: [
-						{
-							icon: "el-icon-coin",
-							title: "存储空间信息",
-							component: "space"
-						},
-						{
-							icon: "el-icon-clock",
-							title: "操作日志",
-							component: "logs"
-						}
-					]
-				},
-				{
-					groupName: "账号升级",
-					list: [
-						{
-							icon: "el-icon-office-building",
-							title: "升级为企业账号",
-							component: "upToEnterprise"
-						}
-					]
-				}
+				//
+				// * 展示隐藏此功能，后续扩展
+				// {
+				// 	groupName: "数据管理",
+				// 	list: [
+				// 		{
+				// 			icon: "el-icon-coin",
+				// 			title: "存储空间信息",
+				// 			component: "space"
+				// 		},
+				// 		{
+				// 			icon: "el-icon-clock",
+				// 			title: "操作日志",
+				// 			component: "logs"
+				// 		}
+				// 	]
+				// },
+				// {
+				// 	groupName: "账号升级",
+				// 	list: [
+				// 		{
+				// 			icon: "el-icon-office-building",
+				// 			title: "升级为企业账号",
+				// 			component: "upToEnterprise"
+				// 		}
+				// 	]
+				// }
 			],
 			user: {
-				userName: "Sakuya",
+				userName: "",
 				userNameF: '',
-				role: "超级管理员",
+				role: "",
 			},
 			page: "account"
 		}

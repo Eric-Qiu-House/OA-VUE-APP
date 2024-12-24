@@ -7,10 +7,11 @@
             <el-col class="apilist">
                 <h2>{{ menuForm.title_ }}</h2>
                 <el-button v-if="menuForm.title_" v-loading="dwgloading" type="primary" size="small" icon="el-icon-plus"
-                    @click="creatDwg()"></el-button>
+                    @click="creatDwg()"
+                    :disabled="!$isButtonVisible || this.$route.query.projectState == 4"></el-button>
                 <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row
                     @expand-change="handleExpandChange">
-                    <el-table-column type="expand" label="全部">
+                    <!-- <el-table-column type="expand" label="全部" disabled>
                         <template #default="props">
                             <el-tree :data="props.row.fileList" :props="defaultProps" node-key="id_" show-checkbox
                                 highlight-current>
@@ -37,14 +38,23 @@
                                 </template>
                             </el-tree>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="drawing_number_" label="图号" width="100"></el-table-column>
                     <el-table-column prop="drawing_name_" label="图名" width="180"
                         show-overflow-tooltip></el-table-column>
                     <el-table-column prop="executor_name_" label="执行" width="110"></el-table-column>
                     <el-table-column prop="verifier_name_" label="负责人" width="130"></el-table-column>
-                    <el-table-column prop="start_date_" label="开始时间" width="100"></el-table-column>
-                    <el-table-column prop="delivery_date_" label="交付时间" width="100"></el-table-column>
+                    <el-table-column prop="start_date_" label="开始(计划时间)" width="100"></el-table-column>
+                    <el-table-column prop="delivery_date_" label="交付(计划时间)" width="100"></el-table-column>
+                    <el-table-column label="时间进度" width="150">
+                        <template #default="{ row }">
+                            <div :style="getStyle(row)">
+                                <el-progress :stroke-width="10" :percentage="getProgress(row)" :color="getStyle(row)" />
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="start_date_ast_" label="开始时间" width="100"></el-table-column>
+                    <el-table-column prop="end_date_aet_" label="完成时间" width="100"></el-table-column>
                     <el-table-column prop="status_" label="状态" width="70">
                         <template #default="scope">
                             <el-link class="mx-1" :type="scope.row.status_ == 1 ? 'info'
@@ -66,13 +76,15 @@
                             {{ 'V' - scope.row.current_version_ }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status_" label="操作" width="220">
+                    <el-table-column prop="status_" label="操作" width="250">
                         <template #default="scope">
-                            <el-button text type="primary" size="small"
-                                @click="openDwgDialog(scope.row)" v-if="userState == 'admin'">信息编辑</el-button>
-                            <el-button text type="primary" size="small"
-                                @click="openHoursDialog(scope.row)" v-if="$TOOL.data.get('USER_INFO').id_ == scope.row.executor_id_">填报工时</el-button>
-                            <el-button text type="primary" size="small" @click="deleteDwg(scope.row)" v-if="userState == 'admin'">删除</el-button>
+                            <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)"
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user' ">信息编辑</el-button>
+                            <el-button text type="primary" size="small" @click="openHoursDialog(scope.row)"
+                                v-if="$TOOL.data.get('USER_INFO').id_ == scope.row.executor_id_ || !this.$route.query.projectState == 4">填报工时</el-button>
+                            <el-button text type="primary"
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user' " size="small"
+                                @click="deleteDwg(scope.row)">删除</el-button>
 
                             <!-- <el-button-group>
 								<el-upload class="sc-file-select__upload" multiple :show-file-list="false"
@@ -140,6 +152,44 @@ export default {
         }
     },
     methods: {
+        // 计算颜色样式
+        getStyle(row) {
+            const newDate = new Date(); // 当前时间
+            const startDate = new Date(row.start_date_);
+            const endDate = new Date(row.end_date_);
+            const totalTime = endDate - startDate;
+            const elapsedTime = newDate - startDate;
+
+            if (totalTime <= 0) {
+                return '#909399'; // 非法日期
+            }
+
+            const progress = (elapsedTime / totalTime) * 100;
+            console.log(progress, 'progressprogressprogress')
+            if (progress < 60) {
+                return '#409EFF';
+            } else if (progress < 80) {
+                return '#E6A23C';
+            } else {
+                return '#F56C6C';
+            }
+        },
+
+        // 计算进度百分比显示
+        getProgress(row) {
+            const newDate = new Date(); // 当前时间
+            const startDate = new Date(row.start_date_);
+            const endDate = new Date(row.delivery_date_);
+            const totalTime = endDate - startDate;
+            const elapsedTime = newDate - startDate;
+
+            if (totalTime <= 0) {
+                return 'N/A'; // 非法日期
+            }
+
+            const progress = Math.round((elapsedTime / totalTime) * 100);
+            return `${progress}`;
+        },
         // 获取图纸
         async getaaa() {
             try {
@@ -147,7 +197,7 @@ export default {
                     project_id_: this.$route.query.projectUuid
                 }
                 this.drawingInfo = await this.$dmsApi.drawingInfo.readByUserId.post(data)
-            } catch(error){
+            } catch (error) {
                 console.error
             }
         },
@@ -226,6 +276,13 @@ export default {
             this.$refs.dwgDialog.open()
         },
         openHoursDialog(row) {
+            if (row.status_ == 1) {
+                this.$message({
+                    message: '图纸任务暂未开始.',
+                    type: 'warning',
+                });
+                return;
+            }
             this.dialogData = row
             this.$refs.manhoursDialog.setData(row)
             this.$refs.manhoursDialog.open()

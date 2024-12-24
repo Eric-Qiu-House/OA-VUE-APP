@@ -5,7 +5,8 @@
 </template>
 
 <script>
-	import API from "@/api";
+	// import API from "@/api";
+	import fileApi from "@/api/fileApi/fileApi";
 	import Editor from '@tinymce/tinymce-vue'
 	import tinymce from 'tinymce/tinymce'
 	import 'tinymce/themes/silver'
@@ -95,7 +96,7 @@
 						return new Promise((resolve, reject) => {
 							const data = new FormData();
 							data.append("file", blobInfo.blob() ,blobInfo.filename());
-							API.common.upload.post(data).then((res) => {
+							fileApi.upload.post(data).then((res) => {
 								resolve(res.data.src)
 							}).catch(() => {
 								reject("Image upload failed")

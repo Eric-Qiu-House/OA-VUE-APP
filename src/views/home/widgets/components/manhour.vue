@@ -1,11 +1,10 @@
 <template>
 	<el-card shadow="hover" header="我的工时">
 		<div class="app-container">
-			{{ specialDates }}
 			<el-calendar v-model="value">
 				<!-- 使用 dateCell 插槽来自定义每个日期单元格的内容 -->
 				<template #dateCell="{ data }">
-					<div :style="{ backgroundColor: getTextColor(data.day).color }" @click="handleDateClick(data.day)"
+					<div :style="{ backgroundColor: getTextColor(data.day).color,color:getTextColor(data.day).color2 }" @click="handleDateClick(data.day)"
 						class="custom-date-cell">
 						{{ data.day.split('-')[2] }}
 						<br>
@@ -64,6 +63,7 @@ export default {
 				totalHours = matchingDates.reduce((sum, item) => sum + item.hours_, 0);
 				return {
 					color: '#409EFF', // 设置背景色
+					color2: '#fff', // 默认背景色
 					hours: totalHours // 累计工时
 				};
 			}

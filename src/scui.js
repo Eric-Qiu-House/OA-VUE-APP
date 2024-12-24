@@ -33,7 +33,7 @@ import scTrend from './components/scMini/scTrend'
 import auth from './directives/auth'
 import auths from './directives/auths'
 import authsAll from './directives/authsAll'
-import role from './directives/role' 
+import role from './directives/role'
 import time from './directives/time'
 import copy from './directives/copy'
 import errorHandler from './utils/errorHandler'
@@ -41,8 +41,22 @@ import errorHandler from './utils/errorHandler'
 import * as elIcons from '@element-plus/icons-vue'
 import * as scIcons from './assets/icons'
 
+import { computed } from 'vue';
+
 export default {
 	install(app) {
+
+		const isButtonVisible = computed(() => {
+			const userInfo = tool.data.get("USER_INFO");
+			return (userInfo?.user_type_ === 'admin' || userInfo?.user_type_ === 'manage') || false;
+		});
+
+		// 将计算出来的值挂载到 globalProperties
+		app.config.globalProperties.$isButtonVisible = isButtonVisible;
+
+		// 全局的按钮控制器
+		// app.config.globalProperties.$isButtonVisible = (tool.data.get("USER_INFO")?.user_type_ === 'admin' || tool.data.get("USER_INFO")?.user_type_ === 'manage') || false;
+
 		//挂载全局对象
 		app.config.globalProperties.$CONFIG = config;
 		app.config.globalProperties.$TOOL = tool;
@@ -86,11 +100,11 @@ export default {
 		app.directive('copy', copy)
 
 		//统一注册el-icon图标
-		for(let icon in elIcons){
+		for (let icon in elIcons) {
 			app.component(`ElIcon${icon}`, elIcons[icon])
 		}
 		//统一注册sc-icon图标
-		for(let icon in scIcons){
+		for (let icon in scIcons) {
 			app.component(`ScIcon${icon}`, scIcons[icon])
 		}
 

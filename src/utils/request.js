@@ -140,7 +140,7 @@ var http = {
         ...config
       })
         .then((response) => {
-          if (showMessage) ElMessage.success('操作成功');
+          // if (showMessage) ElMessage.success('操作成功');
           resolve(response.data);
         })
         .catch((error) => {

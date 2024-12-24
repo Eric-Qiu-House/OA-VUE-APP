@@ -12,6 +12,8 @@ import App from './App.vue'
 const app = createApp(App);
 const pinia = createPinia();
 
+// 设置一个全局按钮显示状态
+
 app.use(store);
 app.use(pinia);
 app.use(router);

@@ -9,7 +9,7 @@
             </el-col>
             <el-col :lg="21">
                 <el-card>
-                    <el-button type="primary" icon="el-icon-plus" @click="add">工时导出</el-button>
+                    <el-button type="primary" icon="el-icon-plus" :disabled="!$isButtonVisible" @click="add">工时导出</el-button>
                     <el-table v-loading="manhoursLoading" ref="usersData" :data="usersData"
                         @selection-change="selectionChange" stripe remoteSort remoteFilter>
                         <el-table-column label="审批单号" prop="审批单号" width="150" sortable="custom"></el-table-column>

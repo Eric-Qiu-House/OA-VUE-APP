@@ -20,28 +20,31 @@
 						<el-button text type="primary" size="small" :style="{
 							color: scope.row.ratify_type_ === 0 ? '#ff8c00' :
 								scope.row.ratify_type_ === 1 ? '#409eff' : '#909399'  // 默认颜色：已关闭
-						}"> 
+						}">
 							{{ scope.row.ratify_type_ === 0 ? '未审批' :
 								scope.row.ratify_type_ === 1 ? '已审批' : '未通过' }}
 						</el-button>
 					</template>
 				</el-table-column>
 				<el-table-column label="申请人" prop="user_name_" width="100"></el-table-column>
+				<el-table-column label="审批人" prop="verifier_name_" width="100"></el-table-column>
+				<el-table-column label="工时日期" prop="record_date_" width="100"></el-table-column>
 				<el-table-column label="工时" prop="hours_" width="100"></el-table-column>
 			</scTable>
 		</el-card>
 	</el-card>
-    <dialog2 ref="manhoursDialog" :menu="dialogData"></dialog2>
+	<dialog2 ref="manhoursDialog" :menu="dialogData" :state="state"></dialog2>
 </template>
 <script>
 import dialog2 from '@/views/dmsSystem/manhourHome/dialog/manhourForm.vue'
 export default {
 	components: {
-        dialog2
-    },
+		dialog2
+	},
 	data() {
 		return {
-            dialogData: [],
+			dialogData: [],
+			state:'审核',
 			tableData: [],
 			projectTypeValue: 0, // 默认选中的tab
 			projectTypes: [
@@ -66,10 +69,10 @@ export default {
 	},
 	methods: {
 		openHoursDialog(row) {
-            this.dialogData = row
-            this.$refs.manhoursDialog.setData(row)
-            this.$refs.manhoursDialog.open()
-        },
+			this.dialogData = row
+			this.$refs.manhoursDialog.setData(row)
+			this.$refs.manhoursDialog.open()
+		},
 		// godoc() {
 		// 	window.open("https://python-abc.xyz/scui-doc/")
 		// },
@@ -92,8 +95,8 @@ export default {
 		},
 		handleClick(row) {
 			this.dialogData = row
-            this.$refs.manhoursDialog.setData(row)
-            this.$refs.manhoursDialog.open()
+			this.$refs.manhoursDialog.setData(row)
+			this.$refs.manhoursDialog.open()
 			// 可以根据业务需求执行更多操作
 		},
 		async getManhours() {

@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="dialogFormVisible" title="Shipping address" width="500">
+	<el-dialog v-model="dialogFormVisible" title="目录导入" width="500">
 		<el-tree ref="menu" class="menu" node-key="uuid_" :data="treeData" :props="menuProps" highlight-current
 			:expand-on-click-node="false" show-checkbox :filter-node-method="menuFilterNode" @node-click="menuClick"
 			@node-drop="nodeDrop" style="max-width: 600px">
@@ -18,9 +18,9 @@
 
 		<template #footer>
 			<div class="dialog-footer">
-				<el-button :loading="loading" @click="dialogFormVisible = false">Cancel</el-button>
+				<el-button :loading="loading" @click="dialogFormVisible = false">取消</el-button>
 				<el-button :loading="loading" type="primary" @click="save">
-					Confirm
+					提交导入
 				</el-button>
 			</div>
 		</template>
@@ -31,9 +31,15 @@
 <script>
 // import { Loading } from '@element-plus/icons-vue';
 // import { provide, getCurrentInstance } from 'vue';
+import { inject } from "vue";
+
 export default {
 	// name: "settingMenu",
 	setup() {
+        const refreshData = inject("refreshData");
+		return {
+            refreshData // 导出供 methods 中使用
+        };
 		// const { proxy } = getCurrentInstance(); // 获取组件实例
 
 		// const refreshData = () => {
@@ -82,6 +88,7 @@ export default {
 				await this.$dmsApi.drawingMenuProject.createBatch.post(data)
 			} finally {
 				this.loading = false
+                this.refreshData()
 				this.dialogFormVisible = false
 			}
 		},

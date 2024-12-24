@@ -1,10 +1,13 @@
 <template>
     <el-dialog v-model="dialogVisible" title="项目详情" width="600px">
-        <el-form :model="projectForm" label-width="100px" v-loading="formLoading">
-            <el-form-item label="项目号">
+        <el-form :model="projectForm" ref="form" :rules="projectFormRules" label-width="100px" v-loading="formLoading">
+            <el-form-item label="项目号" prop="project_number_">
                 <el-input v-model="projectForm.project_number_"></el-input>
             </el-form-item>
-            <el-form-item label="项目类型">
+            <el-form-item label="项目名称" prop="project_name_">
+                <el-input v-model="projectForm.project_name_"></el-input>
+            </el-form-item>
+            <el-form-item label="项目类型" prop="project_type_">
                 <el-select v-model="projectForm.project_type_" placeholder="选择项目状态">
                     <el-option v-for="item in projectTypes.filter(option => option.value !== 0)" :key="item.value"
                         :label="item.label" :value="item.value" />
@@ -13,11 +16,9 @@
             <el-form-item label="项目状态">
                 <el-select v-model="projectForm.project_statu_" placeholder="选择项目状态">
                     <el-option v-for="item in projectState[0].options.filter(option => option.value !== 0)"
-                        :key="item.value" :label="item.label" :value="item.value" />
+                        :key="item.value" :label="item.label" :value="item.value"
+                        :disabled="item.value < initialStatus" />
                 </el-select>
-            </el-form-item>
-            <el-form-item label="项目名称">
-                <el-input v-model="projectForm.project_name_"></el-input>
             </el-form-item>
             <el-form-item label="项目经理">
                 <el-select v-model="projectForm.project_manager_name_" placeholder="选择项目经理"
@@ -60,6 +61,10 @@ export default {
             userType
         };
     },
+    mounted() {
+        // 初始化时过滤状态选项
+        this.initialStatus = this.projectForm.project_statu_;
+    },
     props: {
         editData: {
             type: Object,
@@ -76,6 +81,7 @@ export default {
     },
     data() {
         return {
+            initialStatus: '', // 标志是否初始化
             projectTypeValue: 0, // 默认选中的tab
             projectTypes: [
                 { label: '所有', value: 0 },
@@ -120,7 +126,22 @@ export default {
                 // type: [""]
             },
             dialogVisible: false,
-            projectForm: {},
+            projectForm: {
+                project_number_: '',
+                project_name_: '',
+                project_type_: ''
+            },
+            projectFormRules: {
+                project_number_: [
+                    { required: true, message: '项目号不能为空', trigger: 'blur' }
+                ],
+                project_name_: [
+                    { required: true, message: '项目名称不能为空', trigger: 'blur' }
+                ],
+                project_type_: [
+                    { required: true, message: '项目类型不能为空', trigger: 'blur' }
+                ]
+            },
             projectTable: [],
             projectUserInfos: [],
             projectLoading: false, // 添加加载状态
@@ -135,15 +156,24 @@ export default {
             this.dialogVisible = true
         },
         async handleNodeClick(projectUuid) {
+            // 清空之前的数据
+            this.projectUserInfos = [];
+
             const submitData = {
                 project_id_: projectUuid
             }
+
             try {
-                const projectUserIds = await this.$dmsApi.projectUsershiproute.readId.post(submitData)
-                if (projectUserIds) {
+                let projectUserIds = await this.$dmsApi.projectUsershiproute.readId.post(submitData)
+
+                if (projectUserIds.length) {
                     this.projectUserInfos = await this.$apiIAM.user.usersByUserIds.post(projectUserIds)
                 } else {
-                    console.log('User not found');
+                    this.$message({
+                        message: '请先添加项目组成员！',
+                        grouping: true,
+                        type: 'warning',
+                    });
                     return null;
                 }
             } catch (error) {
@@ -175,7 +205,22 @@ export default {
             return this.$apiIAM.user.userIdReadUserInfo.post(postData)
         },
         async submitFormProject() {
-            this.formLoading = true
+            // 执行表单校验
+            const valid = await new Promise((resolve) => {
+                this.$refs.form.validate((valid) => {
+                    resolve(valid);
+                });
+            });
+
+            // 如果校验不通过，返回
+            if (!valid) {
+                this.formLoading = false;
+                return; // 退出函数，避免执行后续代码
+            }
+
+            // 如果校验通过
+            this.formLoading = true;
+
             try {
                 if (this.projectForm.uuid_) {
                     // 如果存在 uuid_，调用更新接口
@@ -187,21 +232,22 @@ export default {
             } catch (error) {
                 console.error("Error submitting project form:", error);
             } finally {
+                // 无论成功还是失败，都关闭弹框
                 this.dialogVisible = false;
-                this.formLoading = false; // 无论成功还是失败，都关闭弹框
-                this.$emit('updetaProject')
-                // this.postReadByIdProject()
+                this.formLoading = false;
+                this.$emit('updateProject');
+                // this.postReadByIdProject(); // 如果有必要，可以取消注释
             }
         },
         async getProjectInfo() {
             this.projectLoading = true; // 开始加载
             try {
-                if(this.userType == 'admin') {
+                if (this.userType == 'admin') {
                     this.projectTable = await this.$dmsApi.project.readAll.get()
-                }else if (this.userType == 'user') {
+                } else if (this.userType == 'user') {
                     // this.postReadByIdProject()
                 }
-                } catch (error) {
+            } catch (error) {
                 console.error("Error fetching user list:", error);
             } finally {
                 this.projectLoading = false; // 加载完成

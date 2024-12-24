@@ -24,7 +24,8 @@
                 </el-form-item>
                 <el-form-item label="图纸状态">
                     <el-select v-model="dwgForm.status_" placeholder="选择项目状态">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"
+                            :disabled="item.value < initialStatus" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="任务开始">
@@ -52,6 +53,7 @@ export default {
             dwgForm: {},
             projectUserInfos: [],
             loading: false,
+            initialStatus: '',
             options: [
                 {
                     label: "未开始",
@@ -125,8 +127,8 @@ export default {
         },
         //表单注入数据
         setData(data) {
-            console.log(data, 'ssss')
-            this.dwgForm = {...data}
+            this.dwgForm = { ...data }
+            this.initialStatus = data.status_
         }
     }
 }

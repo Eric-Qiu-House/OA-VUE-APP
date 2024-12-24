@@ -4,14 +4,11 @@
 			<el-container>
 				<el-header v-if="status == 'projectCatalogue'">
 					<el-col>
-						{{userType  }}  55555555
-						{{ status }}  55555555
 						<el-button @click="switchComponent('save1')"
 							:type="displayComponent === 'save1' ? 'primary' : ''">图纸管理</el-button>
 						<el-button @click="switchComponent('save')"
 							:type="displayComponent === 'save' ? 'primary' : ''">目录管理</el-button>
 					</el-col>
-					<br>
 				</el-header>
 				<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
 				<el-main class="nopadding">
@@ -20,23 +17,30 @@
 						:filter-node-method="menuFilterNode" @node-click="menuClick" @node-drop="nodeDrop">
 						<template #default="{ node, data }">
 							<span class="custom-tree-node">
-								<span class="label">
-									{{ node.label }}
-								</span>
 
-								<span class="do">
+								<el-text style="width: 180px;" truncated>
+									{{ node.label }}
+
+								</el-text>
+								<!-- <el-text class="label" truncated>
+								</el-text> -->
+
+								<span class="do" v-if="displayComponent === 'save' || drawingCategory">
 									<el-button icon="el-icon-plus" size="small"
+										:disabled="!$isButtonVisible || this.$route.query.projectState == 4"
 										@click.stop="createMenuButton(node, data)"></el-button>
 								</span>
 							</span>
 						</template>
 					</el-tree>
 				</el-main>
-				<el-footer style="height:51px;">
-					<el-button type="primary" size="small" icon="el-icon-plus" @click="createMenuButton()"></el-button>
+				<el-footer style="height:51px;" v-if="displayComponent === 'save' || drawingCategory">
+					<el-button type="primary" size="small" icon="el-icon-plus" @click="createMenuButton()"
+						:disabled="!$isButtonVisible || this.$route.query.projectState == 4"></el-button>
 					<el-button type="danger" size="small" plain icon="el-icon-delete" @click="delMenu"
 						disabled></el-button>
-					<el-button v-if="status == 'projectCatalogue'" @click="importButton">导入模板</el-button>
+					<el-button :disabled="!$isButtonVisible || this.$route.query.projectState == 4"
+						v-if="status == 'projectCatalogue'" @click="importButton">导入模板</el-button>
 				</el-footer>
 			</el-container>
 		</el-aside>
@@ -84,7 +88,7 @@ export default {
 		//控制menu接收的是“项目目录”，还是“类别目录”
 		const status = inject('status'); // 接收父组件提供的状态
 		const userType = inject('userType'); // 接收父组件提供的状态
-		return { status,userType };
+		return { status, userType };
 
 	},
 	components: {

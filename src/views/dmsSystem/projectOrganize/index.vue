@@ -8,7 +8,7 @@
                 </el-card>
             </el-col>
             <el-col :lg="21">
-                <el-card shadow="never" header="">
+                <el-card>
 
                     <el-header class="header-tabs">
                         <el-tabs type="card" v-model="groupId" @tab-change="tabChange">
@@ -19,7 +19,7 @@
 
                     <el-card shadow="never" header="">
                         <el-header>
-                            <el-button type="primary" icon="el-icon-plus" @click="add"
+                            <el-button type="primary" icon="el-icon-plus" @click="add" :disabled="!$isButtonVisible"
                                 v-if="this.projectId != null && this.projectId !== '' && Object.keys(this.projectId).length > 0"></el-button>
                             <!-- <div class="right-panel">
                                 <div class="right-panel-search">
@@ -39,7 +39,7 @@
 						<template #default="scope">
 							<el-avatar :src="scope.row.avatar_" size="small"></el-avatar>
 						</template>
-</el-table-column> -->
+                        </el-table-column> -->
                                 <el-table-column label="头像" width="100" column-key="filterAvatar"
                                     :filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
                                     <template #default="scope">
@@ -182,9 +182,10 @@ export default {
             this.projectId = nodeData.uuid_
             try {
                 const userIds = await this.$dmsApi.projectUsershiproute.readId.post(this.postData)
-                if (userIds) {
+                if (userIds && userIds.length != 0) {
                     this.usersData = await this.$apiIAM.user.usersByUserIds.post(userIds)
                 } else {
+                    this.usersData = []
                     return null;
                 }
             } catch (error) {
