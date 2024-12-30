@@ -76,6 +76,7 @@ export default {
             immediate: true, // 立即执行，初始化时也同步一次
             handler(newValue) {
                 this.projectForm = { ...newValue }; // 同步 props 的数据
+                 this.initialStatus = this.projectForm.project_statu_;
             },
         },
     },
@@ -192,7 +193,8 @@ export default {
         openDialogProject(row) {
             if (row) {
                 this.projectForm = { ...row };
-            } else {
+                 this.initialStatus = this.projectForm.project_statu_;
+                } else {
                 // 初始化为新建时的默认值
                 this.projectForm = {};
             }

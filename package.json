@@ -11,6 +11,7 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@tinymce/tinymce-vue": "5.0.0",
     "axios": "1.3.4",
+    "chinese-calendar": "^1.0.3",
     "codemirror": "5.65.5",
     "core-js": "latest",
     "cropperjs": "1.5.13",

@@ -129,6 +129,13 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
+		readFieldConversion: {
+			url: `${config.DMS_URL}/dmsServer/manHours/readFieldConversionRouter`,
+			name: "readFieldConversion",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
 		readById: {
 			url: `${config.DMS_URL}/dmsServer/manHours/readByIdRouter`,
 			name: "read",

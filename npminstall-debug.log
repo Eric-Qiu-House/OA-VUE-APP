@@ -1,21 +1,13 @@
 {
   root: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-System-Web',
   registry: 'https://registry.npmmirror.com',
-  pkgs: [
-    {
-      name: '@achrinza/node-ipc',
-      version: 'latest',
-      type: 'tag',
-      alias: undefined,
-      arg: [Result]
-    }
-  ],
+  pkgs: [],
   production: false,
   cacheStrict: false,
   cacheDir: 'C:\\Users\\10108\\.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@achrinza/node-ipc","--save"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@achrinza/node-ipc","--save"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","-g","cnpm"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","-g","cnpm"]}',
     npm_config_user_agent: 'npminstall/7.12.0 npm/? node/v20.14.0 win32 x64',
     npm_config_cache: 'C:\\Users\\10108\\.npminstall_tarball',
     NODE: 'D:\\nodejs\\node.exe',
@@ -195,11 +187,13 @@
   ignoreScripts: false,
   foregroundScripts: false,
   ignoreOptionalDependencies: false,
-  detail: false,
+  detail: true,
   forceLinkLatest: false,
   trace: false,
   engineStrict: false,
   registryOnly: false,
   client: false,
-  autoFixVersion: [Function: autoFixVersion]
+  autoFixVersion: [Function: autoFixVersion],
+  targetDir: null,
+  binDir: null
 }

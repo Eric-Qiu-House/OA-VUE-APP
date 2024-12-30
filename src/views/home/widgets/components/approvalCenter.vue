@@ -2,7 +2,7 @@
 	<el-card shadow="hover" header="审批中心">
 		<el-header class="header-tabs">
 			<el-tabs type="card" v-model="projectTypeValue" @tab-change="handleClickType">
-				<el-tab-pane v-for="(item) in projectTypes" :key="item.value" :label="item.label" :name="item.value">
+				<el-tab-pane v-for="(item) in projectTypes" :key="item.value" :label="item.label" :name="item.value" disabled>
 				</el-tab-pane>
 			</el-tabs>
 		</el-header>
@@ -18,11 +18,11 @@
 				<el-table-column label="审批状态" prop="ratify_type_" width="100">
 					<template #default="scope">
 						<el-button text type="primary" size="small" :style="{
-							color: scope.row.ratify_type_ === 0 ? '#ff8c00' :
-								scope.row.ratify_type_ === 1 ? '#409eff' : '#909399'  // 默认颜色：已关闭
+							color: scope.row.ratify_type_ === 1 ? '#ff8c00' :
+								scope.row.ratify_type_ === 2 ? '#409eff' : '#909399'  // 默认颜色：已关闭
 						}">
-							{{ scope.row.ratify_type_ === 0 ? '未审批' :
-								scope.row.ratify_type_ === 1 ? '已审批' : '未通过' }}
+							{{ scope.row.ratify_type_ === 1 ? '未审批' :
+								scope.row.ratify_type_ === 2 ? '已通过' : '未通过' }}
 						</el-button>
 					</template>
 				</el-table-column>
@@ -46,11 +46,11 @@ export default {
 			dialogData: [],
 			state:'审核',
 			tableData: [],
-			projectTypeValue: 0, // 默认选中的tab
+			projectTypeValue: 1, // 默认选中的tab
 			projectTypes: [
-				{ label: '待处理', value: 0 },
-				{ label: '已发起', value: 1 },
-				{ label: '我收到的', value: 2 },
+				{ label: '待处理', value: 1 },
+				{ label: '已发起', value: 2 },
+				{ label: '我收到的', value: 3 },
 			],
 			userInfo: {},
 			submitData: {},
@@ -61,7 +61,7 @@ export default {
 		this.userInfo = this.$TOOL.data.get("USER_INFO");
 		this.submitData = {
 			verifier_id_: this.userInfo.id_,
-			ratify_type_: 0
+			ratify_type_: 1
 		};
 		setTimeout(() => {
 			this.getManhours();
@@ -77,18 +77,18 @@ export default {
 		// 	window.open("https://python-abc.xyz/scui-doc/")
 		// },
 		handleClickType(value) {
-			if (value == 0) {
+			if (value == 1) {
 				this.submitData = {
 					verifier_id_: this.userInfo.id_,
-					ratify_type_: 0
-				}
-			} else if (value == 1) {
-				this.submitData = {
-					user_id_: this.userInfo.id_,
+					ratify_type_: 1
 				}
 			} else if (value == 2) {
 				this.submitData = {
 					user_id_: this.userInfo.id_,
+				}
+			} else if (value == 3) {
+				this.submitData = {
+					verifier_id_: this.userInfo.id_,
 				}
 			}
 			this.getManhours()

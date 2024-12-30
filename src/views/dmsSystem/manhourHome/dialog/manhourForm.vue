@@ -1,7 +1,6 @@
 <template>
     <el-row :gutter="40">
         <el-dialog v-model="dialogDwg" title="工时填报" width="1200" :before-close="handleClose">
-            {{ state }}
             <el-form ref="form" :rules="rules" v-loading="loading" :model="manhoursFrom" label-width="auto"
                 style="max-width: 1200px">
                 <el-form-item label="图号">
@@ -36,13 +35,13 @@
                             :value="item.fullname_" />
                     </el-select>
                 </el-form-item> -->
-                <el-form-item label="审批状态" v-if="manhoursFrom.ratify_type_ != null">
+                <el-form-item label="审批状态">
                     <el-select v-model="manhoursFrom.ratify_type_"
-                        :disabled="!(manhoursFrom.verifier_id_ == $TOOL.data.get('USER_INFO').id_)"
+                        disabled
                         placeholder="请选择审批状态">
-                        <el-option label="待审批" v-show="false" :value=0 :style="{ color: 'gray' }"></el-option>
-                        <el-option label="通过" :value=1 :style="{ color: 'green' }"></el-option>
-                        <el-option label="拒绝" :value=2 :style="{ color: 'red' }"></el-option>
+                        <el-option label="待审批" v-show="false" :value=1 :style="{ color: 'gray' }"></el-option>
+                        <el-option label="通过" :value=2 :style="{ color: 'green' }"></el-option>
+                        <el-option label="拒绝" :value=3 :style="{ color: 'red' }"></el-option>
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="审批人">
@@ -52,10 +51,10 @@
                     <sc-editor v-model="manhoursFrom.submit_message_" placeholder="请输入" :height="300"></sc-editor>
                     <!-- <el-input v-model="manhoursFrom.submit_message_" type="textarea" /> -->
                 </el-form-item>
-                <el-form-item>
-                    <el-button v-model="dialogDwg" v-if="manhoursFrom.user_id_ == $TOOL.data.get('USER_INFO').id_" type="primary" @click="onSubmit">提交申请</el-button>
-                    <el-button v-model="dialogDwg" v-if="manhoursFrom.verifier_id_ == $TOOL.data.get('USER_INFO').id_ && state == '审核' " type="danger" @click="onSubmit">拒绝</el-button>
-                    <el-button v-model="dialogDwg" v-if="manhoursFrom.verifier_id_ == $TOOL.data.get('USER_INFO').id_ && state == '审核' " type="success" @click="onSubmit">通过</el-button>
+                <el-form-item >
+                    <el-button v-model="dialogDwg" v-if="manhoursFrom.user_id_ == $TOOL.data.get('USER_INFO').id_ && !('ratify_type_' in manhoursFrom)" type="primary" @click="onSubmit(1)">提交申请</el-button>
+                    <el-button v-model="dialogDwg" v-if="(manhoursFrom.verifier_id_ == $TOOL.data.get('USER_INFO').id_) && (state == '审核') && (manhoursFrom.ratify_type_ == 1) " type="danger" @click="onSubmit(3)">拒绝</el-button>
+                    <el-button v-model="dialogDwg" v-if="manhoursFrom.verifier_id_ == $TOOL.data.get('USER_INFO').id_ && state == '审核' && manhoursFrom.ratify_type_ == 1" type="success" @click="onSubmit(2)">通过</el-button>
                     <el-button v-model="dialogDwg" @click="(dialogDwg = false)">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -126,7 +125,7 @@ export default {
         open() {
             this.dialogDwg = true
         },
-        async onSubmit() {
+        async onSubmit(stateId) {
             const valid = await new Promise((resolve) => {
                 this.$refs.form.validate((valid) => {
                     resolve(valid);
@@ -144,7 +143,13 @@ export default {
             // this.manhoursFrom.record_date_ = this.manhoursFrom.record_date_.split('T')[0];  // 或者使用其他方法转换
             // }
             try {
-                await this.$dmsApi.manHours.create.post(this.manhoursFrom)
+                this.manhoursFrom.ratify_type_ = stateId
+                if(this.state == "审核"){
+                    await this.$dmsApi.manHours.create.post(this.manhoursFrom)
+                    // await this.$dmsApi.manHours.update.post(this.manhoursFrom)
+                }else {
+                    await this.$dmsApi.manHours.create.post(this.manhoursFrom)
+                }
             } catch (error) {
                 console.log(error)
             } finally {
@@ -156,8 +161,8 @@ export default {
         handleInput(value) {
             if (value < 1) {
                 this.manhoursFrom.hours_ = 1;  // 防止负数输入
-            } else if (value >= 12) {
-                this.manhoursFrom.hours_ = 12;  // 限制最大值为12
+            } else if (value >= 16) {
+                this.manhoursFrom.hours_ = 16;  // 限制最大值为16
             }
         },
         async handleNodeClick(projectUuid) {

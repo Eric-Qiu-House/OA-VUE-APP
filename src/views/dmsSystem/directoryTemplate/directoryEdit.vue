@@ -20,8 +20,10 @@
                         <el-input v-model="form.coding_rule_" clearable placeholder="编码规则"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" :disabled="!$isButtonVisible" @click="save" :loading="loading">保 存</el-button>
-                        <el-button type="primary" :disabled="!$isButtonVisible" @click="deleteButton" :loading="loading">删 除</el-button>
+                        <el-button type="primary" :disabled="!$isButtonVisible" @click="save" :loading="loading">保
+                            存</el-button>
+                        <el-button type="primary" :disabled="!$isButtonVisible" @click="deleteButton"
+                            :loading="loading">删 除</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -30,6 +32,8 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus';
+
 import scIconSelect from '@/components/scIconSelect'
 import { inject } from "vue";
 
@@ -72,7 +76,7 @@ export default {
                 projec_id_: 1,
                 drawing_menu_id_: 2
             },
-            userInfo:[]
+            userInfo: []
         }
     },
     watch: {
@@ -91,7 +95,7 @@ export default {
             return this.$route.name === 'drawingInfo';  // Replace with your actual route name
         }
     },
-    mounted () {
+    mounted() {
         this.userInfo = this.$TOOL.data.get("USER_INFO")
     },
     methods: {
@@ -112,27 +116,41 @@ export default {
             }
         },
         async deleteButton() {
+
+
             try {
-                this.loading = true
-                const subData = {
-                    uuid_: this.form.uuid_
-                }
-                // let response = []
-                if (this.drawingCategory) {
-                    const res = await this.$dmsApi.drawingMenu.delete.post(subData)
-                    if (res !== undefined) {
-                        this.$message.success("删除成功")
-                    } else {
-                        this.$message.warning(res.message)
+                const confirm = await ElMessageBox.confirm(
+                    '此操作将永久删除该项数据，是否继续？',
+                    '提示',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
                     }
-                } else if (this.drawingInfo) {
-                   const res =  await this.$dmsApi.drawingMenuProject.delete.post(subData)
-                    if (res !== undefined) {
-                        this.$message.success("删除成功")
-                    } else {
-                        this.$message.warning(res.message)
+                );
+                if (confirm) {
+                    this.loading = true
+                    const subData = {
+                        uuid_: this.form.uuid_
+                    }
+                    // let response = []
+                    if (this.drawingCategory) {
+                        const res = await this.$dmsApi.drawingMenu.delete.post(subData)
+                        if (res !== undefined) {
+                            this.$message.success("删除成功")
+                        } else {
+                            this.$message.warning(res.message)
+                        }
+                    } else if (this.drawingInfo) {
+                        const res = await this.$dmsApi.drawingMenuProject.delete.post(subData)
+                        if (res !== undefined) {
+                            this.$message.success("删除成功")
+                        } else {
+                            this.$message.warning(res.message)
+                        }
                     }
                 }
+
             } catch (error) {
                 console.error('Error fetching file list:', error);
             } finally {

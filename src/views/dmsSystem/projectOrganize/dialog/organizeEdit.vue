@@ -1,25 +1,29 @@
 <template>
-  <el-dialog :title="用户管理" v-model="visible" :width="1800" destroy-on-close @closed="$emit('closed')">
-    <el-main>
-      <el-row :gutter="5">
-        <el-col :lg="7">
-          <el-tree class="menu" :data="group" @node-click="groupClick">
-            <template #default="{ data }">
-              <span class="el-tree-node__label">
-                {{ data.name_ }}
-              </span>
-            </template>
-          </el-tree>
-        </el-col>
-        <el-col :lg="14">
+  <el-dialog :title="用户管理" v-model="visible" destroy-on-close @closed="$emit('closed')">
+    <el-container>
+      <el-aside>
+        <el-container>
+          <el-main>
+            <el-tree class="menu" :data="group" @node-click="groupClick">
+              <template #default="{ data }">
+                <span class="el-tree-node__label">
+                  {{ data.name_ }}
+                </span>
+              </template>
+            </el-tree>
+          </el-main>
+        </el-container>
+      </el-aside>
+      <el-container>
+        <el-main class="nopadding">
           <el-transfer v-model="value" :data="filteredUserData" :props="{ key: 'id_', label: 'fullname_' }"
-            :titles="['用户组', '项目组']" />
-        </el-col>
-      </el-row>
-    </el-main>
+            :titles="['用户组', '项目组']" /></el-main>
+      </el-container>
+    </el-container>
     <template #footer>
       <el-button @click="visible = false" :loading="loading">取 消</el-button>
       <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">保 存</el-button>
+      <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">确 认</el-button>
     </template>
   </el-dialog>
 </template>
@@ -100,6 +104,9 @@ export default {
       this.mode = mode;
       this.visible = true;
       return this;
+    },
+    open1() {
+      this.visible = true;
     },
     // 加载分组数据
     async getGroup() {

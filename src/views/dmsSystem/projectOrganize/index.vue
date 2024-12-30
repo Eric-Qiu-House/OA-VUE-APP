@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import organizeEdit from '@/views/dmsSystem/projectOrganize/dialog/organizeEdit.vue'
+import organizeEdit from '@/views/dmsSystem/projectOrganize/dialog/organizeEdit.vue' 
 
 export default {
     name: 'user',
