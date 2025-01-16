@@ -4,7 +4,7 @@
       <el-aside>
         <el-container>
           <el-main>
-            <el-tree class="menu" :data="group" @node-click="groupClick">
+            <el-tree class="menu" :data="group" @node-click="groupClick" default-expand-all>
               <template #default="{ data }">
                 <span class="el-tree-node__label">
                   {{ data.name_ }}

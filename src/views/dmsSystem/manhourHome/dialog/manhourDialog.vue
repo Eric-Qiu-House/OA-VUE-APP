@@ -2,8 +2,100 @@
     <el-row :gutter="40">
         <el-dialog v-model="dialogState" title="工时填报" width="1200" :before-close="handleClose">
             <el-card shadow="never">
-                <el-form ref="formRef" :model="recordDay" label-width="100px">
-                    <el-form-item label="当日填报记录" prop="list" disabled>
+                <!-- {{ recordDay }} -->
+                <el-table ref="formRef" :data="recordDay" label-width="100px">
+                    <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
+                    <el-table-column prop="project_number_" label="项目" width="180">
+                        <template #default="scope">
+                            <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
+                                <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                    :label="item.project_number_ + ` - ` + item.project_name_"
+                                    :value="item.project_number_"></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="project_type_" label="项目阶段" min-width="120">
+                        <template #default="scope">
+                            <el-select v-model="scope.row.project_type_" disabled placeholder="请选择">
+                                <el-option v-for="item in projectType" :key="item.value" :label="item.label"
+                                    :value="item.value"></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="job_type_" label="工作类型" min-width="120">
+                        <template #default="scope">
+                            <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
+                                <el-option v-for="item in jobType" :key="item.value" :label="item.label"
+                                    :value="item.value"></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="hours_" label="工时" min-width="100">
+                        <template #default="scope">
+                            <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="record_date_" label="时间" min-width="100">
+                        <template #default="scope">
+                            <el-input v-model="scope.row.record_date_" disabled></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="remark_" label="备注" min-width="180">
+                        <template #default="scope">
+                            <el-input v-model="scope.row.remark_" type="textarea" disabled />
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_" fixed="right" label="操作" width="220">
+                        <template #default="scope">
+                            <!-- <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)" >编辑</el-button> -->
+                            <el-button text type="primary" :disabled="isReadOnly"
+                                @click="deleteButton(scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                    <!-- <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
+                            <el-table-column prop="project_number_" label="项目" width="180">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
+                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                            :label="item.project_number_ + ` - ` + item.project_name_"
+                                            :value="item.project_number_"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="project_type_" label="项目阶段" min-width="120">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.project_type_" disabled  placeholder="请选择">
+                                        <el-option v-for="item in projectType" :key="item.value" :label="item.label"
+                                            :value="item.value"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="job_type_" label="工作类型" min-width="120">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
+                                        <el-option v-for="item in jobType" :key="item.value" :label="item.label"
+                                            :value="item.value"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="hours_" label="工时" min-width="100">
+                                <template #default="scope">
+                                    <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="record_date_" label="时间" min-width="100">
+                                <template #default="scope">
+                                    <el-input v-model="scope.row.record_date_" placeholder="请输入工时" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="remark_" label="备注" min-width="180">
+                                <template #default="scope">
+                                    <el-input v-model="scope.row.remark_" type="textarea" disabled />
+                                </template>
+                            </el-table-column>
+                        </sc-form-table> -->
+                    <!-- </el-form-item> -->
+                    <!-- <el-form-item label="当日填报记录" prop="list" disabled>
                         <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
                             <el-table-column prop="project_number_" label="项目" width="180">
                                 <template #default="scope">
@@ -46,8 +138,8 @@
                                 </template>
                             </el-table-column>
                         </sc-form-table>
-                    </el-form-item>
-                </el-form>
+                    </el-form-item> -->
+                </el-table>
             </el-card>
             <el-card shadow="never" title="新增填报">
                 <el-form ref="formRef" :model="form" label-width="100px">
@@ -110,6 +202,8 @@
 <script>
 import { defineAsyncComponent } from 'vue';
 const scEditor = defineAsyncComponent(() => import('@/components/scEditor'));
+import { ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 export default {
     props: {
@@ -179,8 +273,8 @@ export default {
                 this.getUserDayManhour();
                 this.form.list.forEach(item => {
                     item.record_date_ = this.receiveParams.day,
-                    item.user_id_ = this.userInfo.id_,
-                    item.user_name_ = this.userInfo.fullname_
+                        item.user_id_ = this.userInfo.id_,
+                        item.user_name_ = this.userInfo.fullname_
                 });
             }
         },
@@ -188,8 +282,8 @@ export default {
             handler(newVal) {
                 newVal.list.forEach(item => {
                     item.record_date_ = this.receiveParams.day,
-                    item.user_id_ = this.userInfo.id_,
-                    item.user_name_ = this.userInfo.fullname_
+                        item.user_id_ = this.userInfo.id_,
+                        item.user_name_ = this.userInfo.fullname_
                 });
             },
             deep: true,
@@ -208,6 +302,77 @@ export default {
         }
     },
     methods: {
+        async openDwgDialog() {
+            try {
+                // 弹出确认对话框
+                // const confirm = await ElMessageBox.confirm(
+                //     '此操作将永久删除该项数据，是否继续？',
+                //     '提示',
+                //     {
+                //         confirmButtonText: '确定',
+                //         cancelButtonText: '取消',
+                //         type: 'warning',
+                //     }
+                // );
+                // if (confirm) {
+                // 执行删除逻辑
+                // this.dwgloading = true
+                // const referData = {
+                //     uuid_: row.uuid_,
+                // };
+                // await this.$dmsApi.manHours.delete.post(referData);
+                // this.$emit('invoke-parent-method');
+                // this.dialogState = false; // 关闭弹窗
+                // this.getDwgData(); // 刷新数据
+                // }
+            } catch (error) {
+                // 捕获取消操作或其他错误
+            }
+        },
+        async deleteButton(row) {
+            try {
+                // 获取当前用户操作日期
+                const currentDate = new Date(); // 确保接收了用户操作日期
+                const rowDate = new Date(row.record_date_);
+
+                // 判断是否同月
+                if (currentDate.getFullYear() !== rowDate.getFullYear() || currentDate.getMonth() !== rowDate.getMonth()) {
+                    // 如果不是同一个月，弹出提示，阻止后续操作
+                    ElMessage({
+                        type: 'warning',
+                        message: '只能删除当月的记录！',
+                    });
+                    return;
+                }
+
+                // 弹出确认对话框
+                const confirm = await ElMessageBox.confirm(
+                    '此操作将永久删除该项数据，是否继续？',
+                    '提示',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }
+                );
+
+                if (confirm) {
+                    // 执行删除逻辑
+                    const referData = {
+                        uuid_: row.uuid_,
+                    };
+                    await this.$dmsApi.manHours.delete.post(referData);
+                    this.$emit('invoke-parent-method'); // 通知父组件刷新数据
+                    this.dialogState = false; // 关闭弹窗
+                }
+            } catch (error) {
+                // 捕获取消操作或其他错误
+                if (error !== 'cancel') {
+                    console.error('删除失败:', error);
+                }
+            }
+        },
+
         async getUserDayManhour() {
             const data = {
                 user_id_: this.userInfo.id_,

@@ -9,7 +9,7 @@
 					<!-- <el-tree ref="group" class="menu" node-key="id_" :data="group" :current-node-key="''"
 						:highlight-current="true" :expand-on-click-node="false" :filter-node-method="groupFilterNode"
 						@node-click="groupClick"></el-tree> -->
-					<el-tree class="menu" :data="group" @node-click="groupClick">
+					<el-tree class="menu" :data="group" @node-click="groupClick" default-expand-all>
 						<template #default="{ data }">
 							<span class="el-tree-node__label">
 								{{ data.name_ }}
@@ -23,10 +23,11 @@
 			<el-header>
 				<div class="left-panel">
 					<el-button type="primary" icon="el-icon-plus" @click="add"></el-button>
-					<el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length == 0"
-						@click="batch_del"></el-button>
-					<el-button type="primary" plain :disabled="selection.length == 0">分配角色</el-button>
-					<el-button type="primary" plain :disabled="selection.length == 0">密码重置</el-button>
+					<!-- <el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length == 0"
+						@click="batch_del"></el-button> -->
+					<!-- <el-button type="primary" plain :disabled="selection.length == 0">分配角色</el-button> -->
+					<!-- <el-button type="primary" plain :disabled="selection.length == 0"
+						@click="passwordReset()">密码重置</el-button> -->
 				</div>
 				<div class="right-panel">
 					<div class="right-panel-search">
@@ -36,7 +37,7 @@
 				</div>
 			</el-header>
 			<el-main class="nopadding">
-				<scTable ref="table" :data="userData" @selection-change="selectionChange" stripe remoteSort
+				<scTable ref="table" :data="formData" @selection-change="selectionChange" stripe remoteSort
 					remoteFilter>
 					<el-table-column type="selection" width="50"></el-table-column>
 					<!-- <el-table-column label="ID" prop="id_" width="80" sortable='custom'></el-table-column> -->
@@ -49,7 +50,7 @@
 					<el-table-column label="头像" width="100" column-key="filterAvatar"
 						:filters="[{ text: '已上传', value: '1' }, { text: '未上传', value: '0' }]">
 						<template #default="scope">
-							<el-avatar :src="scope.row.avatar_ ? scope.row.avatar_ : ''" 
+							<el-avatar :src="scope.row.avatar_ ? scope.row.avatar_ : ''"
 								:style="{ backgroundColor: scope.row.avatar_ ? '' : '#409EFF', color: '#fff' }">
 								<template #default>
 									<!-- 如果 avatar_ 为空，显示 fullname_ 的后两位字符 -->
@@ -68,7 +69,14 @@
 					<el-table-column label="姓名" prop="fullname_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="邮箱" prop="email_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="手机号码" prop="mobile_" width="150" sortable='custom'></el-table-column>
-					<el-table-column label="状态" prop="status_" width="150" sortable='custom'></el-table-column>
+					<el-table-column label="状态" prop="status_" width="150" sortable="custom">
+						<template #default="{ row }">
+							<el-tag :type="row.status_ === 1 ? 'success' : row.status_ === 0 ? 'danger' : 'warning'">
+								{{ row.status_ === 1 ? "正常" : row.status_ === 0 ? "停用" : "其他" }}
+							</el-tag>
+						</template>
+					</el-table-column>
+
 					<el-table-column label="操作" fixed="right" align="right" width="160">
 						<template #default="scope">
 							<el-button-group>
@@ -76,6 +84,8 @@
 									@click="table_show(scope.row, scope.$index)">查看</el-button>
 								<el-button text type="primary" size="small"
 									@click="table_edit(scope.row, scope.$index)">编辑</el-button>
+								<el-button text type="primary" size="small"
+									@click="passwordReset(scope.row, scope.$index)">重置</el-button>
 								<el-popconfirm title="确定删除吗？" @confirm="table_del(scope.row, scope.$index)">
 									<template #reference>
 										<el-button text type="primary" size="small">删除</el-button>
@@ -90,18 +100,27 @@
 		</el-container>
 	</el-container>
 
+
+
+
 	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess"
 		@closed="dialog.save = false"></save-dialog>
+
+	<save-password ref="savePassword" @success="handleSuccess">
+
+	</save-password>
 
 </template>
 
 <script>
 import saveDialog from './save'
+import savePassword from './savePassword.vue'
 
 export default {
 	name: 'user',
 	components: {
-		saveDialog
+		saveDialog,
+		savePassword
 	},
 	data() {
 		return {
@@ -116,26 +135,57 @@ export default {
 			search: {
 				name: null
 			},
+			formData: [],
 			userData: []
 		}
 	},
 	// async created() { 
 	// 	try {
 	// 		const list = await this.$apiIAM.user.fromList.get()
-	// 		this.userData = list; // 更新组件的数据
+	// 		this.formData = list; // 更新组件的数据
 	// 	} catch (error) {
 	// 		console.error("Error fetching user list:", error);
 	// 	}
 	// },
 	watch: {
 		groupFilterText(val) {
-			this.$refs.group.filter(val);
-		}
+			const result = [];
+
+			// 内部递归函数，遍历数组中的对象
+			function search(obj) {
+				if (Array.isArray(obj)) {
+					// 如果是数组，遍历每一项
+					obj.forEach((item) => {
+						if (typeof item === "object" && item !== null) {
+							// 检查对象的字段是否包含目标值
+							const isMatched = Object.values(item).some((value) =>
+								String(value).includes(val)
+							);
+							if (isMatched) {
+								result.push(item); // 如果匹配，存入结果数组（完整对象）
+							}
+						}
+					});
+				}
+			}
+
+			// 开始递归搜索
+			search(this.userData);
+
+			// 更新过滤后的结果
+			this.formData = result;
+		},
 	},
 	mounted() {
 		this.getGroup()
 	},
 	methods: {
+		passwordReset(row) {
+			this.$refs.savePassword.dialogVisible = true;
+			this.$nextTick(() => {
+				this.$refs.savePassword.setData(row)
+			})
+		},
 		//添加
 		add() {
 			this.dialog.save = true
@@ -218,6 +268,9 @@ export default {
 		async asd(i) {
 			const data = { group_id_: i }
 			this.userData = await this.$apiIAM.user.usersByGroup.post(data);
+			if (this.groupFilterText.length == 0) {
+				this.formData = this.userData
+			}
 		},
 		//搜索
 		upsearch() {

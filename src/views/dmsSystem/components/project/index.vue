@@ -8,16 +8,21 @@
       <el-card>
         <div shadow="never" header="分类筛选器">
           <sc-select-filter :data="projectState" :selected-values="selectedValues" :label-width="80"
-            @on-change="onSelectChange"></sc-select-filter>
-          <el-button type="primary" :disabled="!$isButtonVisible" icon="el-icon-plus"
-            @click="openDialogProject"></el-button>
+            @on-change="onSelectChange">
+          </sc-select-filter>
+          <div style="display: flex;">
+            <el-button type="primary" :disabled="!$isButtonVisible" icon="el-icon-plus" @click="openDialogProject">
+            </el-button>
+            <el-input placeholder="输入关键字进行过滤" v-model="flterText" clearable style="margin-left: 15px; width: 250px;"></el-input>
+          </div>
+
         </div>
       </el-card>
     </el-header>
-    <scTable v-loading="projectLoading" ref="projectTable" :data="projectTable" row-key="uuid_" style="width: 100%"
-      stripe>
+    <scTable v-loading="projectLoading" ref="projectTable" :data="tableData" row-key="uuid_" style="width: 100%"
+      :default-sort="{ prop: 'project_number_', order: 'descending' }" stripe>
       <el-table-column type="selection" width="50"></el-table-column>
-      <el-table-column label="项目号" prop="project_number_" width="100"></el-table-column>
+      <el-table-column sortable label="项目号" prop="project_number_" width="100"></el-table-column>
       <el-table-column label="项目名称" prop="project_name_" width="150"></el-table-column>
       <el-table-column label="技术负责人" prop="project_manager_name_" width="150"></el-table-column>
       <el-table-column label="开始(计划时间)" prop="start_date_" width="120"></el-table-column>
@@ -71,7 +76,8 @@
       <el-table-column label="操作" fixed="right" width="150">
         <template #default="scope">
           <el-button-group>
-            <el-button text type="primary" size="small" :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'"
+            <el-button text type="primary" size="small"
+              :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'"
               @click="openDialogProject(scope.row)">编辑</el-button>
           </el-button-group>
         </template>
@@ -116,6 +122,8 @@ export default {
           ],
         },
       ],
+      flterText: '',
+      filteredData: [],
       selectedValues: { state: 0 },
       dialogVisible: false,
       projectForm: {},
@@ -123,11 +131,33 @@ export default {
       projectLoading: false,
     };
   },
-
+  computed: {
+    tableData() {
+      return this.filteredData && this.filteredData.length > 0
+        ? this.filteredData
+        : this.projectTable;
+    },
+  },
   created() {
     this.fetchProjects();
   },
-
+  watch: {
+    flterText(val) {
+      const keyword = val.toLowerCase();
+      if (!val || val.trim().length === 0) {
+        this.filteredData = [];
+        this.fetchFilteredProjects();
+        return;
+      }
+      this.filteredData = this.projectTable.filter((row) => {
+        return (
+          (row.project_number_ || '').toLowerCase().includes(keyword) ||
+          (row.project_name_ || '').toLowerCase().includes(keyword) ||
+          (row.remarks_ || '').toLowerCase().includes(keyword)
+        );
+      });
+    },
+  },
   methods: {
     // 计算颜色样式
     getStyle(row) {
@@ -142,7 +172,6 @@ export default {
       }
 
       const progress = (elapsedTime / totalTime) * 100;
-      console.log(progress, 'progressprogressprogress')
       if (progress < 60) {
         return '#409EFF';
       } else if (progress < 80) {

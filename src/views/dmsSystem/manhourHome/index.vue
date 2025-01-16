@@ -3,15 +3,19 @@
         <el-row :gutter="15">
             <el-col :lg="3">
                 <el-card header="项目编号">
+                    <el-input placeholder="输入编号进行过滤" v-model="filterText" clearable></el-input>
                     <el-tree v-loading="proNumLoading" style="max-width: 600px" :data="projectData"
                         node-key="project_number_" :props="defaultProps" @node-click="handleNodeClick"
-                        default-expand-all @check-change="handleCheckChange" :model="checkedKeys" show-checkbox
-                        ref="projectTree" />
+                        default-expand-all @check-change="handleCheckChange" :filter-node-method="menuFilterNode"
+                        :model="checkedKeys" show-checkbox ref="projectTree" />
                 </el-card>
             </el-col>
             <el-col :lg="21">
                 <el-card>
                     <!-- <button @click="oooo()">1111</button> -->
+                    <!-- <el-text class="mx-1" tag="b" size="large" v-if="submitData.project_number_">
+                        {{ submitData.project_number_ + ' - ' + submitData.project_name_ }}
+                    </el-text> -->
 
                     <el-form :label-width="'100px'">
                         <!-- 第一行：查询 -->
@@ -97,6 +101,10 @@
                             </template>
                         </el-table-column>
 
+                        <!-- 工作类型列 -->
+                        <el-table-column v-if="selectedStat.length == 0 " label="备注" prop="remark_" width="150"
+                            sortable="custom"></el-table-column>
+
                     </el-table>
                 </el-card>
             </el-col>
@@ -117,6 +125,7 @@ export default {
                 children: 'children', // 子节点字段为 `children`
             },
             projectId: '',
+            filterText: '',
             timeHorizon: [],
             selectedStat: '',
             selection: [],
@@ -141,6 +150,9 @@ export default {
         this.getProjectInfo();
     },
     watch: {
+        filterText(val) {
+            this.$refs.projectTree.filter(val);
+        },
         checkedKeys(newVal, oldVal) {
             console.log('选中节点变化了:');
             console.log('新的值:', newVal);
@@ -155,6 +167,12 @@ export default {
         }
     },
     methods: {
+        //树过滤
+        menuFilterNode(value, data) {
+            if (!value) return true;
+            var targetText = data.project_number_;
+            return targetText.indexOf(value) !== -1;
+        },
         resetFun() {
             // this.timeHorizon = [];
             this.selectedStat = ''; // 清空选中的统计方式

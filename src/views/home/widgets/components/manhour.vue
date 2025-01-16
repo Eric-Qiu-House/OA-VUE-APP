@@ -15,7 +15,7 @@
 							<span style="font-size: 20px;">{{ data.day.split('-')[2] }}</span>
 							<span>{{ '工时：' }}{{ getTextColor(data.day).hours || 0 }}
 								<el-icon
-									v-if="getTextColor(data.day).hours < 9 && (getDetailedDateInfo(data.day) == '工作日' || getDetailedDateInfo(data.day) === '调休')">
+									v-if="getTextColor(data.day).hours < 8 && (getDetailedDateInfo(data.day) == '工作日' || getDetailedDateInfo(data.day) === '调休')">
 									<Warning color="#E6A23C" type="warning" />
 								</el-icon></span>
 							<span>{{ getDetailedDateInfo(data.day) }}</span>

@@ -10,6 +10,7 @@
 							:type="displayComponent === 'save' ? 'primary' : ''">目录管理</el-button>
 					</el-col>
 				</el-header>
+				<el-card v-else header="图纸目录 -【标准模板】"></el-card>
 				<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
 				<el-main class="nopadding">
 					<el-tree ref="menu" class="menu" node-key="id" :data="menuTreeData" :props="menuProps" draggable

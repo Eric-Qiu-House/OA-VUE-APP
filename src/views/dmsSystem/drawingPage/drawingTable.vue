@@ -9,7 +9,7 @@
                 <el-button v-if="menuForm.title_" v-loading="dwgloading" type="primary" size="small" icon="el-icon-plus"
                     @click="creatDwg()"
                     :disabled="!$isButtonVisible || this.$route.query.projectState == 4"></el-button>
-                <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row
+                <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row :default-sort="{ prop: 'drawing_number_', order: 'ascending' }"
                     @expand-change="handleExpandChange">
                     <!-- <el-table-column type="expand" label="全部" disabled>
                         <template #default="props">
@@ -39,7 +39,7 @@
                             </el-tree>
                         </template>
                     </el-table-column> -->
-                    <el-table-column prop="drawing_number_" label="图号" width="100"></el-table-column>
+                    <el-table-column prop="drawing_number_" sortable label="图号" width="100"></el-table-column>
                     <el-table-column prop="drawing_name_" label="图名" width="180"
                         show-overflow-tooltip></el-table-column>
                     <el-table-column prop="executor_name_" label="执行" width="110"></el-table-column>
@@ -76,7 +76,7 @@
                             {{ 'V' - scope.row.current_version_ }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status_" label="操作" width="250">
+                    <el-table-column prop="status_" fixed="right" label="操作" width="250">
                         <template #default="scope">
                             <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)"
                                 :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user' ">信息编辑</el-button>

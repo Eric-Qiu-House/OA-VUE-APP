@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+import { ElNotification, ElMessageBox } from 'element-plus';
 import sysConfig from "@/config";
 import tool from '@/utils/tool';
 import router from '@/router';
@@ -131,7 +131,7 @@ var http = {
    * @param {object} data 请求体
    * @param {object} config 自定义配置
    */
-  post(url, data = {}, config = {}, showMessage = true) {
+  post(url, data = {}, config = {}) {
     return new Promise((resolve, reject) => {
       axios({
         method: 'post',
@@ -144,7 +144,7 @@ var http = {
           resolve(response.data);
         })
         .catch((error) => {
-          if (showMessage) ElMessage.error('操作失败');
+          // if (showMessage) ElMessage.error('操作失败');
           reject(error);
         });
     });

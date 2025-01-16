@@ -3,8 +3,10 @@
         <el-row :gutter="15">
             <el-col :lg="3">
                 <el-card header="项目编号">
-                    <el-tree v-loading="proNumLoading" style="max-width: 600px" :data="projectData" node-key="id_"
-                        :props="defaultProps" @node-click="handleNodeClick" />
+                    <!-- {{ projectData }} -->
+                    <el-input placeholder="输入编号进行过滤" v-model="filterText" clearable></el-input>
+                    <el-tree ref="tree" v-loading="proNumLoading" style="max-width: 600px" :data="projectData" node-key="id_"
+                        :props="defaultProps" :filter-node-method="menuFilterNode" @node-click="handleNodeClick" />
                 </el-card>
             </el-col>
             <el-col :lg="21">
@@ -12,12 +14,15 @@
 
                     <el-header class="header-tabs">
                         <el-tabs type="card" v-model="groupId" @tab-change="tabChange">
-                            <el-tab-pane label="项目成员 - 23010" name="0"></el-tab-pane>
+                            <el-tab-pane label="项目成员" name="0"></el-tab-pane>
                             <el-tab-pane label="外部通讯录" name="1" disabled></el-tab-pane>
                         </el-tabs>
                     </el-header>
 
                     <el-card shadow="never" header="">
+                        <el-text class="mx-1" tag="b" size="large" v-if="activeProject.project_number_">
+                            {{ activeProject.project_number_ + ' - ' + activeProject.project_name_ }}
+                        </el-text>
                         <el-header>
                             <el-button type="primary" icon="el-icon-plus" @click="add" :disabled="!$isButtonVisible"
                                 v-if="this.projectId != null && this.projectId !== '' && Object.keys(this.projectId).length > 0"></el-button>
@@ -132,6 +137,7 @@ export default {
             defaultProps: {
                 label: 'project_number_',  // 将 `label` 字段映射为 `project_number_`
             },
+            filterText: '',
             proNumLoading: false,
             userLoading: false,
             groupId: "0",
@@ -151,6 +157,7 @@ export default {
             },
             projectData: [],
             projectId: '',
+            activeProject: {},
             usersData: [],
             postData: {}
         }
@@ -158,7 +165,18 @@ export default {
     created() {
         this.getProjectInfo()
     },
+    watch: {
+		filterText(val) {
+			this.$refs.tree.filter(val);
+		}
+	},
     methods: {
+        		//树过滤
+		menuFilterNode(value, data) {
+			if (!value) return true;
+			var targetText = data.project_number_;
+			return targetText.indexOf(value) !== -1;
+		},
         async getFun() {
             try {
                 const userIds = await this.$dmsApi.projectUsershiproute.readId.post(this.postData)
@@ -180,6 +198,7 @@ export default {
             }
             this.userLoading = true
             this.projectId = nodeData.uuid_
+            this.activeProject = nodeData
             try {
                 const userIds = await this.$dmsApi.projectUsershiproute.readId.post(this.postData)
                 if (userIds && userIds.length != 0) {

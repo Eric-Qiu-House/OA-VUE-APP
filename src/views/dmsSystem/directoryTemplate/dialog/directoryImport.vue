@@ -36,10 +36,10 @@ import { inject } from "vue";
 export default {
 	// name: "settingMenu",
 	setup() {
-        const refreshData = inject("refreshData");
+		const refreshData = inject("refreshData");
 		return {
-            refreshData // 导出供 methods 中使用
-        };
+			refreshData // 导出供 methods 中使用
+		};
 		// const { proxy } = getCurrentInstance(); // 获取组件实例
 
 		// const refreshData = () => {
@@ -76,7 +76,7 @@ export default {
 	methods: {
 		async save() {
 			// this.selectedNodes = this.$refs.menu.getHalfCheckedNodes(true);
-				this.loading = false
+			this.loading = false
 			const data = {
 				project_uuid_: this.type,
 				menus: [
@@ -88,7 +88,7 @@ export default {
 				await this.$dmsApi.drawingMenuProject.createBatch.post(data)
 			} finally {
 				this.loading = false
-                this.refreshData()
+				this.refreshData()
 				this.dialogFormVisible = false
 			}
 		},

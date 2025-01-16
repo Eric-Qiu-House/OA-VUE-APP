@@ -107,12 +107,12 @@ export default {
 			roleData: {}
 		}
 	},
-	mounted() {
+	async mounted() {
 		// 获取 - 路由菜单
-		this.getMenu()
+		await this.getMenu()
 		// 角色 - 已拥有的权限
-		this.getDept()
-		this.getGrid()
+		// this.getDept()
+		// this.getGrid()
 	},
 	methods: {
 		//表单注入数据
@@ -151,33 +151,63 @@ export default {
 
 
 		async getMenu() {
-    var data = await this.$apiIAM.system.routerTree.get();
-    this.menu = data;
+			var data = await this.$apiIAM.system.routerTree.get();
+			this.menu = data;
+			// const asd = [2]
+			// this.$refs.menu.setCheckedKeys(asd, true);
+			this.$nextTick(() => {
+				const node = this.$refs.menu.getNode(1); // 确保树节点已经渲染完成
+				console.log(node.childNodes.length, 'nodenodenodenodenode'); // 打印node
+				const selectedKeys = (this.roleData.router_tree_ || [] ).filter(key => {
+					const node = this.$refs.menu.getNode(key)
+					if ( node.childNodes.length == 0 ) {
+						return key
+					}
+				})
+				this.$refs.menu.setCheckedKeys(selectedKeys, true)
+			});
+			// if (this.menu) {
+			// 	const node = this.$refs.menu.getNode(2);
 
-    this.$nextTick(() => {
-        const selectedKeys = this.roleData.router_tree_ || [];
-        this.$refs.menu.setCheckedKeys(selectedKeys, true);
+			// 	console.log(node, 'nodenodenodenodenode')
+			// }
 
-        // 遍历所有选中的节点，更新父节点状态
-        selectedKeys.forEach(key => {
-            const node = this.$refs.menu.getNode(key);
-            if (node) {
-                this.checkParentNodes(node);
-            }
-        });
-    });
-},
 
-checkParentNodes(node) {
-    const parentNode = node.parent;
-    if (parentNode && parentNode.level !== 0) {
-        // 如果当前节点被选中，选中父节点
-        this.$refs.menu.setChecked(parentNode.data.id, true);
+			// this.$nextTick(() => {
+			// 	// 获取需要选中的节点 IDs，排除父节点的 ID
+			// 	const selectedKeys = (this.roleData.router_tree_ || []).filter(key => {
+			// 		const node = this.$refs.menu.getNode(key);
+			// 		// if (node && node.level > 0) {
+			// 		// 	return key
+			// 		// }
+			// 		// return node && node.level > 0; // 只选中子节点，排除父节点
+			// 		return node.level; // 只选中子节点，排除父节点
+			// 	});
 
-        // 递归选中上层父节点
-        this.checkParentNodes(parentNode);
-    }
-},
+			// 	console.log(selectedKeys, '11')
+			// 	// 只选中子节点，避免父节点被选中
+			// 	// this.$refs.menu.setCheckedKeys(selectedKeys, true);
+
+			// 	// 遍历所有选中的子节点，更新父节点状态
+			// 	// selectedKeys.forEach(key => {
+			// 	//     const node = this.$refs.menu.getNode(key);
+			// 	//     if (node) {
+			// 	//         this.checkParentNodes(node);
+			// 	//     }
+			// 	// });
+			// });
+		},
+
+		checkParentNodes(node) {
+			const parentNode = node.parent;
+			if (parentNode && parentNode.level !== 0) {
+				// 如果当前节点被选中，选中父节点
+				this.$refs.menu.setChecked(parentNode.data.id, true);
+
+				// 递归选中上层父节点
+				this.checkParentNodes(parentNode);
+			}
+		},
 
 		// 以下无用
 		async getDept() {
