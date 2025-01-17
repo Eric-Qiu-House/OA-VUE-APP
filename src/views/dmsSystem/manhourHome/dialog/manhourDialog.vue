@@ -1,58 +1,59 @@
 <template>
     <el-row :gutter="40">
         <el-dialog v-model="dialogState" title="工时填报" width="1200" :before-close="handleClose">
-            <el-card shadow="never">
+            <el-card shadow="never" title="">
                 <!-- {{ recordDay }} -->
-                <el-table ref="formRef" :data="recordDay" label-width="100px">
-                    <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
-                    <el-table-column prop="project_number_" label="项目" width="180">
-                        <template #default="scope">
-                            <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
-                                <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                    :label="item.project_number_ + ` - ` + item.project_name_"
-                                    :value="item.project_number_"></el-option>
-                            </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="project_type_" label="项目阶段" min-width="120">
-                        <template #default="scope">
-                            <el-select v-model="scope.row.project_type_" disabled placeholder="请选择">
-                                <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                    :value="item.value"></el-option>
-                            </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="job_type_" label="工作类型" min-width="120">
-                        <template #default="scope">
-                            <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
-                                <el-option v-for="item in jobType" :key="item.value" :label="item.label"
-                                    :value="item.value"></el-option>
-                            </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="hours_" label="工时" min-width="100">
-                        <template #default="scope">
-                            <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="record_date_" label="时间" min-width="100">
-                        <template #default="scope">
-                            <el-input v-model="scope.row.record_date_" disabled></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="remark_" label="备注" min-width="180">
-                        <template #default="scope">
-                            <el-input v-model="scope.row.remark_" type="textarea" disabled />
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="status_" fixed="right" label="操作" width="220">
-                        <template #default="scope">
-                            <!-- <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)" >编辑</el-button> -->
-                            <el-button text type="primary" :disabled="isReadOnly"
-                                @click="deleteButton(scope.row)">删除</el-button>
-                        </template>
-                    </el-table-column>
-                    <!-- <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
+                <el-form-item label="填报记录" :label-width="100">
+                    <el-table ref="formRef" :data="recordDay" label-width="100px">
+                        <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
+                        <el-table-column prop="project_number_" label="项目" width="180">
+                            <template #default="scope">
+                                <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
+                                    <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                        :label="item.project_number_ + ` - ` + item.project_name_"
+                                        :value="item.project_number_"></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="project_type_" label="项目阶段" min-width="120">
+                            <template #default="scope">
+                                <el-select v-model="scope.row.project_type_" disabled placeholder="请选择">
+                                    <el-option v-for="item in projectType" :key="item.value" :label="item.label"
+                                        :value="item.value"></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="job_type_" label="工作类型" min-width="120">
+                            <template #default="scope">
+                                <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
+                                    <el-option v-for="item in jobType" :key="item.value" :label="item.label"
+                                        :value="item.value"></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="hours_" label="工时" min-width="100">
+                            <template #default="scope">
+                                <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="record_date_" label="时间" min-width="100">
+                            <template #default="scope">
+                                <el-input v-model="scope.row.record_date_" disabled></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="remark_" label="备注" min-width="180">
+                            <template #default="scope">
+                                <el-input v-model="scope.row.remark_" type="textarea" disabled />
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="status_" fixed="right" label="操作" width="220">
+                            <template #default="scope">
+                                <!-- <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)" >编辑</el-button> -->
+                                <el-button text type="primary" :disabled="isReadOnly"
+                                    @click="deleteButton(scope.row)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                        <!-- <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
                             <el-table-column prop="project_number_" label="项目" width="180">
                                 <template #default="scope">
                                     <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
@@ -94,8 +95,8 @@
                                 </template>
                             </el-table-column>
                         </sc-form-table> -->
-                    <!-- </el-form-item> -->
-                    <!-- <el-form-item label="当日填报记录" prop="list" disabled>
+                        <!-- </el-form-item> -->
+                        <!-- <el-form-item label="当日填报记录" prop="list" disabled>
                         <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
                             <el-table-column prop="project_number_" label="项目" width="180">
                                 <template #default="scope">
@@ -139,9 +140,11 @@
                             </el-table-column>
                         </sc-form-table>
                     </el-form-item> -->
-                </el-table>
+                    </el-table>
+                </el-form-item>
+
             </el-card>
-            <el-card shadow="never" title="新增填报">
+            <el-card shadow="never">
                 <el-form ref="formRef" :model="form" label-width="100px">
                     <el-form-item label="新增填报" prop="list">
                         <sc-form-table ref="rulesList" v-model="form.list" :addTemplate="addTemplate">
