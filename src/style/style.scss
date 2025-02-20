@@ -3,3 +3,11 @@
 @use 'pages.scss';
 @use 'media.scss';
 @use 'dark.scss';
+
+/* 修改 el-tree 选中节点的背景颜色和文字颜色 */
+.el-tree .is-current > .el-tree-node__content {
+    background-color: rgb(121.3, 187.1, 255) !important; /* 选中时背景色 */
+    color: white !important; /* 选中时文字颜色 */
+  }
+  
+  

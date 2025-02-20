@@ -164,7 +164,7 @@ function getDetailedDateInfo(date) {
     // 检查是否是调休日
     if (workdays[formattedDate]) {
     //   return `调休日: ${workdays[formattedDate]}`;
-      return `调休`;
+      return `调休-班`;
     }
   
     // 检查是否是周末

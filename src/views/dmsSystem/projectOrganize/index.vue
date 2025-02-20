@@ -6,7 +6,7 @@
                     <!-- {{ projectData }} -->
                     <el-input placeholder="输入编号进行过滤" v-model="filterText" clearable></el-input>
                     <el-tree ref="tree" v-loading="proNumLoading" style="max-width: 600px" :data="projectData" node-key="id_"
-                        :props="defaultProps" :filter-node-method="menuFilterNode" @node-click="handleNodeClick" />
+                        :props="defaultProps" :filter-node-method="menuFilterNode" @node-click="handleNodeClick" highlight-current/>
                 </el-card>
             </el-col>
             <el-col :lg="21">

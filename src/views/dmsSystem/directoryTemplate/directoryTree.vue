@@ -14,7 +14,7 @@
 				<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
 				<el-main class="nopadding">
 					<el-tree ref="menu" class="menu" node-key="id" :data="menuTreeData" :props="menuProps" draggable
-						highlight-current :expand-on-click-node="false" check-strictly show-checkbox
+						highlight-current check-strictly show-checkbox
 						:filter-node-method="menuFilterNode" @node-click="menuClick" @node-drop="nodeDrop">
 						<template #default="{ node, data }">
 							<span class="custom-tree-node">

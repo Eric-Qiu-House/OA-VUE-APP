@@ -249,8 +249,10 @@ export default {
                 { label: "设备订货", value: 5 },
                 { label: "更改设计", value: 6 },
                 { label: "技术支持", value: 7 },
-                { label: "管理", value: 8 },
+                { label: "部门管理", value: 8 },
                 { label: "其他", value: 9 },
+                { label: "项目管理", value: 10 },
+                { label: "现场服务", value: 11 },
             ],
             projectType: [
                 { label: "研发项目", value: 1 },

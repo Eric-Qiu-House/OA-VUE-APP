@@ -9,9 +9,9 @@
                 <el-button v-if="menuForm.title_" v-loading="dwgloading" type="primary" size="small" icon="el-icon-plus"
                     @click="creatDwg()"
                     :disabled="!$isButtonVisible || this.$route.query.projectState == 4"></el-button>
-                <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row :default-sort="{ prop: 'drawing_number_', order: 'ascending' }"
-                    @expand-change="handleExpandChange">
-                    <!-- <el-table-column type="expand" label="全部" disabled>
+                <el-table v-loading="dwgloading" ref="table" :data="drawingInfo" highlight-current-row
+                    :default-sort="{ prop: 'drawing_number_', order: 'ascending' }" @expand-change="handleExpandChange">
+                    <el-table-column type="expand" label="全部" disabled>
                         <template #default="props">
                             <el-tree :data="props.row.fileList" :props="defaultProps" node-key="id_" show-checkbox
                                 highlight-current>
@@ -38,7 +38,7 @@
                                 </template>
                             </el-tree>
                         </template>
-                    </el-table-column> -->
+                    </el-table-column>
                     <el-table-column prop="drawing_number_" sortable label="图号" width="100"></el-table-column>
                     <el-table-column prop="drawing_name_" label="图名" width="180"
                         show-overflow-tooltip></el-table-column>
@@ -79,11 +79,11 @@
                     <el-table-column prop="status_" fixed="right" label="操作" width="250">
                         <template #default="scope">
                             <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)"
-                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user' ">信息编辑</el-button>
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'">信息编辑</el-button>
                             <el-button text type="primary" size="small" @click="openHoursDialog(scope.row)"
                                 v-if="$TOOL.data.get('USER_INFO').id_ == scope.row.executor_id_ || !this.$route.query.projectState == 4">填报工时</el-button>
                             <el-button text type="primary"
-                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user' " size="small"
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'" size="small"
                                 @click="deleteDwg(scope.row)">删除</el-button>
 
                             <!-- <el-button-group>

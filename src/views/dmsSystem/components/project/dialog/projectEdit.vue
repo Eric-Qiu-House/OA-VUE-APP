@@ -27,12 +27,18 @@
                         :value="item.fullname_" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="客户">
+            <el-form-item label="船东">
                 <el-input v-model="projectForm.ship_owner_"></el-input>
             </el-form-item>
             <el-form-item label="船厂">
                 <el-input v-model="projectForm.ship_person_"></el-input>
             </el-form-item>
+            <el-form-item label="船级社">
+                <el-input v-model="projectForm.ship_person_"></el-input>
+            </el-form-item>
+            <el-form-item label="设计院">
+                <el-input v-model="projectForm.ship_person_"></el-input>
+            </el-form-item> 
             <el-form-item label="项目开始">
                 <el-date-picker v-model="projectForm.start_date_" type="date" placeholder="选择开始日期"
                     style="width: 100%"></el-date-picker>

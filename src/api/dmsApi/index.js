@@ -3,6 +3,36 @@ import http from "@/utils/request"
 // import { create } from "sortablejs";
 
 export default {
+	firm: {
+		read: {
+			url: `${config.DMS_URL}/dmsServer/firm/readRouter`,
+			name: "查询全部",
+			post: async function(){
+				return await http.post(this.url);
+			}
+		},
+		create: {
+			url: `${config.DMS_URL}/dmsServer/firm/createRouter`,
+			name: "添加",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		update: {
+			url: `${config.DMS_URL}/dmsServer/firm/updateRouter`,
+			name: "更新",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+		readById: {
+			url: `${config.DMS_URL}/dmsServer/firm/readByIdRouter`,
+			name: "条件查询",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+	},
 	project: {
 		readAll: {
 			url: `${config.DMS_URL}/dmsServer/project/readRouter`,
@@ -39,13 +69,6 @@ export default {
 				return await http.post(this.url,params);
 			}
 		}
-		// delete: {
-		// 	url: `${config.DMS_URL}/org/group/deleteGroup`,
-		// 	name: "删除",
-		// 	post: async function(params){
-		// 		return await http.post(this.url,params);
-		// 	}
-		// },
 	},
     projectUsershiproute: {
 		readId: {
