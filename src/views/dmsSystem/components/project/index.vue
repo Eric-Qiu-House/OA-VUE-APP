@@ -65,6 +65,20 @@
         </template>
       </el-table-column>
       <el-table-column label="送审状态" fixed="right" width="80">
+        <!-- <template #default="scope">
+          <el-button-group>
+            <router-link
+              :to="{ name: 'drawingInfo', query: { projectUuid: scope.row.uuid_, state: 'admin', projectState: scope.row.project_statu_ } }"
+              v-if="userType == 'admin'">
+              <el-button text type="primary" size="small">查看</el-button>
+            </router-link>
+            <router-link
+              :to="{ name: 'userDrawing', query: { projectUuid: scope.row.uuid_, state: 'user', projectState: scope.row.project_statu_ } }"
+              v-if="userType == 'user'">
+              <el-button text type="primary" size="small">查看</el-button>
+            </router-link>
+          </el-button-group>
+        </template> -->
         <template #default>
           <el-button-group>
             <router-link :to="{ name: 'submissionPlan' }">

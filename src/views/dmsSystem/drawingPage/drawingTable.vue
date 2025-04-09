@@ -79,7 +79,9 @@
                     <el-table-column prop="status_" fixed="right" label="操作" width="250">
                         <template #default="scope">
                             <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)"
-                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'">信息编辑</el-button>
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'">编辑</el-button>
+                            <el-button text type="primary" size="small" @click="openDrawer(scope.row)"
+                                :disabled="this.$TOOL.data.get('USER_INFO').user_type_ == 'user'">上传</el-button>
                             <el-button text type="primary" size="small" @click="openHoursDialog(scope.row)"
                                 v-if="$TOOL.data.get('USER_INFO').id_ == scope.row.executor_id_ || !this.$route.query.projectState == 4">填报工时</el-button>
                             <el-button text type="primary"
@@ -108,22 +110,26 @@
     </el-row>
     <dialog1 ref="dwgDialog" :menu="dialogData" @getFun="getDwgData"></dialog1>
     <dialog2 ref="manhoursDialog" :menu="dialogData"></dialog2>
+    <drawer-upload ref="drawer" :drawerData="drawerData"></drawer-upload>
 </template>
 
 <script>
 import dialog1 from '@/views/dmsSystem/drawingPage/dialog/drawingEdit.vue'
 import dialog2 from '@/views/dmsSystem/manhourHome/dialog/manhourForm.vue'
+import drawerUpload from '@/views/dmsSystem/drawingPage/drawer/drawerUpload.vue'
 import { ElMessageBox } from 'element-plus';
 
 export default {
     components: {
         dialog1,
-        dialog2
+        dialog2,
+        drawerUpload
     },
     data() {
         return {
             dialogData: [],
             dwgloading: false,
+            drawerData: {},
             menuForm: [], //接受当前菜单信息
             // 图纸菜单
             defaultProps: {
@@ -274,6 +280,12 @@ export default {
             this.dialogData = row
             this.$refs.dwgDialog.setData(row)
             this.$refs.dwgDialog.open()
+        },
+        openDrawer(row) {
+            // this.dialogData = row
+            // this.$refs.dwgDialog.setData(row)
+            this.$refs.drawer.open()
+            this.drawerData = row
         },
         openHoursDialog(row) {
             if (row.status_ == 1) {

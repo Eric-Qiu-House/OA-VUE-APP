@@ -47,6 +47,8 @@
 		</el-aside>
 		<el-container>
 			<el-main class="nopadding" style="padding:20px;" ref="main">
+				<!-- <submission-table  ></submission-table> -->
+
 				<menu-params v-if="displayComponent === 'save' || status == 'typeCatalogue'" ref="save"
 					:menu="menuTreeData"></menu-params>
 				<dwg-form v-if="displayComponent === 'save1' && status == 'projectCatalogue'" ref="save"
@@ -54,8 +56,10 @@
 				<el-crd v-if="dialogMenu">
 					<import-menu :type="projectUuid"></import-menu>
 				</el-crd>
+
 				<!-- <save2 v-if="displayComponent === 'save2'" ref="save" :menu="menuTreeData" :type="displayType"></save2> -->
 			</el-main>
+			
 		</el-container>
 	</el-container>
 </template>
@@ -64,6 +68,7 @@
 let newMenuIndex = 1;
 import menuParams from '@/views/dmsSystem/directoryTemplate/directoryEdit.vue'
 import dwgForm from '@/views/dmsSystem/drawingPage/drawingTable.vue'
+// import submissionTable from '@/views/dmsSystem/drawingPage/submissionTable.vue'
 import importMenu from '@/views/dmsSystem/directoryTemplate/dialog/directoryImport.vue'
 // import save2 from '@/views/drawingSystem/drawingCategory.vue' 
 import { provide, getCurrentInstance } from 'vue';
@@ -96,7 +101,8 @@ export default {
 		menuParams,
 		dwgForm,
 		// save2,
-		importMenu
+		importMenu,
+		// submissionTable
 	},
 	data() {
 		return {

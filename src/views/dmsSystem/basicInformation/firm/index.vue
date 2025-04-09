@@ -1,6 +1,7 @@
 <template>
     <el-button type="primary" :disabled="!$isButtonVisible" icon="el-icon-plus" @click="openDialogAdd">
     </el-button>
+    {{ message }}
     <scTable ref="table" v-loading="userLoading" :data="data" @selection-change="selectionChange" stripe remoteSort
         remoteFilter>
         <el-table-column type="selection" width="50"></el-table-column>
@@ -28,7 +29,7 @@
     </scTable>
 
     <!-- 引入并使用 EditDialog -->
-    <edit-dialog v-model="dialogVisible" :rowData="selectedRow" :dialogTitle="'编辑企业信息'" @save="saveChanges" />
+    <edit-dialog v-model="dialogVisible" :rowData="selectedRow" :dialogTitle="dialogType" @save="saveChanges" />
 </template>
 
 <script>
@@ -38,12 +39,27 @@ export default {
     components: {
         EditDialog
     },
+    props: {
+        message: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             data: [],
             dialogVisible: false,  // 控制编辑 Dialog 的显示与隐藏
             selectedRow: null,     // 选中的行数据
+            dialogType: ''
         };
+    },
+    watch: {
+        async message(newValue) {
+            const data = {
+                firm_type_: newValue
+            }
+            this.data = await this.$dmsApi.firm.readById.post(data);
+        }
     },
     async mounted() {
         const revData = {
@@ -53,11 +69,14 @@ export default {
     },
     methods: {
         openDialogAdd() {
+            this.dialogType = '新增'
             this.dialogVisible = true;  // 打开 Dialog
         },
+
         // 打开编辑 Dialog
         openDialogForEdit(row) {
             this.selectedRow = row;  // 将选中行数据赋值给 selectedRow
+            this.dialogType = '编辑'
             this.dialogVisible = true;  // 打开 Dialog
         },
 
@@ -67,19 +86,33 @@ export default {
             this.dialogVisible = false;
             this.$message.success('保存成功!');
         },
-
         // 删除企业
-        handleDelete(row) {
-            this.$confirm('确定要删除这个企业吗?', '删除确认', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
+        async handleDelete(row) {
+            try {
+                // 确认删除操作
+                await this.$confirm('确定要删除这个企业吗?', '删除确认', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                });
+
+                // 删除企业
                 console.log('删除的企业: ', row);
+                const revData = { uuid_: row.uuid_ }; // 假设 row.id 是企业的唯一标识
+                await this.$dmsApi.firm.deleteRouter.post(revData);
+
+                // 删除成功
                 this.$message.success('删除成功!');
-            }).catch(() => {
-                this.$message.info('取消删除');
-            });
+            } catch (error) {
+                if (error !== 'cancel') {
+                    // 处理删除失败的情况
+                    console.error('删除失败:', error);
+                    this.$message.error('删除失败，请重试!');
+                } else {
+                    // 用户取消删除
+                    this.$message.info('取消删除');
+                }
+            }
         },
 
         // 打开查看 Drawer (如果有需要)

@@ -32,6 +32,13 @@ export default {
 				return await http.post(this.url,params);
 			}
 		},
+		deleteRouter: {
+			url: `${config.DMS_URL}/dmsServer/firm/deleteRouter`,
+			name: "删除",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
 	},
 	project: {
 		readAll: {

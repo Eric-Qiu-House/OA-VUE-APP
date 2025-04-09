@@ -28,8 +28,8 @@
                     <el-table ref="tableData" :data="tableData" highlight-current-row @row-contextmenu="rowContextmenu">
                         <el-table-column type="selection" width="50"></el-table-column>
                         <el-table-column prop="id" label="图号" width="100"></el-table-column>
-                        <!-- <el-table-column prop="state2" label="送审交期" width="100"></el-table-column> -->
-                        <!-- <el-table-column prop="stateA" label="文件状态" width="80">
+                        <el-table-column prop="state2" label="送审交期" width="100"></el-table-column>
+                        <el-table-column prop="stateA" label="文件状态" width="80">
                             <template #default="scope">
                                 <el-link class="mx-1" :type="scope.row.stateA == 0 ? 'info'
                                     : scope.row.stateA == 1 ? 'success'
@@ -39,9 +39,8 @@
                                         : scope.row.stateA == 1 ? '已上传' : '未知' }}
                                 </el-link>
                             </template>
-                        </el-table-column> -->
-                        <el-table-column prop="state5" label="当前版本" width="80"></el-table-column>
-                        <el-table-column prop="state4" label="上传时间" width="100"></el-table-column>
+                        </el-table-column>
+                        <el-table-column prop="state4" label="文件时间" width="100"></el-table-column>
                         <el-table-column prop="state3" label="客户" width="80">
                             <template #default="scope">
                                 <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
@@ -102,6 +101,7 @@
                                 </el-link>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="state5" label="当前版本" width="80"></el-table-column>
                         <el-table-column prop="name" label="图名" width="180"></el-table-column>
 
                     </el-table>

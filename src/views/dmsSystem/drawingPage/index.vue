@@ -7,63 +7,18 @@
 		</el-tabs>
 	</el-header>
 	<menu-directory></menu-directory>
-
-	<!-- <el-container>
-		<el-aside width="300px" v-loading="menuloading">
-			<el-container>
-				<el-header>
-					<el-button type="primary" icon="el-icon-plus" @click="displayType = '目录'">目录</el-button>
-					<el-button type="primary" icon="el-icon-plus" @click="displayType = '图纸'">图纸</el-button>
-					<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
-				</el-header>
-				<el-main class="nopadding">
-					<el-tree ref="menu" class="menu" node-key="id" :data="menuList" :props="menuProps" draggable
-						highlight-current check-strictly show-checkbox
-						:filter-node-method="menuFilterNode" @node-click="menuClick" @node-drop="nodeDrop">
-
-						<template #default="{ node, data }">
-							<span class="custom-tree-node">
-								<span class="label">
-									{{ node.label }}
-								</span>
-								<span class="do">
-									<el-button icon="el-icon-plus" size="small"
-										@click.stop="add(node, data)"></el-button>
-								</span>
-							</span>
-						</template>
-
-</el-tree>
-</el-main>
-<el-footer style="height:51px;">
-	<el-button type="primary" size="small" icon="el-icon-plus" @click="add()"></el-button>
-	<el-button type="danger" size="small" plain icon="el-icon-delete" @click="delMenu"></el-button>
-</el-footer>
-</el-container>
-</el-aside>
-<el-container>
-	<el-main class="nopadding" style="padding:20px;" ref="main">
-		<save ref="save" :menu="menuList" :type="displayType"></save>
-	</el-main>
-</el-container>
-</el-container> -->
-	<!-- <el-container>
-		<el-main class="nopadding" style="padding:20px;" ref="main">
-			<save ref="save" :menu="menuList" :type="displayType"></save>
-		</el-main>
-	</el-container> -->
 </template>
 
 <script>
 let newMenuIndex = 1;
-import save from '@/views/dmsSystem/drawingPage/drawingTable.vue'
+// import save from '@/views/dmsSystem/drawingPage/drawingTable.vue'
 import menuDirectory from '@/views/dmsSystem/directoryTemplate/directoryTree.vue'
 import { provide } from 'vue';
 
 export default {
 	name: "settingMenu",
 	components: {
-		save,
+		// save,
 		menuDirectory
 	},
 	props: {
@@ -97,14 +52,11 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.$route.query, 'sssssssssssssssssssssssssss');  // 输出传递过来的 id 参数
-		// this.getMenu();
 	},
 	methods: {
 		//加载树数据
 		async getMenu() {
 			this.menuloading = true
-			// var data = await this.$apiIAM.system.routerTree.get();
 			const data = {
 				project_id_: 1
 			}
@@ -146,12 +98,6 @@ export default {
 			this.getMenu();
 
 			this.menuloading = false
-			// newMenuData.id = res.data
-
-			// this.$refs.menu.append(newMenuData, node)
-			// this.$refs.menu.setCurrentKey(newMenuData.id)
-			// var pid = node ? node.data.id : ""
-			// this.$refs.save.setData(newMenuData, pid)
 		},
 		//删除菜单
 		async delMenu() {

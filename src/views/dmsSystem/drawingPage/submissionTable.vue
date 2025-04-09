@@ -8,106 +8,87 @@
 
 
 <template>
-    <el-header class="header-tabs">
-        <el-tabs type="card" v-model="groupId" @tab-change="tabChange">
-            <el-tab-pane label="友奇（内部）" name="0"></el-tab-pane>
-            <el-tab-pane label="船厂（外部）" name="1"></el-tab-pane>
-            <el-tab-pane label="外派（外部）" name="4"></el-tab-pane>
-        </el-tabs>
-    </el-header>
     <el-main>
-        <el-row :gutter="15">
-            <el-col :lg="4">
-                <el-card>
-                    <el-tree style="max-width: 600px" :data="data" node-key="id" :default-expanded-keys="[1, 2, 3]"
-                        :default-checked-keys="[42]" :props="defaultProps" />
-                </el-card>
-            </el-col>
-            <el-col :lg="20">
-                <el-card shadow="never">
-                    <el-table ref="tableData" :data="tableData" highlight-current-row @row-contextmenu="rowContextmenu">
-                        <el-table-column type="selection" width="50"></el-table-column>
-                        <el-table-column prop="id" label="图号" width="100"></el-table-column>
-                        <!-- <el-table-column prop="state2" label="送审交期" width="100"></el-table-column> -->
-                        <!-- <el-table-column prop="stateA" label="文件状态" width="80">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.stateA == 0 ? 'info'
-                                    : scope.row.stateA == 1 ? 'success'
-                                        : scope.row.stateA == 2 ? 'primary'
-                                                : 'default'">
-                                    {{ scope.row.stateA == 0 ? '未上传'
-                                        : scope.row.stateA == 1 ? '已上传' : '未知' }}
-                                </el-link>
-                            </template>
-                        </el-table-column> -->
-                        <el-table-column prop="state5" label="当前版本" width="80"></el-table-column>
-                        <el-table-column prop="state4" label="上传时间" width="100"></el-table-column>
-                        <el-table-column prop="state3" label="客户" width="80">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
-                                    : scope.row.state3 == 1 ? 'success'
-                                        : scope.row.state3 == 2 ? 'primary'
-                                            : scope.row.state3 == 3 ? 'danger'
-                                                : 'default'">
-                                    {{ scope.row.state3 == 0 ? '未送审'
-                                        : scope.row.state3 == 1 ? '已送审'
-                                            : scope.row.state3 == 2 ? '已退审'
-                                                : scope.row.state3 == 3 ? '已通过'
-                                                    : '未知' }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state3" label="船级社" width="80">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
-                                    : scope.row.state3 == 1 ? 'success'
-                                        : scope.row.state3 == 2 ? 'primary'
-                                            : scope.row.state3 == 3 ? 'danger'
-                                                : 'default'">
-                                    {{ scope.row.state3 == 0 ? '未送审'
-                                        : scope.row.state3 == 1 ? '已送审'
-                                            : scope.row.state3 == 2 ? '已退审'
-                                                : scope.row.state3 == 3 ? '已通过'
-                                                    : '不送审' }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state3" label="罐厂" width="80">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
-                                    : scope.row.state3 == 1 ? 'success'
-                                        : scope.row.state3 == 2 ? 'primary'
-                                            : scope.row.state3 == 3 ? 'danger'
-                                                : 'default'">
-                                    {{ scope.row.state3 == 0 ? '未送审'
-                                        : scope.row.state3 == 1 ? '已送审'
-                                            : scope.row.state3 == 2 ? '已退审'
-                                                : scope.row.state3 == 3 ? '已通过'
-                                                    : '不送审' }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="state3" label="撬块厂" width="80">
-                            <template #default="scope">
-                                <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
-                                    : scope.row.state3 == 1 ? 'success'
-                                        : scope.row.state3 == 2 ? 'primary'
-                                            : scope.row.state3 == 3 ? 'danger'
-                                                : 'default'">
-                                    {{ scope.row.state3 == 0 ? '未送审'
-                                        : scope.row.state3 == 1 ? '已送审'
-                                            : scope.row.state3 == 2 ? '已退审'
-                                                : scope.row.state3 == 3 ? '已通过'
-                                                    : '不送审' }}
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="name" label="图名" width="180"></el-table-column>
+        <el-table ref="tableData" :data="tableData" highlight-current-row @row-contextmenu="rowContextmenu">
+            <el-table-column type="selection" width="50"></el-table-column>
+            <el-table-column prop="id" label="图号" width="100"></el-table-column>
+            <!-- <el-table-column prop="state2" label="送审交期" width="100"></el-table-column> -->
+            <!-- <el-table-column prop="stateA" label="文件状态" width="80">
+                <template #default="scope">
+                    <el-link class="mx-1" :type="scope.row.stateA == 0 ? 'info'
+                        : scope.row.stateA == 1 ? 'success'
+                            : scope.row.stateA == 2 ? 'primary'
+                                : 'default'">
+                        {{ scope.row.stateA == 0 ? '未上传'
+                            : scope.row.stateA == 1 ? '已上传' : '未知' }}
+                    </el-link>
+                </template>
+            </el-table-column> -->
+            <el-table-column prop="state4" label="文件时间" width="100"></el-table-column>
+            <el-table-column prop="state3" label="客户" width="80">
+                <template #default="scope">
+                    <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
+                        : scope.row.state3 == 1 ? 'success'
+                            : scope.row.state3 == 2 ? 'primary'
+                                : scope.row.state3 == 3 ? 'danger'
+                                    : 'default'">
+                        {{ scope.row.state3 == 0 ? '未送审'
+                            : scope.row.state3 == 1 ? '已送审'
+                                : scope.row.state3 == 2 ? '已退审'
+                                    : scope.row.state3 == 3 ? '已通过'
+                                        : '未知' }}
+                    </el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="state3" label="船级社" width="80">
+                <template #default="scope">
+                    <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
+                        : scope.row.state3 == 1 ? 'success'
+                            : scope.row.state3 == 2 ? 'primary'
+                                : scope.row.state3 == 3 ? 'danger'
+                                    : 'default'">
+                        {{ scope.row.state3 == 0 ? '未送审'
+                            : scope.row.state3 == 1 ? '已送审'
+                                : scope.row.state3 == 2 ? '已退审'
+                                    : scope.row.state3 == 3 ? '已通过'
+                                        : '不送审' }}
+                    </el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="state3" label="罐厂" width="80">
+                <template #default="scope">
+                    <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
+                        : scope.row.state3 == 1 ? 'success'
+                            : scope.row.state3 == 2 ? 'primary'
+                                : scope.row.state3 == 3 ? 'danger'
+                                    : 'default'">
+                        {{ scope.row.state3 == 0 ? '未送审'
+                            : scope.row.state3 == 1 ? '已送审'
+                                : scope.row.state3 == 2 ? '已退审'
+                                    : scope.row.state3 == 3 ? '已通过'
+                                        : '不送审' }}
+                    </el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="state3" label="撬块厂" width="80">
+                <template #default="scope">
+                    <el-link class="mx-1" :type="scope.row.state3 == 0 ? 'info'
+                        : scope.row.state3 == 1 ? 'success'
+                            : scope.row.state3 == 2 ? 'primary'
+                                : scope.row.state3 == 3 ? 'danger'
+                                    : 'default'">
+                        {{ scope.row.state3 == 0 ? '未送审'
+                            : scope.row.state3 == 1 ? '已送审'
+                                : scope.row.state3 == 2 ? '已退审'
+                                    : scope.row.state3 == 3 ? '已通过'
+                                        : '不送审' }}
+                    </el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="state5" label="当前版本" width="80"></el-table-column>
+            <el-table-column prop="name" label="图名" width="180"></el-table-column>
 
-                    </el-table>
-                </el-card>
-            </el-col>
-        </el-row>
+        </el-table>
     </el-main>
 </template>
 
@@ -485,7 +466,7 @@ export default {
                     name: 'P&I Diagram Identification System系统图仪表图例符号',
                     date: '赵琦',
                     state: '范亚华',
-                    stateA:0,
+                    stateA: 0,
                     state1: '2021-10-10',
                     state2: '2021-10-18',
                     state3: 0,
@@ -498,7 +479,7 @@ export default {
                     name: 'P&I Diagram Identification System系统图仪表图例符号',
                     date: '赵琦',
                     state: '范亚华',
-                    stateA:1,
+                    stateA: 1,
                     state1: '2022-09-11',
                     state2: '2023-04-23',
                     state3: 1,
@@ -511,7 +492,7 @@ export default {
                     id: 'PE01PID_001',
                     name: 'P&I Diagram Identification System系统图仪表图例符号',
                     date: '赵琦',
-                    stateA:1,
+                    stateA: 1,
                     state: '范亚华',
                     state1: '2023-05-12',
                     state2: '2021-07-18',
@@ -525,7 +506,7 @@ export default {
                     id: 'PE01PID_001',
                     name: 'P&I Diagram Identification System系统图仪表图例符号',
                     date: '赵琦',
-                    stateA:1,
+                    stateA: 1,
                     state: '范亚华',
                     state1: '2023-05-12',
                     state2: '2021-07-18',

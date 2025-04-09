@@ -24,5 +24,9 @@ export default {
 			label: '设计院',
 			value: '设计院',
 		},
+		{
+			label: '供应商',
+			value: '供应商',
+		},
 	],
 }
