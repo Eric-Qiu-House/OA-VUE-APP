@@ -1,11 +1,10 @@
 <template>
 	<el-card shadow="hover" header="我的工时">
-
-
+		specialDates {{ specialDates }}
 		<div class="app-container">
 			<el-calendar v-model="value">
 				<!-- 使用 dateCell 插槽来自定义每个日期单元格的内容 -->
-				<template #dateCell="{ data }">
+				<template #date-cell="{ data }">
 					<div :style="{
 						backgroundColor: getTextColor(data.day).color,
 						color: getTextColor(data.day).color2,
@@ -72,6 +71,8 @@ export default {
 				console.log(submitData, 'submitData')
 				// 获取工时数据
 				this.specialDates = await this.$dmsApi.manHours.readByUserId.post(submitData);
+				console.log(this.specialDates, 'this.specialDates');
+
 			} catch (error) {
 				console.log(error);
 			}
@@ -101,39 +102,41 @@ export default {
 			this.$refs.manhoursDialog.open();
 		},
 		getTextColor(day) {
-			// 获取点击的日期格式化为 YYYY-MM-DD 进行比较
+			// 根据传入日期查找是否有对应的工时记录
 			const matchingDates = this.specialDates.filter(item => item.record_date_ === day);
-			let totalHours = 0;
 
+			let totalHours = 0;
 			if (matchingDates.length > 0) {
+				// 计算该日期的总工时
 				totalHours = matchingDates.reduce((sum, item) => sum + item.hours_, 0);
 			}
 
-			// 获取详细日期信息
+			// 获取日期对应的工作类型（如：工作日、休息日、调休-班等）
 			const detailedInfo = getDetailedDateInfo(day);
 
-			// 判断是否为工作日或调休
-			let color2; // 默认字体颜
-			let backgroundColor; // 默认背景颜色
+			// 默认字体和背景颜色（未设置时为 undefined）
+			let color2;
+			let backgroundColor;
 
-			// 只有当有工时数据时，才显示蓝色背景
+			// 如果该日期有工时记录，则设置背景色为蓝色、字体为白色
 			if (totalHours > 0) {
-				color2 = '#fff'; // 字体颜色
-				// backgroundColor = '#409EFF'; // 背景色
-				backgroundColor = '#409EFF'; // 背景色
+				backgroundColor = '#409EFF';
+				color2 = '#fff';
 			}
 
-			// 如果日期不是工作日或调休，字体颜色变红
+			// 如果该日期不是工作日或调休上班，则将字体颜色设为红色
 			if (detailedInfo !== '工作日' && detailedInfo !== '调休-班') {
-				color2 = 'rgb(196, 86.4, 86.4)'; // 字体颜色为红色
+				color2 = 'rgb(196, 86.4, 86.4)';
 			}
 
+			// 返回颜色设置和工时信息
 			return {
-				color: backgroundColor, // 背景色
-				color2: color2, // 字体颜色
-				hours: totalHours // 累计工时
+				color: backgroundColor,  // 背景色（用于日历格）
+				color2: color2,          // 字体颜色
+				hours: totalHours        // 总工时
 			};
 		}
+
 	}
 };
 </script>

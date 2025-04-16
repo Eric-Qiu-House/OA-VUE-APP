@@ -1,28 +1,13 @@
 {
-  root: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-System-Web',
+  root: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-VUE-APP',
   registry: 'https://registry.npmmirror.com',
-  pkgs: [
-    {
-      name: '@univer/core',
-      version: 'latest',
-      type: 'tag',
-      alias: undefined,
-      arg: [Result]
-    },
-    {
-      name: '@univer/ui',
-      version: 'latest',
-      type: 'tag',
-      alias: undefined,
-      arg: [Result]
-    }
-  ],
+  pkgs: [],
   production: false,
   cacheStrict: false,
   cacheDir: 'C:\\Users\\10108\\.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@univer/core","@univer/ui"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@univer/core","@univer/ui"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","-g","depcheck"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\10108\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","-g","depcheck"]}',
     npm_config_user_agent: 'npminstall/7.12.0 npm/? node/v20.14.0 win32 x64',
     npm_config_cache: 'C:\\Users\\10108\\.npminstall_tarball',
     NODE: 'D:\\nodejs\\node.exe',
@@ -57,8 +42,9 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-System-Web',
-    INIT_CWD: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-System-Web'
+    npm_config_gl_binary_host: 'https://cdn.npmmirror.com/binaries/gl',
+    npm_rootpath: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-VUE-APP',
+    INIT_CWD: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-VUE-APP'
   },
   binaryMirrors: {
     ENVS: {
@@ -87,7 +73,8 @@
       npm_config_keytar_binary_host: 'https://cdn.npmmirror.com/binaries/keytar',
       npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
       npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
-      npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs'
+      npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
+      npm_config_gl_binary_host: 'https://cdn.npmmirror.com/binaries/gl'
     },
     '@ali/s2': { host: 'https://cdn.npmmirror.com/binaries/looksgood-s2' },
     sharp: { replaceHostFiles: [Array], replaceHostMap: [Object] },
@@ -126,7 +113,10 @@
     },
     fsevents: { host: 'https://cdn.npmmirror.com/binaries/fsevents' },
     nodejieba: { host: 'https://cdn.npmmirror.com/binaries/nodejieba' },
-    canvas: { host: 'https://cdn.npmmirror.com/binaries/canvas' },
+    canvas: {
+      host: 'https://cdn.npmmirror.com/binaries/canvas',
+      remote_path: 'v{version}'
+    },
     'skia-canvas': { host: 'https://cdn.npmmirror.com/binaries/skia-canvas' },
     'flow-bin': {
       replaceHost: 'https://github.com/facebook/flow/releases/download/v',
@@ -194,7 +184,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-System-Web',
+  workspaceRoot: 'E:\\Eric-Server\\00-IT\\00-code\\00 work area - Git\\OA-VUE-APP',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,
@@ -202,11 +192,13 @@
   ignoreScripts: false,
   foregroundScripts: false,
   ignoreOptionalDependencies: false,
-  detail: false,
+  detail: true,
   forceLinkLatest: false,
   trace: false,
   engineStrict: false,
   registryOnly: false,
   client: false,
-  autoFixVersion: [Function: autoFixVersion]
+  autoFixVersion: [Function: autoFixVersion],
+  targetDir: null,
+  binDir: null
 }

@@ -393,6 +393,7 @@ export default {
             }
         },
         open() {
+            console.log(this.dialogState,'open-tyep')
             this.dialogState = true;
         },
         resetForm() {
