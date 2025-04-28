@@ -1,6 +1,5 @@
 <template>
 	<el-card shadow="hover" header="我的工时">
-		specialDates {{ specialDates }}
 		<div class="app-container">
 			<el-calendar v-model="value">
 				<!-- 使用 dateCell 插槽来自定义每个日期单元格的内容 -->
