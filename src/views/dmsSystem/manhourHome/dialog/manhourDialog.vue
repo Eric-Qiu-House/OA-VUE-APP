@@ -1,6 +1,6 @@
 <template>
     <el-row :gutter="40">
-        <el-dialog v-model="dialogState" title="工时填报" width="1200" :before-close="handleClose">
+        <el-dialog v-model="dialogState" title="工时填报" width="1400" :before-close="handleClose">
             <el-card shadow="never" title="">
                 <!-- {{ recordDay }} -->
                 <el-form-item label="填报记录" :label-width="100">
@@ -10,14 +10,23 @@
                             <template #default="scope">
                                 <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
                                     <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                        :label="item.project_number_ + ` - ` + item.project_name_"
+                                        :label="item.project_number_"
                                         :value="item.project_number_"></el-option>
                                 </el-select>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="project_type_" label="项目阶段" min-width="120">
+                        <el-table-column prop="project_name_" label="项目名称" width="180">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
+                                        <el-option v-for="item in projectInfo" :key="item.project_name_"
+                                            :label="item.project_name_"
+                                            :value="item.project_name_"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                        <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
                             <template #default="scope">
-                                <el-select v-model="scope.row.project_type_" disabled placeholder="请选择">
+                                <el-select v-model="scope.row.pro_stage_" disabled placeholder="请选择">
                                     <el-option v-for="item in projectType" :key="item.value" :label="item.label"
                                         :value="item.value"></el-option>
                                 </el-select>
@@ -53,93 +62,6 @@
                                     @click="deleteButton(scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
-                        <!-- <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
-                            <el-table-column prop="project_number_" label="项目" width="180">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
-                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                            :label="item.project_number_ + ` - ` + item.project_name_"
-                                            :value="item.project_number_"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="project_type_" label="项目阶段" min-width="120">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_type_" disabled  placeholder="请选择">
-                                        <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="job_type_" label="工作类型" min-width="120">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
-                                        <el-option v-for="item in jobType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="hours_" label="工时" min-width="100">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="record_date_" label="时间" min-width="100">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.record_date_" placeholder="请输入工时" disabled></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="remark_" label="备注" min-width="180">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.remark_" type="textarea" disabled />
-                                </template>
-                            </el-table-column>
-                        </sc-form-table> -->
-                        <!-- </el-form-item> -->
-                        <!-- <el-form-item label="当日填报记录" prop="list" disabled>
-                        <sc-form-table ref="rulesList" v-model="recordDay" :addTemplate="addTemplate" :disabled="true">
-                            <el-table-column prop="project_number_" label="项目" width="180">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
-                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                            :label="item.project_number_ + ` - ` + item.project_name_"
-                                            :value="item.project_number_"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="project_type_" label="项目阶段" min-width="120">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_type_" disabled  placeholder="请选择">
-                                        <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="job_type_" label="工作类型" min-width="120">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
-                                        <el-option v-for="item in jobType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="hours_" label="工时" min-width="100">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="record_date_" label="时间" min-width="100">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.record_date_" placeholder="请输入工时" disabled></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="remark_" label="备注" min-width="180">
-                                <template #default="scope">
-                                    <el-input v-model="scope.row.remark_" type="textarea" disabled />
-                                </template>
-                            </el-table-column>
-                        </sc-form-table>
-                    </el-form-item> -->
                     </el-table>
                 </el-form-item>
 
@@ -150,16 +72,26 @@
                         <sc-form-table ref="rulesList" v-model="form.list" :addTemplate="addTemplate">
                             <el-table-column prop="project_number_" label="项目" width="180">
                                 <template #default="scope">
-                                    <el-select v-model="scope.row.project_number_" placeholder="请选择项目" filterable>
+                                    <el-select v-model="scope.row.project_number_" placeholder="请选择项目" filterable
+                                        @change="handleOptionSelect($event, scope.row)">
                                         <el-option v-for="item in projectInfo" :key="item.project_number_"
                                             :label="item.project_number_ + ` - ` + item.project_name_"
                                             :value="item.project_number_"></el-option>
                                     </el-select>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="project_type_" label="项目阶段" min-width="120">
+                            <el-table-column prop="project_name_" label="项目名称" width="180">
                                 <template #default="scope">
-                                    <el-select v-model="scope.row.project_type_" placeholder="请选择阶段" filterable>
+                                    <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
+                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                            :label="item.project_name_"
+                                            :value="item.project_name_"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.pro_stage_" placeholder="请选择阶段" filterable>
                                         <el-option v-for="item in projectType" :key="item.value" :label="item.label"
                                             :value="item.value"></el-option>
                                     </el-select>
@@ -205,6 +137,7 @@
 <script>
 import { defineAsyncComponent } from 'vue';
 const scEditor = defineAsyncComponent(() => import('@/components/scEditor'));
+import config from '@/utils/projectBasicstInfo'
 import { ElMessageBox } from 'element-plus';
 import { ElMessage } from 'element-plus';
 
@@ -221,7 +154,7 @@ export default {
                 user_id_: '',
                 user_name_: '',
                 project_number_: '',
-                project_type_: '',
+                pro_stage_: '',
                 job_type_: '',
                 hours_: '',
                 record_date_: '',
@@ -233,7 +166,7 @@ export default {
                         user_id_: '',
                         user_name_: '',
                         project_number_: '',
-                        project_type_: '',
+                        pro_stage_: '',
                         job_type_: '',
                         hours_: '',
                         record_date_: '',
@@ -241,27 +174,8 @@ export default {
                 ],
             },
             recordDay: [],
-            jobType: [
-                { label: "基本设计", value: 1 },
-                { label: "详细设计", value: 2 },
-                { label: "研究设计", value: 3 },
-                { label: "三维设计", value: 4 },
-                { label: "设备订货", value: 5 },
-                { label: "更改设计", value: 6 },
-                { label: "技术支持", value: 7 },
-                { label: "部门管理", value: 8 },
-                { label: "其他", value: 9 },
-                { label: "项目管理", value: 10 },
-                { label: "现场服务", value: 11 },
-            ],
-            projectType: [
-                { label: "研发项目", value: 1 },
-                { label: "工程项目", value: 2 },
-                { label: "研发+工程", value: 3 },
-                { label: "维保项目", value: 4 },
-                { label: "市场响应", value: 5 },
-                { label: "其他", value: 6 },
-            ],
+            jobType: config.jobType,
+            projectType: config.proStage,
         };
     },
     components: {
@@ -297,9 +211,12 @@ export default {
     async mounted() {
         this.userInfo = this.$TOOL.data.get("USER_INFO");
         if (this.userInfo) {
-            this.form.user_name_ = this.userInfo.fullname_;
+            this.form.user_name_ = this.userInfo.id_;
+            const data = {
+                userId: this.userInfo.id_,
+            }
             try {
-                const response = await this.$dmsApi.project.readByUser.post();
+                const response = await this.$dmsApi.project.readByUser.post(data);
                 this.projectInfo = response;
             } catch (error) {
                 console.error(error);
@@ -307,6 +224,20 @@ export default {
         }
     },
     methods: {
+        handleOptionSelect(selectedValue, row) {
+            console.log('选中的值:', row);
+            // 这里可以执行其他操作，比如根据选中的值更新行数据等
+            // 例如，假设你想同时更新项目的名称
+            this.projectInfo.forEach(item => {
+                if (item.project_number_ === selectedValue) {
+                    row.pro_stage_ = item.pro_stage_;
+                }
+            });
+            const selectedItem = this.projectInfo.find(item => item.project_number_ === selectedValue);
+            if (selectedItem) {
+                row.project_name_ = selectedItem.project_name_; // 更新项目名称
+            }
+        },
         async openDwgDialog() {
             try {
                 // 弹出确认对话框
@@ -393,7 +324,7 @@ export default {
             }
         },
         open() {
-            console.log(this.dialogState,'open-tyep')
+            console.log(this.dialogState, 'open-tyep')
             this.dialogState = true;
         },
         resetForm() {

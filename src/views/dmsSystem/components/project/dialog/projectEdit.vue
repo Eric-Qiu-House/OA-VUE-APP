@@ -8,11 +8,34 @@
                 <el-input v-model="projectForm.project_name_"></el-input>
             </el-form-item>
             <el-form-item label="项目类型" prop="project_type_">
-                <el-select v-model="projectForm.project_type_" placeholder="选择项目状态">
+                <el-select v-model="projectForm.project_type_" placeholder="选择项目类型">
                     <el-option v-for="item in projectTypes.filter(option => option.value !== 0)" :key="item.value"
                         :label="item.label" :value="item.value" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="项目阶段" prop="pro_stage_">
+                <el-select v-model="projectForm.pro_stage_" placeholder="选择项目阶段">
+                    <el-option v-for="item in proStage.filter(option => option.value !== 0)" :key="item.value"
+                        :label="item.label" :value="item.value" />
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="负责人">
+                <userInput @onUserInput="onUserInput"></userInput>
+
+                <!-- <el-select v-model="projectForm.project_manager_name_" placeholder="选择负责人"
+                    @click="handleNodeClick(projectForm.uuid_)" @change="handleManagerChange">
+                    <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
+                        :value="item.fullname_" />
+                </el-select> -->
+            </el-form-item>
+            <!-- <el-form-item label="项目成员">
+                <el-select v-model="projectForm.projectUsers_" placeholder="选择项目成员"
+                    @click="handleNodeClick(projectForm.uuid_)" @change="handleManagerChange">
+                    <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
+                        :value="item.fullname_" />
+                </el-select>
+            </el-form-item> -->
             <el-form-item label="项目状态">
                 <el-select v-model="projectForm.project_statu_" placeholder="选择项目状态">
                     <el-option v-for="item in projectState[0].options.filter(option => option.value !== 0)"
@@ -20,13 +43,7 @@
                         :disabled="item.value < initialStatus" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="项目经理">
-                <el-select v-model="projectForm.project_manager_name_" placeholder="选择项目经理"
-                    @click="handleNodeClick(projectForm.uuid_)" @change="handleManagerChange">
-                    <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
-                        :value="item.fullname_" />
-                </el-select>
-            </el-form-item>
+
             <el-form-item label="船东">
                 <el-input v-model="projectForm.ship_owner_"></el-input>
             </el-form-item>
@@ -38,7 +55,7 @@
             </el-form-item>
             <el-form-item label="设计院">
                 <el-input v-model="projectForm.ship_person_"></el-input>
-            </el-form-item> 
+            </el-form-item>
             <el-form-item label="项目开始">
                 <el-date-picker v-model="projectForm.start_date_" type="date" placeholder="选择开始日期"
                     style="width: 100%"></el-date-picker>
@@ -57,9 +74,13 @@
 <script>
 import scSelectFilter from '@/components/scSelectFilter'
 import { inject } from 'vue';
+import config from '@/utils/projectBasicstInfo'
+import userInput from '@/views/iamSystem/components/user/inputUser'
+
 export default {
     components: {
-        scSelectFilter
+        scSelectFilter,
+        userInput
     },
     setup() {
         const userType = inject('userType');  // 注入数据
@@ -82,7 +103,7 @@ export default {
             immediate: true, // 立即执行，初始化时也同步一次
             handler(newValue) {
                 this.projectForm = { ...newValue }; // 同步 props 的数据
-                 this.initialStatus = this.projectForm.project_statu_;
+                this.initialStatus = this.projectForm.project_statu_;
             },
         },
     },
@@ -90,42 +111,13 @@ export default {
         return {
             initialStatus: '', // 标志是否初始化
             projectTypeValue: 0, // 默认选中的tab
-            projectTypes: [
-                { label: '所有', value: 0 },
-                { label: '市场响应', value: 1 },
-                { label: '自研项目', value: 2 },
-                { label: '工程项目', value: 3 },
-            ],
+            proStage: config.proStage,
+            projectTypes: config.proType,
             projectState: [
                 {
                     title: "状态(单)",
                     key: "state",
-                    options: [
-                        {
-                            label: "全部",
-                            value: 0
-                        },
-                        {
-                            label: "未开始",
-                            value: 1,
-                            icon: "el-icon-flag"
-                        },
-                        {
-                            label: "执行中",
-                            value: 2,
-                            icon: "el-icon-bottom-left"
-                        },
-                        {
-                            label: "已完成",
-                            value: 3,
-                            icon: "el-icon-checked"
-                        },
-                        {
-                            label: "已关闭",
-                            value: 4,
-                            icon: "el-icon-circle-close"
-                        }
-                    ]
+                    options: config.proState,
                 }
             ],
             selectedValues: {
@@ -147,7 +139,10 @@ export default {
                 ],
                 project_type_: [
                     { required: true, message: '项目类型不能为空', trigger: 'blur' }
-                ]
+                ],
+                pro_stage_: [
+                    { required: true, message: '项目阶段不能为空', trigger: 'blur' }
+                ],
             },
             projectTable: [],
             projectUserInfos: [],
@@ -162,6 +157,11 @@ export default {
         open() {
             this.dialogVisible = true
         },
+        onUserInput(value) {
+            this.projectForm.project_manager_user_id_ = value;
+            console.log('选中的项目经理:', value);
+
+        },
         async handleNodeClick(projectUuid) {
             // 清空之前的数据
             this.projectUserInfos = [];
@@ -175,6 +175,7 @@ export default {
 
                 if (projectUserIds.length) {
                     this.projectUserInfos = await this.$apiIAM.user.usersByUserIds.post(projectUserIds)
+                    // this.projectUserInfos = await this.$apiIAM.user.fromList.post()
                 } else {
                     this.$message({
                         message: '请先添加项目组成员！',
@@ -199,8 +200,8 @@ export default {
         openDialogProject(row) {
             if (row) {
                 this.projectForm = { ...row };
-                 this.initialStatus = this.projectForm.project_statu_;
-                } else {
+                this.initialStatus = this.projectForm.project_statu_;
+            } else {
                 // 初始化为新建时的默认值
                 this.projectForm = {};
             }
@@ -243,6 +244,7 @@ export default {
                 // 无论成功还是失败，都关闭弹框
                 this.dialogVisible = false;
                 this.formLoading = false;
+                this.$emit('onProjectUpdate');
                 this.$emit('updateProject');
                 // this.postReadByIdProject(); // 如果有必要，可以取消注释
             }

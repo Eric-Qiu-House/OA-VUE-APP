@@ -1,5 +1,7 @@
 <template>
 	<el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
+		{{ form.dept }}
+		{{ depts }}
 		<el-form :model="form" :rules="rules" :disabled="mode == 'show'" ref="dialogForm" label-width="100px"
 			label-position="left">
 			<!-- <el-form-item label="头像" prop="avatar">
@@ -159,6 +161,16 @@ export default {
 				this.form.role = this.userRelationData.role_id_;
 			}
 		},
+		findDeptName(depts, targetId) {
+			for (const dept of depts) {
+				if (dept.id_ == targetId) return dept.name_;
+				if (dept.children) {
+					const found = this.findDeptName(dept.children, targetId);
+					if (found) return found;
+				}
+			}
+			return null; // 未找到
+		},
 		// 表单提交方法
 		submit() {
 			if (this.mode === 'add') {
@@ -172,9 +184,8 @@ export default {
 							// status_: this.form.status,
 							password_: this.form.password,
 							group_id_: this.form.dept,
-							role_id_: this.form.role
-				// 			dept: [],
-				// role: []
+							role_id_: this.form.role,
+							group_name_:  this.findDeptName(this.depts, this.form.dept)
 						};
 						var res = await this.$apiIAM.user.add.post(newdata);
 						this.isSaveing = false;
@@ -196,7 +207,8 @@ export default {
 						let newdata = {
 							id_: this.form.id,
 							group_id_: this.form.dept,
-							role_id_: this.form.role
+							role_id_: this.form.role,
+							group_name_:  this.findDeptName(this.depts, this.form.dept)
 						};
 						var res = await this.$apiIAM.relation.update.post(newdata);
 						this.isSaveing = false;

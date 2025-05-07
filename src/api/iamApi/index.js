@@ -81,9 +81,16 @@ export default {
 	user: {
 		fromList: {
 			url: `${config.IAM_URL}/iamServer/user/inquireList`,
-			name: "用户",
+			name: "全部用户",
 			get: async function(){
 				return await http.get(this.url);
+			}
+		},
+		readDim: {
+			url: `${config.IAM_URL}/iamServer/user/readDimRouter`,
+			name: "模糊查询",
+			post: async function(params){
+				return await http.post(this.url, params);
 			}
 		},
 		usersByGroup: {

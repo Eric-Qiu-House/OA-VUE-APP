@@ -75,6 +75,13 @@ export default {
 			post: async function(params){
 				return await http.post(this.url,params);
 			}
+		},
+		readFuzzyQueryProjectRouter: {
+			url: `${config.DMS_URL}/dmsServer/project/readFuzzyQueryProjectRouter`,
+			name: "模糊查询",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
 		}
 	},
     projectUsershiproute: {
@@ -192,6 +199,17 @@ export default {
 			name: "readByProjectManhoursCsv",
 			post: async function(params){
 				return await http.post(this.url,params);
+			}
+		},
+		exportManhoursToExcelRouter: {
+			url: `${config.DMS_URL}/dmsServer/manHours/exportManhoursToExcelRouter`,
+			name: "exportManhoursToExcelRouter",
+			post: async function(params){
+				        // 设置 responseType: 'blob' 来接收二进制文件流
+						const config = {
+							responseType: 'blob',  // 关键点：指定响应类型为 blob
+						};
+				return await http.post(this.url,params, config);
 			}
 		},
 		delete: {

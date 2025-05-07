@@ -23,7 +23,7 @@
     <template #footer>
       <el-button @click="visible = false" :loading="loading">取 消</el-button>
       <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">保 存</el-button>
-      <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">确 认</el-button>
+      <!-- <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">确 认</el-button> -->
     </template>
   </el-dialog>
 </template>
