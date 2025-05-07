@@ -5,7 +5,7 @@
             <template #default="scope">{{ scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column label="项目号" prop="project_number_" width="120" sortable="custom" />
-        <el-table-column label="项目名称" prop="projectName" width="150" sortable="custom" />
+        <el-table-column label="项目名称" prop="project_name_" width="150" sortable="custom" />
         <el-table-column label="姓名" prop="user_name_" width="100" sortable="custom" />
         <el-table-column label="项目类型" prop="project_type_label" width="100" sortable="custom" />
         <el-table-column label="项目阶段" prop="pro_stage_" width="100" sortable="custom" />
