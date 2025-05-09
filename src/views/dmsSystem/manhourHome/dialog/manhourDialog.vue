@@ -6,29 +6,28 @@
                 <el-form-item label="填报记录" :label-width="100">
                     <el-table ref="formRef" :data="recordDay" label-width="100px">
                         <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
-                        <el-table-column prop="project_number_" label="项目" width="180">
-                            <template #default="scope">
-                                <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
-                                    <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                        :label="item.project_number_"
-                                        :value="item.project_number_"></el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="project_name_" label="项目名称" width="180">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
-                                        <el-option v-for="item in projectInfo" :key="item.project_name_"
-                                            :label="item.project_name_"
-                                            :value="item.project_name_"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
                         <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
                             <template #default="scope">
                                 <el-select v-model="scope.row.pro_stage_" disabled placeholder="请选择">
                                     <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                        :value="item.value"></el-option>
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="project_number_" label="项目" width="180">
+                            <template #default="scope">
+                                <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
+                                    <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                        :label="item.project_number_" :value="item.project_number_"></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="project_name_" label="项目名称" width="180">
+                            <template #default="scope">
+                                <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
+                                    <el-option v-for="item in projectInfo" :key="item.project_name_"
+                                        :label="item.project_name_" :value="item.project_name_"></el-option>
                                 </el-select>
                             </template>
                         </el-table-column>
@@ -70,30 +69,35 @@
                 <el-form ref="formRef" :model="form" label-width="100px">
                     <el-form-item label="新增填报" prop="list">
                         <sc-form-table ref="rulesList" v-model="form.list" :addTemplate="addTemplate">
+
+                            <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.pro_stage_" placeholder="请选择阶段" filterable
+                                        @change="handleStageChange(scope.row)">
+                                        <el-option v-for="item in projectType" :key="item.value" :label="item.label"
+                                            :value="item.value"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+
                             <el-table-column prop="project_number_" label="项目" width="180">
                                 <template #default="scope">
                                     <el-select v-model="scope.row.project_number_" placeholder="请选择项目" filterable
                                         @change="handleOptionSelect($event, scope.row)">
-                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                            :label="item.project_number_ + ` - ` + item.project_name_"
-                                            :value="item.project_number_"></el-option>
+                                        <el-option v-for="item in filteredProjectInfo(scope.row.pro_stage_)"
+                                            :key="item.project_number_"
+                                            :label="item.project_number_ + ' - ' + item.project_name_"
+                                            :value="item.project_number_">
+                                        </el-option>
                                     </el-select>
                                 </template>
                             </el-table-column>
+
                             <el-table-column prop="project_name_" label="项目名称" width="180">
                                 <template #default="scope">
                                     <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
                                         <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                            :label="item.project_name_"
-                                            :value="item.project_name_"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.pro_stage_" placeholder="请选择阶段" filterable>
-                                        <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
+                                            :label="item.project_name_" :value="item.project_name_"></el-option>
                                     </el-select>
                                 </template>
                             </el-table-column>
@@ -224,6 +228,15 @@ export default {
         }
     },
     methods: {
+        handleStageChange(row) {
+            // 清除项目选中状态
+            row.project_number_ = "";
+            console.log(row, '555555555555555')
+        },
+        filteredProjectInfo(proStage) {
+            if (!proStage) return this.projectInfo; // 如果 pro_stage_ 为空，则返回全部项目信息
+            return this.projectInfo.filter(item => item.pro_stage_ === proStage);
+        },
         handleOptionSelect(selectedValue, row) {
             console.log('选中的值:', row);
             // 这里可以执行其他操作，比如根据选中的值更新行数据等
