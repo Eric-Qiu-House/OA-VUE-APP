@@ -37,7 +37,7 @@ export default {
         projectHeader,
         proTree,
         formItem,
-        manhourTable
+        manhourTable,
     },
     data() {
         return {

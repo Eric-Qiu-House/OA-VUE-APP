@@ -1,109 +1,42 @@
 <template>
-    <el-row :gutter="40">
-        <el-dialog v-model="dialogState" title="工时填报" width="1400" :before-close="handleClose">
-            <el-card shadow="never" title="">
-                <!-- {{ recordDay }} -->
-                <el-form-item label="填报记录" :label-width="100">
-                    <el-table ref="formRef" :data="recordDay" label-width="100px">
-                        <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
-                        <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
-                            <template #default="scope">
-                                <el-select v-model="scope.row.pro_stage_" disabled placeholder="请选择">
-                                    <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="project_number_" label="项目" width="180">
-                            <template #default="scope">
-                                <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
-                                    <el-option v-for="item in projectInfo" :key="item.project_number_"
-                                        :label="item.project_number_" :value="item.project_number_"></el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="project_name_" label="项目名称" width="180">
-                            <template #default="scope">
-                                <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
-                                    <el-option v-for="item in projectInfo" :key="item.project_name_"
-                                        :label="item.project_name_" :value="item.project_name_"></el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="job_type_" label="工作类型" min-width="120">
-                            <template #default="scope">
-                                <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
-                                    <el-option v-for="item in jobType" :key="item.value" :label="item.label"
-                                        :value="item.value"></el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="hours_" label="工时" min-width="100">
-                            <template #default="scope">
-                                <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="record_date_" label="时间" min-width="100">
-                            <template #default="scope">
-                                <el-input v-model="scope.row.record_date_" disabled></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="remark_" label="备注" min-width="180">
-                            <template #default="scope">
-                                <el-input v-model="scope.row.remark_" type="textarea" disabled />
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="status_" fixed="right" label="操作" width="220">
-                            <template #default="scope">
-                                <!-- <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)" >编辑</el-button> -->
-                                <el-button text type="primary" :disabled="isReadOnly"
-                                    @click="deleteButton(scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-form-item>
-
-            </el-card>
-            <el-card shadow="never">
-                <el-form ref="formRef" :model="form" label-width="100px">
-                    <el-form-item label="新增填报" prop="list">
-                        <sc-form-table ref="rulesList" v-model="form.list" :addTemplate="addTemplate">
-
+    <!-- <el-row :gutter="40"> -->
+    <el-dialog v-model="dialogState" title="工时填报" width="90%" :before-close="handleClose">
+        <el-container style="height: 70vh; overflow: hidden;">
+            <!-- 左侧表单区域 -->
+            <el-aside style="width: 70%; padding-right: 10px; overflow-y: auto;">
+                <el-card shadow="never" title="">
+                    <!-- {{ recordDay }} -->
+                    <el-form-item label="填报记录" :label-width="100">
+                        <el-table ref="formRef" :data="recordDay" label-width="100px">
+                            <!-- <el-form-item label="当日填报记录" prop="list" disabled> -->
                             <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
                                 <template #default="scope">
-                                    <el-select v-model="scope.row.pro_stage_" placeholder="请选择阶段" filterable
-                                        @change="handleStageChange(scope.row)">
+                                    <el-select v-model="scope.row.pro_stage_" disabled placeholder="请选择">
                                         <el-option v-for="item in projectType" :key="item.value" :label="item.label"
-                                            :value="item.value"></el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-
-                            <el-table-column prop="project_number_" label="项目" width="180">
-                                <template #default="scope">
-                                    <el-select v-model="scope.row.project_number_" placeholder="请选择项目" filterable
-                                        @change="handleOptionSelect($event, scope.row)">
-                                        <el-option v-for="item in filteredProjectInfo(scope.row.pro_stage_)"
-                                            :key="item.project_number_"
-                                            :label="item.project_number_ + ' - ' + item.project_name_"
-                                            :value="item.project_number_">
+                                            :value="item.value">
                                         </el-option>
                                     </el-select>
                                 </template>
                             </el-table-column>
-
+                            <el-table-column prop="project_number_" label="项目" width="180">
+                                <template #default="scope">
+                                    <el-select v-model="scope.row.project_number_" placeholder="请选择" disabled>
+                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                            :label="item.project_number_" :value="item.project_number_"></el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
                             <el-table-column prop="project_name_" label="项目名称" width="180">
                                 <template #default="scope">
                                     <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
-                                        <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                        <el-option v-for="item in projectInfo" :key="item.project_name_"
                                             :label="item.project_name_" :value="item.project_name_"></el-option>
                                     </el-select>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="job_type_" label="工作类型" min-width="120">
                                 <template #default="scope">
-                                    <el-select v-model="scope.row.job_type_" placeholder="请选择类型" filterable>
+                                    <el-select v-model="scope.row.job_type_" disabled placeholder="请选择阶段">
                                         <el-option v-for="item in jobType" :key="item.value" :label="item.label"
                                             :value="item.value"></el-option>
                                     </el-select>
@@ -111,31 +44,111 @@
                             </el-table-column>
                             <el-table-column prop="hours_" label="工时" min-width="100">
                                 <template #default="scope">
-                                    <el-input v-model="scope.row.hours_" placeholder="请输入工时"></el-input>
+                                    <el-input v-model="scope.row.hours_" placeholder="请输入内容" disabled></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="record_date_" label="时间" min-width="100">
                                 <template #default="scope">
-                                    <el-input v-model="scope.row.record_date_" placeholder="请选择时间" disabled></el-input>
+                                    <el-input v-model="scope.row.record_date_" disabled></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="remark_" label="备注" min-width="180">
                                 <template #default="scope">
-                                    <el-input v-model="scope.row.remark_" type="textarea" />
+                                    <el-input v-model="scope.row.remark_" type="textarea" disabled />
                                 </template>
                             </el-table-column>
-                        </sc-form-table>
+                            <el-table-column prop="status_" fixed="right" label="操作" width="100">
+                                <template #default="scope">
+                                    <!-- <el-button text type="primary" size="small" @click="openDwgDialog(scope.row)" >编辑</el-button> -->
+                                    <el-button text type="primary" :disabled="isReadOnly"
+                                        @click="deleteButton(scope.row)">删除</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-form-item>
-                </el-form>
-            </el-card>
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-button v-model="dialogState" @click="(dialogState = false)" :loading="loading">取消</el-button>
-                    <el-button v-model="dialogState" type="primary" @click="onSubmit" :loading="loading">提交</el-button>
-                </div>
-            </template>
-        </el-dialog>
-    </el-row>
+
+                </el-card>
+                <el-card shadow="never">
+                    <el-form ref="formRef" :model="form" label-width="100px">
+                        <el-form-item label="新增填报" prop="list">
+                            <sc-form-table ref="rulesList" v-model="form.list" :addTemplate="addTemplate">
+
+                                <el-table-column prop="pro_stage_" label="项目阶段" min-width="120">
+                                    <template #default="scope">
+                                        <el-select v-model="scope.row.pro_stage_" placeholder="请选择阶段" filterable
+                                            @change="handleStageChange(scope.row)">
+                                            <el-option v-for="item in projectType" :key="item.value" :label="item.label"
+                                                :value="item.value"></el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column prop="project_number_" label="项目" width="180">
+                                    <template #default="scope">
+                                        <el-select v-model="scope.row.project_number_" placeholder="请选择项目" filterable
+                                            @change="handleOptionSelect($event, scope.row)">
+                                            <el-option v-for="item in filteredProjectInfo(scope.row.pro_stage_)"
+                                                :key="item.project_number_"
+                                                :label="item.project_number_ + ' - ' + item.project_name_"
+                                                :value="item.project_number_">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column prop="project_name_" label="项目名称" width="180">
+                                    <template #default="scope">
+                                        <el-select v-model="scope.row.project_name_" placeholder="请选择" disabled>
+                                            <el-option v-for="item in projectInfo" :key="item.project_number_"
+                                                :label="item.project_name_" :value="item.project_name_"></el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="job_type_" label="工作类型" min-width="120">
+                                    <template #default="scope">
+                                        <el-select v-model="scope.row.job_type_" placeholder="请选择类型" filterable>
+                                            <el-option v-for="item in jobType" :key="item.value" :label="item.label"
+                                                :value="item.value"></el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="hours_" label="工时" min-width="100">
+                                    <template #default="scope">
+                                        <el-input v-model="scope.row.hours_" placeholder="请输入工时"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="record_date_" label="时间" min-width="100">
+                                    <template #default="scope">
+                                        <el-input v-model="scope.row.record_date_" placeholder="请选择时间"
+                                            disabled></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="remark_" label="备注" min-width="180">
+                                    <template #default="scope">
+                                        <el-input v-model="scope.row.remark_" type="textarea" />
+                                    </template>
+                                </el-table-column>
+                            </sc-form-table>
+                        </el-form-item>
+                    </el-form>
+                </el-card>
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-button v-model="dialogState" @click="(dialogState = false)"
+                            :loading="loading">取消</el-button>
+                        <el-button v-model="dialogState" type="primary" @click="onSubmit"
+                            :loading="loading">提交</el-button>
+                    </div>
+                </template>
+            </el-aside>
+            <!-- 右侧手册表格区域 -->
+            <el-main style="padding-left: 10px; border-left: 1px solid #eee; overflow-y: auto;">
+                <handbookTable></handbookTable>
+            </el-main>
+        </el-container>
+
+    </el-dialog>
+    <!-- </el-row> -->
 </template>
 
 <script>
@@ -144,10 +157,15 @@ const scEditor = defineAsyncComponent(() => import('@/components/scEditor'));
 import config from '@/utils/projectBasicstInfo'
 import { ElMessageBox } from 'element-plus';
 import { ElMessage } from 'element-plus';
+import handbookTable from '../handbookTable'
 
 export default {
     props: {
         receiveParams: Object,
+    },
+    components: {
+        scEditor,
+        handbookTable
     },
     data() {
         return {
@@ -181,9 +199,6 @@ export default {
             jobType: config.jobType,
             projectType: config.proStage,
         };
-    },
-    components: {
-        scEditor,
     },
     watch: {
         dialogState(val) {

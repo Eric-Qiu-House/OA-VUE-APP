@@ -1,5 +1,4 @@
 <template>
-  {{ $isButtonVisible }}
   <el-container>
     <el-header style="height: auto;" class="header-tabs">
       <project-header ref="proHeader" @handleSend="handleSend" @proDialog="openDialogProject"></project-header>
