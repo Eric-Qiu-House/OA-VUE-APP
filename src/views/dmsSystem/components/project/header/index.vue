@@ -1,4 +1,5 @@
 <template>
+    {{ userType }}
     <el-tabs type="card" v-model="projectTypeValue" @tab-change="onTabChange">
         <el-tab-pane v-for="item in projectTypes" :key="item.value" :label="item.label" :name="item.value" />
     </el-tabs>
@@ -21,8 +22,8 @@ export default {
     components: { scSelectFilter },
 
     setup() { 
-        const userType = inject('userType');
-        return { userType };
+        const powerContext = inject('powerContext');
+        return { powerContext };
     },
 
     data() {
@@ -78,6 +79,8 @@ export default {
         },
     },
     created() {
+        console.log(this.$isButtonVisible,'sssssssssssssssssssss')
+
         this.fetchProjects()
     },
     methods: {
@@ -89,10 +92,13 @@ export default {
             this.projectLoading = true
             try {
                 this.clearInput()
-                if (this.userType === 'admin') {
+                if (this.powerContext.projectPower === 'projectAdmin') {
                     this.projectTable = await this.$dmsApi.project.readAll.get()
-                } else if (this.userType === 'user') {
-                    this.projectTable = await this.$dmsApi.project.readByUser.post()
+                } else if (this.powerContext.projectPower === 'projectUser') {
+                    const data = {
+                        id_: this.$isButtonVisible.userInfo.id_
+                    }
+                    this.projectTable = await this.$dmsApi.project.readByUser.post(data)
                 }
                 this.projectTable = await this.$dmsApi.project.readAll.get()
 

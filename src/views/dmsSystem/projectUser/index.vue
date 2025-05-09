@@ -12,9 +12,16 @@ export default {
         project
     },
     setup() {
-        // 使用 provide 提供 userType 数据
-        provide('userType', 'user');
-        return {}; // 如果没有其他内容需要返回，可以保留空对象
-    },
+        const projectPower = 'projectUser';
+        const rolePower = 'roleUser';
+
+        // 将多个值合并为一个对象提供出去
+        provide('powerContext', {
+            projectPower,
+            rolePower
+        });
+
+        return {};
+    }
 };
 </script>

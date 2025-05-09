@@ -1,6 +1,12 @@
 <template>
     <el-dialog v-model="dialogVisible" title="项目详情" width="600px">
         <el-form :model="projectForm" ref="form" :rules="projectFormRules" label-width="100px" v-loading="formLoading">
+            <el-form-item label="企业" prop="firm_">
+                <el-select v-model="projectForm.firm_" placeholder="选择合同主体">
+                    <el-option v-for="item in projectFirm.filter(option => option.value !== 0)" :key="item.value"
+                        :label="item.label" :value="item.label" :disabled="item.value < initialStatus" />
+                </el-select>
+            </el-form-item>
             <el-form-item label="项目号" prop="project_number_">
                 <el-input v-model="projectForm.project_number_"></el-input>
             </el-form-item>
@@ -43,7 +49,10 @@
                         :disabled="item.value < initialStatus" />
                 </el-select>
             </el-form-item>
-
+            <el-form-item label="备注">
+                    <el-input v-model="projectForm.remarks_" autosize type="textarea"
+                        placeholder="可输入备注信息" />
+            </el-form-item>
             <el-form-item label="船东">
                 <el-input v-model="projectForm.ship_owner_"></el-input>
             </el-form-item>
@@ -120,17 +129,23 @@ export default {
                     options: config.proState,
                 }
             ],
+            projectFirm: config.proFirm,
             selectedValues: {
                 state: 0,
                 // type: [""]
             },
             dialogVisible: false,
             projectForm: {
+                firm_: '',
                 project_number_: '',
                 project_name_: '',
-                project_type_: ''
+                project_type_: '',
+                pro_stage_: ''
             },
             projectFormRules: {
+                firm_: [
+                    { required: true, message: '合同主体不能为空', trigger: 'blur' }
+                ],
                 project_number_: [
                     { required: true, message: '项目号不能为空', trigger: 'blur' }
                 ],

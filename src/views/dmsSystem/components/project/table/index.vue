@@ -3,6 +3,7 @@
         :default-sort="{ prop: 'project_number_', order: 'descending' }" stripe>
         <!-- 表格列定义 -->
         <el-table-column type="selection" width="50"></el-table-column>
+        <el-table-column sortable label="主体" prop="firm_" width="100"></el-table-column>
         <el-table-column sortable label="项目号" prop="project_number_" width="100"></el-table-column>
         <el-table-column label="项目名称" prop="project_name_" width="150"></el-table-column>
         <el-table-column label="负责人" prop="project_manager_name_" width="150"></el-table-column>
@@ -81,7 +82,7 @@ import { inject } from 'vue';
 
 export default {
     setup() {
-        const userType = inject('userType'); 
+        const userType = inject('projectPower'); 
         return { userType };
     },
 

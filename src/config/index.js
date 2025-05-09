@@ -23,6 +23,7 @@ const DEFAULT_CONFIG = {
 	FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3001`, 
 	IAM_URL: `${process.env.VUE_APP_API_BASEURL}:3002`, 
 	DMS_URL: `${process.env.VUE_APP_API_BASEURL}:3003`, 
+	PRO_FILE_URL: `${process.env.VUE_APP_API_BASEURL}:3004`, 
 
 	//请求超时
 	TIMEOUT: 10000,

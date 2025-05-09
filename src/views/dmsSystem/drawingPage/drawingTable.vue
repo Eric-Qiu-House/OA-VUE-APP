@@ -210,10 +210,13 @@ export default {
         async getDwgData() {
             this.dwgloading = true
             try {
-                const referData = {
-                    drawing_menu_id_: this.menuForm.uuid_
-                }
-                const receiveData = await this.$dmsApi.drawingInfo.readById.post(referData)
+                // const referData = {
+                //     drawing_menu_id_: this.menuForm.uuid_
+                // }
+                // const receiveData = await this.$dmsApi.drawingInfo.readById.post(referData)
+                const project_number_ = 987
+                const receiveData = await this.$proFile.folder.readFoldersByProjectNumberRouter.post(project_number_)
+                
                 if (receiveData) {
                     this.drawingInfo = receiveData
                 } else {
