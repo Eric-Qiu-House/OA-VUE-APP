@@ -136,7 +136,7 @@ export default {
 			}
 		},
 		changePassword: {
-			url: `${config.IAM_URL}/login/changePassword`,
+			url: `${config.IAM_URL}/iamServer/login/changePassword`,
 			name: "修改密码",
 			post: async function(params){
 				return await http.post(this.url,params);
