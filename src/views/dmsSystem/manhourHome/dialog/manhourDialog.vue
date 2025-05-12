@@ -132,21 +132,20 @@
                         </el-form-item>
                     </el-form>
                 </el-card>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button v-model="dialogState" @click="(dialogState = false)"
-                            :loading="loading">取消</el-button>
-                        <el-button v-model="dialogState" type="primary" @click="onSubmit"
-                            :loading="loading">提交</el-button>
-                    </div>
-                </template>
+
             </el-aside>
+
             <!-- 右侧手册表格区域 -->
             <el-main style="padding-left: 10px; border-left: 1px solid #eee; overflow-y: auto;">
                 <handbookTable></handbookTable>
             </el-main>
         </el-container>
-
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button v-model="dialogState" @click="(dialogState = false)" :loading="loading">取消</el-button>
+                <el-button v-model="dialogState" type="primary" @click="onSubmit" :loading="loading">提交</el-button>
+            </div>
+        </template>
     </el-dialog>
     <!-- </el-row> -->
 </template>
