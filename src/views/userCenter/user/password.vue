@@ -83,7 +83,7 @@ export default {
 					account_: userInfo.account_,
 					password_: this.form.userPassword,
 					newPassword_: this.form.newPassword
-				}
+				} 
 				await  this.$apiIAM.user.changePassword.post(data)
 				this.$refs.form.validate(valid => {
 					if (valid) {

@@ -43,28 +43,15 @@ const config = {
     ],
     proState: [
         {
-            label: "全部",
-            value: 0
-        },
-        {
-            label: "未开始",
-            value: 1,
-            icon: "el-icon-flag"
-        },
-        {
-            label: "执行中",
-            value: 2,
-            icon: "el-icon-bottom-left"
-        },
-        {
-            label: "已完成",
-            value: 3,
-            icon: "el-icon-checked"
-        },
-        {
-            label: "已关闭",
-            value: 4,
-            icon: "el-icon-circle-close"
+            title: '状态(单)',
+            key: 'state',
+            options: [
+                { label: '全部', value: 0 },
+                { label: '未开始', value: 1, icon: 'el-icon-flag' },
+                { label: '执行中', value: 2, icon: 'el-icon-bottom-left' },
+                { label: '已完成', value: 3, icon: 'el-icon-checked' },
+                { label: '已关闭', value: 4, icon: 'el-icon-circle-close' }
+            ]
         }
     ],
     jobType: [
@@ -77,7 +64,7 @@ const config = {
         { label: "设备订货", value: 5, text: '设备技术协议阶段的产生的工时' },
         { label: "部门管理", value: 8, text: '部门人员及项目工作计划梳理及规划，专业间协调；与客户之间的协调会等' },
         { label: "项目管理", value: 10, text: '【项目部】项目过程管理工作' },
-        { label: "现场服务", value: 11, text: '客户现场工作服务'},
+        { label: "现场服务", value: 11, text: '客户现场工作服务' },
         { label: "出差工时", value: 12, text: '出差通勤工时，无任务' },
         { label: "休假工时", value: 13, text: '请假补填工时，以保证【月度填报工时>8*工作天数】' },
         { label: "其他工时", value: 9, text: '无相关类型时，则填其他，具体内容可补充备注中' },

@@ -5,7 +5,7 @@
 				<el-header v-if="status == 'projectCatalogue'">
 					<el-col>
 						<el-button @click="switchComponent('save1')"
-							:type="displayComponent === 'save1' ? 'primary' : ''">图纸管理</el-button>
+							:type="displayComponent === 'save1' ? 'primary' : ''">图纸清单</el-button>
 						<el-button @click="switchComponent('save')"
 							:type="displayComponent === 'save' ? 'primary' : ''">目录管理</el-button>
 					</el-col>

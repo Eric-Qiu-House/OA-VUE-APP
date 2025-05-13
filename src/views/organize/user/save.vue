@@ -1,7 +1,5 @@
 <template>
 	<el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
-		{{ form.dept }}
-		{{ depts }}
 		<el-form :model="form" :rules="rules" :disabled="mode == 'show'" ref="dialogForm" label-width="100px"
 			label-position="left">
 			<!-- <el-form-item label="头像" prop="avatar">
@@ -26,6 +24,10 @@
 				<el-cascader v-model="form.dept" :options="depts" :props="deptsProps" clearable
 					style="width: 100%;"></el-cascader>
 			</el-form-item>
+			<el-form-item label="用户类型" prop="user_type_">
+				<el-input v-model="form.user_type_" placeholder="请输入完整的真实姓名" clearable></el-input>
+			</el-form-item>
+			
 			<el-form-item label="所属角色" prop="role">
 				<el-select v-model="form.role" multiple filterable style="width: 100%">
 					<el-option v-for="item in roleData" :key="item.id_" :label="item.name_" :value="item.id_" />
@@ -61,6 +63,7 @@ export default {
 				name: "",
 				password: '',
 				password2: '',
+				user_type_: 'user',
 				// status: '0',
 				dept: [],
 				role: []
@@ -185,7 +188,7 @@ export default {
 							password_: this.form.password,
 							group_id_: this.form.dept,
 							role_id_: this.form.role,
-							group_name_:  this.findDeptName(this.depts, this.form.dept)
+							group_name_: this.findDeptName(this.depts, this.form.dept)
 						};
 						var res = await this.$apiIAM.user.add.post(newdata);
 						this.isSaveing = false;
@@ -208,7 +211,7 @@ export default {
 							id_: this.form.id,
 							group_id_: this.form.dept,
 							role_id_: this.form.role,
-							group_name_:  this.findDeptName(this.depts, this.form.dept)
+							group_name_: this.findDeptName(this.depts, this.form.dept)
 						};
 						var res = await this.$apiIAM.relation.update.post(newdata);
 						this.isSaveing = false;

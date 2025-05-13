@@ -69,6 +69,7 @@
 					<el-table-column label="姓名" prop="fullname_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="邮箱" prop="email_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="手机号码" prop="mobile_" width="150" sortable='custom'></el-table-column>
+					<el-table-column label="用户类型" prop="user_type_" width="150" sortable='custom'></el-table-column>
 					<el-table-column label="状态" prop="status_" width="150" sortable="custom">
 						<template #default="{ row }">
 							<el-tag :type="row.status_ === 1 ? 'success' : row.status_ === 0 ? 'danger' : 'warning'">

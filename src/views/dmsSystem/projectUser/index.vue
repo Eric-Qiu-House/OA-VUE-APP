@@ -12,8 +12,8 @@ export default {
         project
     },
     setup() {
-        const projectPower = 'projectUser';
-        const rolePower = 'roleUser';
+        const projectPower = 'user';
+        const rolePower = 'user';
 
         // 将多个值合并为一个对象提供出去
         provide('powerContext', {
