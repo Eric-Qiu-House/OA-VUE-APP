@@ -1,21 +1,10 @@
 <template>
     <el-card header="项目编号">
-        <el-tree
-            style="max-width: 600px"
-            :data="proTree"
-            node-key="project_number_"
-            :props="defaultProps"
-            @node-click="handleNodeClick"
-            @check-change="handleCheckChange"
-            :filter-node-method="menuFilterNode"
-            show-checkbox
-            highlight-current
-            default-expand-all
-            ref="projectTree"
-        />
+        <el-tree style="max-width: 600px" :data="proTree" node-key="project_number_" :props="defaultProps" :expand-on-click-node="false"
+            @node-click="handleNodeClick" @check-change="handleCheckChange" :filter-node-method="menuFilterNode"
+            :show-checkbox="isMultipleSelection" highlight-current default-expand-all ref="projectTree" />
     </el-card>
 </template>
-
 <script>
 import debounce from 'lodash/debounce';
 
@@ -24,6 +13,10 @@ export default {
         proData: {
             type: Array,
             default: () => [],
+        },
+        isMultipleSelection: {
+            type: Boolean,
+            default: true, // 默认支持多选
         },
     },
     data() {
@@ -52,7 +45,7 @@ export default {
     methods: {
         menuFilterNode(value, data) {
             if (!value) return true;
-            return data.project_number_.indexOf(value) !== -1;
+            return data.project_number_.includes(value);
         },
         addRootNode(flatData) {
             return [
@@ -62,18 +55,22 @@ export default {
                 },
             ];
         },
-        handleNodeClick() {
-            // 在使用 checkedKeys 前，确保它是一个有效的数组
-            if (Array.isArray(this.checkedKeys)) {
-                // 做一些必要的操作
-                console.log('选中的项目:', this.checkedKeys);
+        handleNodeClick(data) {
+            if (this.isMultipleSelection) {
+                const checkedKeys = this.$refs.projectTree.getCheckedKeys();
+                if (!checkedKeys.includes(data.project_number_)) {
+                    this.$refs.projectTree.setCheckedKeys([data.project_number_]);
+                }
             } else {
-                console.error('checkedKeys 不是一个有效的数组');
+                this.$emit('proSend', data);
+                console.log('选中的项目:', data.project_number_);
             }
         },
         handleCheckChange() {
-            this.checkedKeys = this.$refs.projectTree.getCheckedKeys();
-            this.emitCheckedKeys(); // 使用防抖后的函数，只在停止操作一段时间后触发
+            if (this.isMultipleSelection) {
+                this.checkedKeys = this.$refs.projectTree.getCheckedKeys();
+                this.emitCheckedKeys(); // 使用防抖后的函数，只在停止操作一段时间后触发
+            }
         },
     },
 };

@@ -37,9 +37,8 @@
         </el-table-column>
         <el-table-column label="开始时间" prop="start_date_ast_" width="120"></el-table-column>
         <el-table-column label="结束时间" prop="end_date_aet_" width="120"></el-table-column>
-
-        <el-table-column label="客户" prop="ship_owner_" width="150"></el-table-column>
-        <el-table-column label="船厂" prop="ship_person_" width="150"></el-table-column>
+        <!-- <el-table-column label="客户" prop="ship_owner_" width="150"></el-table-column>
+        <el-table-column label="船厂" prop="ship_person_" width="150"></el-table-column> -->
         <el-table-column label="备注" prop="remarks_" width="200" sortable></el-table-column>
         <el-table-column label="图纸状态" fixed="right" width="80">
             <template #default="scope">

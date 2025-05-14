@@ -1,319 +1,255 @@
-<template>
-    <el-dialog v-model="dialogVisible" title="项目详情" width="600px">
-        <el-form :model="projectForm" ref="form" :rules="projectFormRules" label-width="100px" v-loading="formLoading">
-            <el-form-item label="企业" prop="firm_">
-                <el-select v-model="projectForm.firm_" placeholder="选择合同主体">
-                    <el-option v-for="item in projectFirm.filter(option => option.value !== 0)" :key="item.value"
-                        :label="item.label" :value="item.label" :disabled="item.value < initialStatus" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="项目号" prop="project_number_">
-                <el-input v-model="projectForm.project_number_"></el-input>
-            </el-form-item>
-            <el-form-item label="项目名称" prop="project_name_">
-                <el-input v-model="projectForm.project_name_"></el-input>
-            </el-form-item>
-            <el-form-item label="项目类型" prop="project_type_">
-                <el-select v-model="projectForm.project_type_" placeholder="选择项目类型">
-                    <el-option v-for="item in projectTypes.filter(option => option.value !== 0)" :key="item.value"
-                        :label="item.label" :value="item.value" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="项目阶段" prop="pro_stage_">
-                <el-select v-model="projectForm.pro_stage_" placeholder="选择项目阶段">
-                    <el-option v-for="item in proStage.filter(option => option.value !== 0)" :key="item.value"
-                        :label="item.label" :value="item.value" />
-                </el-select>
-            </el-form-item>
+    <template>
+        <el-dialog v-model="dialogVisible" title="项目详情" width="600px">
+            <el-form :model="projectForm" ref="form" :rules="projectFormRules" label-width="100px"
+                v-loading="formLoading">
+                <el-form-item label="企业" prop="firm_">
+                    <el-select v-model="projectForm.firm_" placeholder="选择合同主体">
+                        <el-option v-for="item in projectFirm.filter(option => option.value !== 0)" :key="item.value"
+                            :label="item.label" :value="item.label" :disabled="item.value < initialStatus" />
+                    </el-select>
+                </el-form-item>
 
-            <el-form-item label="负责人">
-                <userInput @onUserInput="onUserInput"></userInput>
+                <el-form-item label="项目号" prop="project_number_">
+                    <el-input v-model="projectForm.project_number_" />
+                </el-form-item>
 
-                <!-- <el-select v-model="projectForm.project_manager_name_" placeholder="选择负责人"
-                    @click="handleNodeClick(projectForm.uuid_)" @change="handleManagerChange">
-                    <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
-                        :value="item.fullname_" />
-                </el-select> -->
-            </el-form-item>
-            <!-- <el-form-item label="项目成员">
-                <el-select v-model="projectForm.projectUsers_" placeholder="选择项目成员"
-                    @click="handleNodeClick(projectForm.uuid_)" @change="handleManagerChange">
-                    <el-option v-for="item in projectUserInfos" :key="item.id_" :label="item.fullname_"
-                        :value="item.fullname_" />
-                </el-select>
-            </el-form-item> -->
-            <el-form-item label="项目状态">
-                <el-select v-model="projectForm.project_statu_" placeholder="选择项目状态">
-                    <el-option v-for="item in projectState[0].options.filter(option => option.value !== 0)"
-                        :key="item.value" :label="item.label" :value="item.value"
-                        :disabled="item.value < initialStatus" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="备注">
-                    <el-input v-model="projectForm.remarks_" autosize type="textarea"
-                        placeholder="可输入备注信息" />
-            </el-form-item>
-            <el-form-item label="船东">
-                <el-input v-model="projectForm.ship_owner_"></el-input>
-            </el-form-item>
-            <el-form-item label="船厂">
-                <el-input v-model="projectForm.ship_person_"></el-input>
-            </el-form-item>
-            <el-form-item label="船级社">
-                <el-input v-model="projectForm.ship_person_"></el-input>
-            </el-form-item>
-            <el-form-item label="设计院">
-                <el-input v-model="projectForm.ship_person_"></el-input>
-            </el-form-item>
-            <el-form-item label="项目开始">
-                <el-date-picker v-model="projectForm.start_date_" type="date" placeholder="选择开始日期"
-                    style="width: 100%"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="项目结束">
-                <el-date-picker v-model="projectForm.end_date_" type="date" placeholder="选择结束日期"
-                    style="width: 100%"></el-date-picker>
-            </el-form-item>
-        </el-form>
-        <div class="dialog-footer">
-            <el-button v-loading="formLoading" @click="dialogVisible = false">取消</el-button>
-            <el-button v-loading="formLoading" type="primary" @click="submitFormProject">提交</el-button>
-        </div>
-    </el-dialog>
-</template>
+                <el-form-item label="项目名称" prop="project_name_">
+                    <el-input v-model="projectForm.project_name_" />
+                </el-form-item>
+
+                <el-form-item label="项目类型" prop="project_type_">
+                    <el-select v-model="projectForm.project_type_" placeholder="选择项目类型">
+                        <el-option v-for="item in projectTypes.filter(option => option.value !== 0)" :key="item.value"
+                            :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="项目阶段" prop="pro_stage_">
+                    <el-select v-model="projectForm.pro_stage_" placeholder="选择项目阶段">
+                        <el-option v-for="item in proStage.filter(option => option.value !== 0)" :key="item.value"
+                            :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="项目成员" v-if="isShow">
+                    <div style="display: flex;">
+                        <el-input v-model="selectedUserIds" disabled />
+                        <el-button type="primary" :icon="Edit" circle @click="addUser" />
+                    </div>
+                </el-form-item>
+
+                <el-form-item label="阶段负责人" v-if="isShow">
+                    <userInput v-model="projectForm.project_manager_name_"  @onUserInput="onUserInput" placeholder="请输入姓名进行查询"  />
+                </el-form-item>
+
+                <el-form-item label="项目状态">
+                    <el-select v-model="projectForm.project_statu_" placeholder="选择项目状态">
+                        <el-option v-for="item in projectState[0].options.filter(option => option.value !== 0)"
+                            :key="item.value" :label="item.label" :value="item.value"
+                            :disabled="item.value < initialStatus" />
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="备注">
+                    <el-input v-model="projectForm.remarks_" type="textarea" autosize placeholder="可输入备注信息" />
+                </el-form-item>
+
+                <!-- <el-form-item label="船东" v-if="isShow">
+                    <el-input v-model="projectForm.ship_owner_" />
+                </el-form-item>
+
+                <el-form-item label="船厂" v-if="isShow">
+                    <el-input v-model="projectForm.ship_person_" />
+                </el-form-item>
+
+                <el-form-item label="船级社" v-if="isShow">
+                    <el-input v-model="projectForm.ship_person_" />
+                </el-form-item>
+
+                <el-form-item label="设计院" v-if="isShow">
+                    <el-input v-model="projectForm.ship_person_" />
+                </el-form-item> -->
+
+                <el-form-item label="项目开始" v-if="isShow">
+                    <el-date-picker v-model="projectForm.start_date_" type="date" style="width: 100%"
+                        placeholder="选择开始日期" />
+                </el-form-item>
+
+                <el-form-item label="项目结束" v-if="isShow">
+                    <el-date-picker v-model="projectForm.end_date_" type="date" style="width: 100%"
+                        placeholder="选择结束日期" />
+                </el-form-item>
+            </el-form>
+
+            <div class="dialog-footer">
+                <el-button v-loading="formLoading" @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" v-loading="formLoading" @click="submitFormProject">提交</el-button>
+            </div>
+        </el-dialog>
+
+        <organize-edit v-if="dialogVisible" ref="saveDialog" @success="fetchUsers" @closed="dialogVisible = false" />
+    </template>
+
 <script>
-import scSelectFilter from '@/components/scSelectFilter'
-import { inject } from 'vue';
 import config from '@/utils/projectBasicstInfo'
 import userInput from '@/views/iamSystem/components/user/inputUser'
+import OrganizeEdit from '@/views/dmsSystem/projectOrganize/dialog/organizeEdit.vue'
+import { Edit } from '@element-plus/icons-vue'
 
 export default {
-    components: {
-        scSelectFilter,
-        userInput
-    },
-    setup() {
-        const userType = inject('userType');  // 注入数据
-        return {
-            userType
-        };
-    },
-    mounted() {
-        // 初始化时过滤状态选项
-        this.initialStatus = this.projectForm.project_statu_;
-    },
+    components: { userInput, OrganizeEdit },
     props: {
         editData: {
             type: Object,
-            required: true,
-        },
-    },
-    watch: {
-        editData: {
-            immediate: true, // 立即执行，初始化时也同步一次
-            handler(newValue) {
-                this.projectForm = { ...newValue }; // 同步 props 的数据
-                this.initialStatus = this.projectForm.project_statu_;
-            },
-        },
+            required: true
+        }
     },
     data() {
         return {
-            initialStatus: '', // 标志是否初始化
-            projectTypeValue: 0, // 默认选中的tab
-            proStage: config.proStage,
-            projectTypes: config.proType,
-            projectState: [
-                {
-                    title: "状态(单)",
-                    key: "state",
-                    options: config.proState,
-                }
-            ],
-            projectFirm: config.proFirm,
-            selectedValues: {
-                state: 0,
-                // type: [""]
-            },
             dialogVisible: false,
-            projectForm: {
-                firm_: '',
-                project_number_: '',
-                project_name_: '',
-                project_type_: '',
-                pro_stage_: ''
-            },
-            projectFormRules: {
-                firm_: [
-                    { required: true, message: '合同主体不能为空', trigger: 'blur' }
-                ],
-                project_number_: [
-                    { required: true, message: '项目号不能为空', trigger: 'blur' }
-                ],
-                project_name_: [
-                    { required: true, message: '项目名称不能为空', trigger: 'blur' }
-                ],
-                project_type_: [
-                    { required: true, message: '项目类型不能为空', trigger: 'blur' }
-                ],
-                pro_stage_: [
-                    { required: true, message: '项目阶段不能为空', trigger: 'blur' }
-                ],
-            },
-            projectTable: [],
+            formLoading: false,
+            initialStatus: '',
+            selectedUserIds: [],
+            isShow: String,
+            Edit,
             projectUserInfos: [],
-            projectLoading: false, // 添加加载状态
-            formLoading: false
+            projectForm: {},
+            projectFormRules: {
+                firm_: [{ required: true, message: '合同主体不能为空', trigger: 'blur' }],
+                project_number_: [{ required: true, message: '项目号不能为空', trigger: 'blur' }],
+                project_name_: [{ required: true, message: '项目名称不能为空', trigger: 'blur' }],
+                project_type_: [{ required: true, message: '项目类型不能为空', trigger: 'blur' }],
+                pro_stage_: [{ required: true, message: '项目阶段不能为空', trigger: 'blur' }]
+            },
+            projectTypes: config.proType,
+            proStage: config.proStage,
+            projectState: config.proState,
+            projectFirm: config.proFirm
         }
     },
-    created() {
-        this.getProjectInfo()
-    },
-    methods: {
-        open() {
-            this.dialogVisible = true
-        },
-        onUserInput(value) {
-            this.projectForm.project_manager_user_id_ = value;
-            console.log('选中的项目经理:', value);
-
-        },
-        async handleNodeClick(projectUuid) {
-            // 清空之前的数据
-            this.projectUserInfos = [];
-
-            const submitData = {
-                project_id_: projectUuid
-            }
-
-            try {
-                let projectUserIds = await this.$dmsApi.projectUsershiproute.readId.post(submitData)
-
-                if (projectUserIds.length) {
-                    this.projectUserInfos = await this.$apiIAM.user.usersByUserIds.post(projectUserIds)
-                    // this.projectUserInfos = await this.$apiIAM.user.fromList.post()
-                } else {
-                    this.$message({
-                        message: '请先添加项目组成员！',
-                        grouping: true,
-                        type: 'warning',
-                    });
-                    return null;
-                }
-            } catch (error) {
-                console.error("Error fetching user list:", error);
-            }
-        },
-        handleManagerChange(value) {
-            // 通过 fullname_ 查找完整的项目经理对象
-            const selectedManager = this.projectUserInfos.find(item => item.fullname_ === value);
-            if (selectedManager) {
-                this.projectForm.project_manager_user_id_ = selectedManager.id_;  // 将 id_ 存储到 project_form 中
-            } else {
-                console.log('未找到对应的项目经理');
-            }
-        },
-        openDialogProject(row) {
-            if (row) {
-                this.projectForm = { ...row };
+    watch: {
+        editData: {
+            immediate: true,
+            handler(newVal) {
+                this.projectForm = { ...newVal };
+                this.isShow = this.projectForm.uuid_
                 this.initialStatus = this.projectForm.project_statu_;
-            } else {
-                // 初始化为新建时的默认值
-                this.projectForm = {};
+                // 如果有 uuid_ 则立即查询项目组成员
+                if (this.projectForm.uuid_) {
+                    this.handleNodeClick();
+                }
             }
+        },
+
+        dialogVisible(newValue) {
+            if (!newValue) { // 当对话框关闭时
+                this.projectUserInfos = []; // 
+            }
+        }
+    },
+
+    methods: {
+
+        // 打开此页面
+        open() {
+            this.selectedUserIds = [];
             this.dialogVisible = true;
         },
-        userInfo(id) {
-            const postData = {
-                id_: id
-            }
-            return this.$apiIAM.user.userIdReadUserInfo.post(postData)
+
+        resetFormData() {
+            this.selectedUserIds = [];
+            this.projectUserInfos = [];
+            this.formLoading = false;
+            this.initialStatus = '';
+            this.projectForm = { ...this.editData }; // 重新复制 editData 避免引用污染
         },
-        async submitFormProject() {
-            // 执行表单校验
-            const valid = await new Promise((resolve) => {
-                this.$refs.form.validate((valid) => {
-                    resolve(valid);
-                });
-            });
 
-            // 如果校验不通过，返回
-            if (!valid) {
-                this.formLoading = false;
-                return; // 退出函数，避免执行后续代码
+        // 修改项目用户成员
+        addUser() {
+            this.$nextTick(() => {
+                this.$refs.saveDialog?.open?.()?.setData(this.projectUserInfos, this.projectForm)
+            })
+        },
+
+        // 查询项目组 - 并添加到 input 中
+        async handleNodeClick() {
+            try {
+                const userIDs = await this.getProjectUseIDs(); // ✅ 等待 Promise 完成
+                console.log(userIDs, 'userIDs');
+
+                if (userIDs && userIDs.length > 0) {
+                    await this.getProjectUserInfo(userIDs); // ✅ 继续处理用户信息
+                } else {
+                    this.selectedUserIds = []; // 清空 selectedUserIds
+                    this.$message.warning('请添加项目组成员！');
+                }
+            } catch (error) {
+                console.error("获取项目成员失败:", error);
+                this.$message.error("获取项目成员失败");
             }
+        },
 
-            // 如果校验通过
-            this.formLoading = true;
+        // 项目组 - 用户ID
+        async getProjectUseIDs() {
+            try {
+                const submitData = {
+                    project_id_: this.projectForm.uuid_
+                }
+                let userIDs = await this.$dmsApi.projectUsershiproute.readId.post(submitData)
+                return userIDs
+            } catch (error) {
+                console.error
+            }
+        },
 
+        // ID 查询 用户名信息
+        async getProjectUserInfo(userIDs) {
+            try {
+                console.log(userIDs, 'userIDs')
+                this.projectUserInfos = await this.$apiIAM.user.usersByUserIds.post(userIDs)
+                this.selectedUserIds = this.projectUserInfos.map(user => user.fullname_);
+            } catch (error) {
+                console.error
+            }
+        },
+
+        //  添加 阶段负责人
+        onUserInput(val) {
+            this.projectForm.project_manager_user_id_ = val
+            console.log(this.projectForm)
+
+        },
+
+        // 提交表单
+        async submitFormProject() {
+            const valid = await this.$refs.form.validate().catch(() => false)
+            if (!valid) return
+
+            this.formLoading = true
             try {
                 if (this.projectForm.uuid_) {
-                    // 如果存在 uuid_，调用更新接口
-                    await this.$dmsApi.project.update.post(this.projectForm);
+                    // 修改
+                    await this.$dmsApi.project.update.post(this.projectForm)
                 } else {
-                    // 如果不存在 uuid_，调用新增接口
-                    await this.$dmsApi.project.create.post(this.projectForm);
-                }
-            } catch (error) {
-                console.error("Error submitting project form:", error);
-            } finally {
-                // 无论成功还是失败，都关闭弹框
-                this.dialogVisible = false;
-                this.formLoading = false;
-                this.$emit('onProjectUpdate');
-                this.$emit('updateProject');
-                // this.postReadByIdProject(); // 如果有必要，可以取消注释
-            }
-        },
-        async getProjectInfo() {
-            this.projectLoading = true; // 开始加载
-            try {
-                if (this.userType == 'admin') {
-                    this.projectTable = await this.$dmsApi.project.readAll.get()
-                } else if (this.userType == 'user') {
-                    // this.postReadByIdProject()
-                }
-            } catch (error) {
-                console.error("Error fetching user list:", error);
-            } finally {
-                this.projectLoading = false; // 加载完成
-            }
-        },
-        async postReadByIdProject() {
-            // 初始化提交数据对象
-            const submitData = {};
-            // 动态添加字段，排除值为 0 的字段
-            if (this.projectTypeValue !== 0) {
-                submitData.project_type_ = this.projectTypeValue;
-            }
-            if (this.selectedValues.state !== 0) {
-                submitData.project_statu_ = this.selectedValues.state;
-            }
-            this.projectLoading = true; // 开始加载
-            try {
-                // 调用接口
-                if (this.selectedValues.state == 0 && this.projectTypeValue == 0) {
-                    this.getProjectInfo()
-                } else {
-                    if (submitData.project_statu_ == 0) {
-                        delete submitData.project_statu_;
+                    // 增加
+                    const resData = await this.$dmsApi.project.create.post(this.projectForm)
+                    if (resData) {
+                        const userInfo = this.$TOOL.data.get("USER_INFO");
+                        const reqData = {
+                            project_id_: resData.uuid_,
+                            users: [ userInfo.id_ ]
+                        };
+                        await this.$dmsApi.projectUsershiproute.update.post(reqData);
                     }
-                    this.projectTable = await this.$dmsApi.project.readById.post(submitData);
                 }
-            } catch (error) {
-                console.error("Error fetching user list:", error);
+                this.$emit('updateProject')
+                this.dialogVisible = false
+            } catch (err) {
+                console.error('提交失败', err)
             } finally {
-                this.projectLoading = false; // 加载完成
+                this.formLoading = false
             }
-        },
-        // 标签切换
-        tabChange() {
-            this.postReadByIdProject()
-        },
-        //状态切换
-        selectChange(selected) {
-            this.selectedValues.state = selected.state
-            this.postReadByIdProject()
-        },
+        }
     }
 }
 </script>

@@ -63,7 +63,7 @@ export default {
             deep: true
         },
         filterText() {
-            this.transferData(this.projectTable)
+            this.transferData(this.tableData) // 使用 computed 的 tableData
         },
     },
     computed: {

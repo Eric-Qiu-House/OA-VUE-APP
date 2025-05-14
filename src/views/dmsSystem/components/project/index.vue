@@ -32,10 +32,10 @@ export default {
       this.proData = data;
     },
     // 更新数据
-    onProjectUpdate() {
-      // console.log('onProjectUpdate', this.proData = []);
-      this.$refs.proHeader.fetchProjects();
-    },
+    // onProjectUpdate() {
+    //   // console.log('onProjectUpdate', this.proData = []);
+    //   this.$refs.proHeader.fetchProjects();
+    // },
     openDialogProject(row = {}) {
       this.projectForm = { ...row };
       this.$refs.projectEdit.open();

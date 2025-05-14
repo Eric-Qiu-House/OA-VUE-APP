@@ -1,14 +1,13 @@
 <template>
-  <el-dialog :title="用户管理" v-model="visible" destroy-on-close @closed="$emit('closed')">
+  <el-dialog :title="'用户管理'" v-model="visible" destroy-on-close @closed="$emit('closed')">
+    <el-text class="mx-1" type="primary">{{ prejectData.project_number_ + ' - ' + prejectData.project_name_ }}</el-text>
     <el-container>
       <el-aside>
         <el-container>
           <el-main>
             <el-tree class="menu" :data="group" @node-click="groupClick" default-expand-all>
               <template #default="{ data }">
-                <span class="el-tree-node__label">
-                  {{ data.name_ }}
-                </span>
+                <span class="el-tree-node__label">{{ data.name_ }}</span>
               </template>
             </el-tree>
           </el-main>
@@ -17,35 +16,32 @@
       <el-container>
         <el-main class="nopadding">
           <el-transfer v-model="value" :data="filteredUserData" :props="{ key: 'id_', label: 'fullname_' }"
-            :titles="['用户组', '项目组']" /></el-main>
+                       :titles="['用户组', '项目组']" />
+        </el-main>
       </el-container>
     </el-container>
     <template #footer>
-      <el-button @click="visible = false" :loading="loading">取 消</el-button>
-      <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">保 存</el-button>
-      <!-- <el-button v-if="mode != 'show'" type="primary" :loading="loading" @click="updeteProUser()">确 认</el-button> -->
+      <el-button @click="handleCancel">取 消</el-button>
+      <el-button v-if="mode !== 'show'" type="primary" :loading="loading" @click="updateProUser">保 存</el-button>
     </template>
   </el-dialog>
 </template>
-
 <script>
 export default {
   emits: ['success', 'closed'],
   data() {
     return {
       mode: "add",
-      data: [],
       value: [],
       visible: false,
       group: [],
-      projectId: '',
+      prejectData: {},
       userData: [], // 完整用户数据
       groupUser: [], // 部门用户数据
       loading: false
     };
   },
   computed: {
-    // 过滤后的用户数据，保留已选中的用户
     filteredUserData() {
       if (this.groupUser.length === 0) return this.userData;
 
@@ -64,67 +60,72 @@ export default {
     }
   },
   methods: {
-    async updeteProUser() {
-      this.loading = true
-      const data = {
-        project_id_: this.projectId,
-        users: this.value
+    async updateProUser() {
+      if (this.value.length === 0) {
+        this.$message.warning('请至少选择一个用户');
+        return;
       }
 
-      if (this.value == 0) {
-        this.$message.warning('请至少选择一个用户');  // 警告消息
-        this.loading = false
-        return
-      }
+      this.loading = true;
+      const data = {
+        project_id_: this.prejectData.uuid_,
+        users: this.value
+      };
+
       try {
         await this.$dmsApi.projectUsershiproute.update.post(data);
+        this.$message.success('更新成功');
+        this.$emit('success');
       } catch (error) {
-        console.error('提交失败:', error);  // 记录错误详情
+        console.error('提交失败:', error);
+        this.$message.error('更新失败，请检查日志');
       } finally {
-        this.$emit('success')
-        this.loading = false
-        this.visible = false
+        this.loading = false;
+        this.visible = false;
       }
     },
-    // 树点击事件
+
     async groupClick(data) {
-      this.asd(data.id_);
+      await this.loadGroupUsers(data.id_);
     },
-    // 加载分组用户
-    async asd(groupId) {
+
+    async loadGroupUsers(groupId) {
       const data = { group_id_: groupId };
-      this.groupUser = await this.$apiIAM.user.usersByGroup.post(data);
+      try {
+        this.groupUser = await this.$apiIAM.user.usersByGroup.post(data);
+      } catch (error) {
+        console.error('加载分组用户失败:', error);
+      }
     },
-    // 获取所有用户
+
     async getUser() {
-      this.userData = await this.$apiIAM.user.fromList.get();
+      try {
+        this.userData = await this.$apiIAM.user.fromList.get();
+      } catch (error) {
+        console.error('获取所有用户失败:', error);
+      }
     },
-    // 打开弹窗
+
     open(mode = 'add') {
       this.mode = mode;
       this.visible = true;
       return this;
     },
-    open1() {
-      this.visible = true;
-    },
-    // 加载分组数据
+
     async getGroup() {
-      this.loading = true
+      this.loading = true;
       try {
         const res = await this.$apiIAM.group.fromList.get();
         this.group = res;
       } catch (error) {
-        console.error
+        console.error('加载分组数据失败:', error);
       } finally {
-        this.loading = false
+        this.loading = false;
       }
-
     },
-    // 设置选中数据
-    async setData(data, projectId) {
 
-      this.projectId = projectId
+    async setData(data, prejectData) {
+      this.prejectData = prejectData;
 
       if (!Array.isArray(data)) {
         console.error("setData 参数必须是数组");
@@ -144,6 +145,10 @@ export default {
       // 更新 value
       this.value = [...new Set([...this.value, ...matchedValues])];
       console.log("Updated value:", this.value);
+    },
+
+    handleCancel() {
+      this.visible = false;
     }
   },
   mounted() {

@@ -25,8 +25,8 @@
 <script>
 import organizeEdit from '@/views/dmsSystem/projectOrganize/dialog/organizeEdit.vue';
 import { mergeManhourData, mergeManhourDataByProject } from '@/utils/manhourUtils';
-import projectHeader from '@/views/dmsSystem/components/project/header/index.vue';
 import { getDetailedDateInfo } from '@/utils/holidayChecker';
+import projectHeader from '@/views/dmsSystem/components/project/header/index.vue';
 import proTree from './tree';
 import formItem from './form';
 import manhourTable from './table';
