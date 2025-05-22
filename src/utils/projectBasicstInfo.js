@@ -11,7 +11,7 @@ const config = {
     ],
     proType: [
         {
-            value: 0,
+            value: Number,
             label: '全部',
         },
         {
@@ -43,16 +43,47 @@ const config = {
     ],
     proState: [
         {
-            title: '状态(单)',
+            title: '合同主体',
+            key: 'firm',
+            options: [
+                { label: '全部', value: '' },
+                { label: '友奇', value: '友奇' },
+                { label: '星际', value: '星际' },
+            ]
+        },
+        {
+            title: '项目阶段',
+            key: 'stage',
+            options: [
+                {
+                    value: Number,
+                    label: '全部'
+                },
+                {
+                    value: 1,
+                    label: '市场响应'
+                },
+                {
+                    value: 2,
+                    label: '项目执行'
+                },
+                {
+                    value: 3,
+                    label: '售后维保'
+                },
+            ]
+        },
+        {
+            title: '项目状态',
             key: 'state',
             options: [
-                { label: '全部', value: 0 },
+                { label: '全部', value: Number },
                 { label: '未开始', value: 1, icon: 'el-icon-flag' },
                 { label: '执行中', value: 2, icon: 'el-icon-bottom-left' },
                 { label: '已完成', value: 3, icon: 'el-icon-checked' },
                 { label: '已关闭', value: 4, icon: 'el-icon-circle-close' }
             ]
-        }
+        },
     ],
     jobType: [
         { label: "基本设计", value: 1, text: '如原理图，计算类等相关需要送审的文件' },

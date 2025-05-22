@@ -3,6 +3,15 @@ import http from "@/utils/request"
 // import { create } from "sortablejs";
 
 export default {
+	converge: {
+		readUserProjectRouter: {
+			url: `${config.DMS_URL}/dmsServer/converge/readUserProjectRouter`,
+			name: "权限动态查询 项目信息",
+			post: async function(params){
+				return await http.post(this.url,params);
+			}
+		},
+	},
 	firm: {
 		read: {
 			url: `${config.DMS_URL}/dmsServer/firm/readRouter`,

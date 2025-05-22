@@ -1,192 +1,243 @@
 <template>
-    <!-- {{ userInfo }} -->
-    <el-tabs type="card" v-model="projectTypeValue" @tab-change="onTabChange">
-        <el-tab-pane v-for="item in projectTypes" :key="item.value" :label="item.label" :name="item.value" />
-    </el-tabs>
-    <el-card>
-        <div shadow="never" header="分类筛选器">
-            <sc-select-filter :data="projectState" :selected-values="selectedValues" :label-width="80"
-                @on-change="onSelectChange" />
-        </div>
+    <div class="project-header">
+        <el-tabs type="card" v-model="reqData.project_type_" @tab-change="onTabChange">
+            <el-tab-pane v-for="item in projectTypes" :key="item.value" :label="item.label" :name="item.value" />
+        </el-tabs>
 
-        <el-input placeholder="输入 项目号 项目名称 进行过滤" v-model="filterText" clearable style="height: 40px; width: 250px;" />
-    </el-card>
+        <el-card class="filter-card">
+            <div class="filter-header" shadow="never">
+                <sc-select-filter :data="projectState" :selected-values="selectedValues" :label-width="80"
+                    @on-change="onSelectChange" />
+            </div>
+
+            <el-input v-model="filterText" placeholder="输入 项目号 项目名称 进行过滤" clearable class="search-input"
+                @clear="onClearFilter" />
+        </el-card>
+    </div>
 </template>
 
 <script>
 import scSelectFilter from '@/components/scSelectFilter'
 import config from '@/utils/projectBasicstInfo'
-import { inject } from 'vue';
+import { inject } from 'vue'
 
 export default {
-    components: { scSelectFilter },
+    name: 'ProjectHeader',
+
+    components: {
+        scSelectFilter
+    },
+
     inject: ['powerContext'],
+
     setup() {
-        const powerContext = inject('powerContext');
-        return { powerContext };
+        const powerContext = inject('powerContext')
+        return { powerContext }
     },
 
     data() {
         return {
             userInfo: {},
-            projectTypeValue: 0,
-            selectedValues: { state: 0 },
+            selectedValues: {
+                firm: String,
+                stage: Number,
+                state: Number,
+            },
             projectTypes: config.proType,
             projectState: config.proState,
             reqData: {
-                project_type_: 0,
-                project_statu_: 0
+                project_type_: Number,
+                project_statu_: Number,
+                firm_: String,
+                pro_stage_: Number
             },
             filterText: '',
             projectTable: [],
-            filteredData: [],
             projectLoading: false,
         }
     },
+
     watch: {
-        projectTypeValue(val) {
-            this.reqData.project_type_ = val
-            // this.applyFilter()
-        },
-        reqData: {
-            handler(val) {
-                this.reqData == val
-                this.applyFilter(val)
-            },
-            deep: true
-        },
-        selectedValues: {
-            handler(val) {
-                this.reqData.project_statu_ = val.state
-                // this.applyFilter()
-            },
-            deep: true
-        },
         filterText() {
-            this.transferData(this.tableData) // 使用 computed 的 tableData
+            this.transferData(this.tableData)
         },
+        // 监听 reqData 的变化，统一处理数据更新
+        reqData: {
+            handler(newVal) {
+                this.applyFilter(newVal)
+            },
+            deep: true
+        }
     },
+
     computed: {
         tableData() {
-            // 过滤器 - 根据输入框内容进行筛选
             const keyword = this.filterText.trim().toLowerCase()
+            if (!keyword) return this.projectTable
 
-            let data = this.projectTable
-            if (keyword) {
-                data = data.filter(row => {
-                    return (
-                        // 根据项目编号、名称 进行模糊匹配
-                        (row.project_number_ || '').toLowerCase().includes(keyword) ||
-                        (row.project_name_ || '').toLowerCase().includes(keyword) ||
-                        String(row.project_type_ || '').toLowerCase().includes(keyword) ||
-                        String(row.project_statu_ || '').toLowerCase().includes(keyword)
-                    )
-                })
-            }
-            return data
+            const searchFields = [
+                'project_number_',
+                'project_name_',
+                'project_type_',
+                'project_statu_',
+                'project_firm_',
+                'project_stage_'
+            ]
+
+            return this.projectTable.filter(row =>
+                searchFields.some(field =>
+                    String(row[field] || '').toLowerCase().includes(keyword)
+                )
+            )
         },
     },
-    async mounted() {
-        this.userInfo = this.$TOOL.data.get("USER_INFO");
-    },
+
     created() {
+        this.initData()
         this.fetchProjects()
     },
+
     methods: {
-        // 清空输入框内容
-        clearInput() {
+        // 初始化数据
+        async initData() {
+            this.userInfo = this.$TOOL.data.get("USER_INFO")
+        },
+
+        // 更新请求数据
+        updateReqData(data) {
+            Object.assign(this.reqData, data)
+        },
+
+        // 处理选项卡切换事件
+        onTabChange(val) {
+            this.updateReqData({ project_type_: val })
+        },
+
+        // 处理选择器变化事件
+        onSelectChange(selected) {
+            this.selectedValues = selected
+            this.updateReqData({
+                project_statu_: selected.state,
+                firm_: selected.firm,
+                pro_stage_: selected.stage
+            })
+        },
+
+        // 清空筛选条件
+        onClearFilter() {
             this.filterText = ''
+            this.resetFilters()
+            this.fetchProjects()
         },
 
-        async userPro() {
-            const data = {
-                userId: this.userInfo.id_,
+        // 重置所有筛选条件
+        resetFilters() {
+            this.selectedValues = {
+                firm: String,
+                stage: Number,
+                state: Number,
             }
-            try {
-                return await this.$dmsApi.project.readByUser.post(data);
-            } catch (error) {
-                console.error(error);
-            }
+            this.updateReqData({
+                project_type_: Number,
+                project_statu_: Number,
+                firm_: String,
+                pro_stage_: Number
+            })
         },
-        async adminPro() {
-            try {
-                return await this.$dmsApi.project.readAll.get()
-            } catch (error) {
-                console.log(error)
-            }
+
+        // 检查对象是否所有字段都为空值
+        isAllFieldsEmpty(obj) {
+            return Object.values(obj).every(value =>
+                value === null ||
+                value === undefined ||
+                value === '' ||
+                (typeof value === 'number' && (isNaN(value) || value === 0))
+            )
         },
+
+        // 检查值是否为空
+        isEmptyValue(value) {
+            return value === null ||
+                value === undefined ||
+                value === '' ||
+                (typeof value === 'number' && (isNaN(value) || value === 0))
+        },
+
+        // 获取项目数据
         async fetchProjects() {
-            this.userInfo = this.$TOOL.data.get("USER_INFO");
-
-            this.clearInput();
-            this.projectLoading = true;
+            const params = {
+                role: this.userInfo.user_type_
+            }
 
             try {
-                let projects = [];
+                const filteredProjects = await this.$dmsApi.converge.readUserProjectRouter.post(params)
+                this.transferData(filteredProjects)
+            } catch (error) {
+                console.error('Error fetching projects:', error)
+                this.projectTable = []
+                this.transferData([])
+            }
+        },
 
-                if (this.userInfo.user_type_ === 'admin') {
-                    projects = await this.adminPro(); // 等待获取真实数据
-                } else if (this.userInfo.user_type_ === 'user') {
-                    projects = await this.userPro(); // 等待获取真实数据
+        // 清理对象中的空值字段
+        cleanEmptyFields(obj) {
+            const cleanedObj = {}
+            // let hasValidData = false
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (this.isEmptyValue(value)) continue
+                cleanedObj[key] = value
+                // hasValidData = true
+            }
+            
+            return cleanedObj
+        },
+
+        // 应用过滤条件 
+        async applyFilter(val) {
+            try {
+                if (this.isAllFieldsEmpty(val)) {
+                    await this.fetchProjects()
+                    return
+                }
+                
+                const cleanedData = this.cleanEmptyFields(val)
+                const params = {
+                    role: this.userInfo.user_type_
                 }
 
-                this.projectTable = projects; // 确保是数组
-                this.transferData(this.projectTable);
+                if (Object.keys(cleanedData).length > 0) {
+                    params.data = cleanedData
+                }
+
+                const filteredProjects = await this.$dmsApi.converge.readUserProjectRouter.post(params)
+                this.transferData(filteredProjects)
             } catch (error) {
-                console.error('Error fetching projects:', error);
-                this.projectTable = []; // 出错时设置为空数组防止后续出错
-                this.transferData([]);
-            } finally {
-                this.projectLoading = false;
-            }
-        },
-
-        // 应用筛选器 - 根据选择的项目类型和状态进行筛选 数据
-        applyFilter(val) {
-
-            let filteredProjects = [];
-
-            if (val.project_type_ == 0 && val.project_statu_ == 0) {
-                this.fetchProjects()
-                return
-            }
-
-            if (val.project_type_ != 0 && val.project_statu_ != 0) {
-                filteredProjects = this.projectTable.filter(item => (item.project_statu_ == val.project_statu_ && item.project_type_ == val.project_type_));
-                this.transferData(filteredProjects);
-                return
-            }
-
-            // 根据项目类型过滤
-            if (val.project_type_ == 0 && val.project_statu_ != 0) {
-                filteredProjects = this.projectTable.filter(item => item.project_statu_ == val.project_statu_);
-                this.transferData(filteredProjects);
-                return
-            }
-
-            // 根据项目状态过滤
-            if (val.project_type_ != 0 && val.project_statu_ == 0) {
-                filteredProjects = this.projectTable.filter(item => item.project_type_ == val.project_type_);
-                this.transferData(filteredProjects);
-                return
+                console.error(error)
             }
         },
 
         // 发送数据到父组件
-        transferData(table) {
-            this.$emit('handleSend', table)
+        transferData(data) {
+            this.$emit('handleSend', data)
         },
-
-        // 处理选项卡切换事件
-        onTabChange(newVal) {
-            this.reqData.project_type_ = newVal; // 更新当前选中的项目类型
-        },
-
-        // // 处理选择器变化事件
-        onSelectChange(selected) {
-            this.selectedValues.state = selected.state;
-            this.reqData.project_statu_ = selected.state; // 更新当前选中的项目状态
-        }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.project-header {
+    .filter-card {
+        margin-top: 16px;
+    }
+
+    .filter-header {
+        margin-bottom: 16px;
+    }
+
+    .search-input {
+        height: 40px;
+        width: 250px;
+    }
+}
+</style>

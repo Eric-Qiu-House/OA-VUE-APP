@@ -102,7 +102,7 @@ export default {
     },
     methods: {
         handleSend(data) {
-            this.proData = data;
+            this.proData = data.data;
         },
         onPagingData(data) {
             this.pageData = data;

@@ -44,7 +44,7 @@
 
                 <el-form-item label="项目状态">
                     <el-select v-model="projectForm.project_statu_" placeholder="选择项目状态">
-                        <el-option v-for="item in projectState[0].options.filter(option => option.value !== 0)"
+                        <el-option v-for="item in projectState[2].options.filter(option => option.value !== 0)"
                             :key="item.value" :label="item.label" :value="item.value"
                             :disabled="item.value < initialStatus" />
                     </el-select>

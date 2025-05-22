@@ -1,12 +1,14 @@
 <template>
+
     <el-container>
         <el-header style="height: auto" class="header-tabs">
             <project-header @handleSend="handleSend" @proDialog="openDialogProject" />
         </el-header>
+
         <el-main>
             <el-row :gutter="15">
                 <el-col :lg="3">
-                    <pro-tree :proData="proData" @proSend="handleProSend" :isMultipleSelection="isMultipleSelection" />
+                    <pro-tree :proData="proData.data" @proSend="handleProSend" :isMultipleSelection="isMultipleSelection" />
                 </el-col>
                 <el-col :lg="21">
                     <el-card>
@@ -15,9 +17,11 @@
                 </el-col>
             </el-row>
         </el-main>
+
     </el-container>
 
     <organize-edit v-if="dialogVisible" ref="saveDialog" @success="fetchUsers" @closed="dialogVisible = false" />
+
 </template>
 
 <script>
@@ -48,7 +52,7 @@ export default {
         }
     },
     created() {
-        this.fetchProjectInfo()
+        // this.fetchProjectInfo()
     },
     watch: {
         filterText(val) {
@@ -68,27 +72,30 @@ export default {
         openDialogProject() {
             this.dialogVisible = true
         },
-        async fetchProjectInfo() {
-            this.projectLoading = true
-            try {
-                this.proData = await this.$dmsApi.project.readAll.get()
-            } catch (error) {
-                console.error('获取项目信息失败：', error)
-            } finally {
-                this.projectLoading = false
-            }
-        },
+        // async fetchProjectInfo() {
+        //     this.projectLoading = true
+        //     try {
+        //         this.proData = await this.$dmsApi.project.readAll.get()
+        //     } catch (error) {
+        //         console.error('获取项目信息失败：', error)
+        //     } finally {
+        //         this.projectLoading = false
+        //     }
+        // },
         async fetchUsers() {
             if (!this.selectedProject.uuid_) return
 
             this.userLoading = true
             try {
-                const userIds = await this.$dmsApi.projectUsershiproute.readId.post(this.postData)
-                if (userIds && userIds.length > 0) {
-                    this.usersData = await this.$apiIAM.user.usersByUserIds.post(userIds)
-                } else {
-                    this.usersData = []
-                }
+                // const userIds = await this.$dmsApi.projectUsershiproute.readId.post(this.postData)
+                // // console.log(userIds,'userIdsuserIdsuserIdsuserIdsuserIdsuserIdsuserIdsuserIdsuserIdsuserIdsuserIds')
+                // if (userIds && userIds.length > 0) {
+                //     const reqData = userIds.data
+                //     this.usersData = await this.$apiIAM.user.usersByUserIds.post(reqData)
+                //     console.log(this.usersData,'this.usersData')
+                // } else {
+                //     this.usersData = []
+                // }
             } catch (error) {
                 console.error('获取用户列表失败：', error)
                 this.usersData = []
